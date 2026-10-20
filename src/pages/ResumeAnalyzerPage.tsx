@@ -115,7 +115,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
       {activeTab === 'ats' && (
         <div className="space-y-6">
           {/* Big Score Card */}
-          <div className="bg-white dark:bg-[#121316] p-6 rounded-2xl border border-forge-200 dark:border-white/[0.07] shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-white dark:bg-[#121316] p-6 rounded-2xl border border-forge-200/80 dark:border-white/[0.08] shadow-layer-md flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
               <div className="text-xs font-bold uppercase tracking-wider text-forge-400 dark:text-slate-500">Overall ATS Assessment</div>
               <div className="text-4xl sm:text-5xl font-black text-forge-900 dark:text-white flex items-center justify-center md:justify-start space-x-3">
@@ -130,45 +130,45 @@ export const ResumeAnalyzerPage: React.FC = () => {
             </div>
 
             {/* Category Breakdown Progress Bars (Section 18) */}
-            <div className="w-full md:w-80 space-y-2 text-xs">
+            <div className="w-full md:w-80 space-y-2.5 text-xs">
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Parsing Stream:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.parsing}%</span>
               </div>
-              <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.parsing}%` }} />
+              <div className="w-full bg-forge-100 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 dark:bg-emerald-400 h-2 rounded-full transition-all duration-300" style={{ width: `${ats.categories.parsing}%` }} />
               </div>
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Single-Column Structure:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.structure}%</span>
               </div>
-              <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.structure}%` }} />
+              <div className="w-full bg-forge-100 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 dark:bg-emerald-400 h-2 rounded-full transition-all duration-300" style={{ width: `${ats.categories.structure}%` }} />
               </div>
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Contact Info Text:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.contactInfo}%</span>
               </div>
-              <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.contactInfo}%` }} />
+              <div className="w-full bg-forge-100 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 dark:bg-emerald-400 h-2 rounded-full transition-all duration-300" style={{ width: `${ats.categories.contactInfo}%` }} />
               </div>
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Standard Sections:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.sections}%</span>
               </div>
-              <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.sections}%` }} />
+              <div className="w-full bg-forge-100 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 dark:bg-emerald-400 h-2 rounded-full transition-all duration-300" style={{ width: `${ats.categories.sections}%` }} />
               </div>
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Formatting & Glyphs:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.formatting}%</span>
               </div>
-              <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
-                <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.formatting}%` }} />
+              <div className="w-full bg-forge-100 dark:bg-white/[0.06] h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 dark:bg-emerald-400 h-2 rounded-full transition-all duration-300" style={{ width: `${ats.categories.formatting}%` }} />
               </div>
             </div>
           </div>

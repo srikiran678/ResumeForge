@@ -69,7 +69,7 @@ export const DashboardPage: React.FC = () => {
         {/* Resumes */}
         <Link
           to="/resumes"
-          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-card-subtle hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all space-y-1.5 group"
+          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-layer-sm hover:shadow-layer-md hover:border-indigo-500/40 dark:hover:border-indigo-500/40 transition-all space-y-1.5 group"
         >
           <div className="flex justify-between items-center text-slate-400 dark:text-slate-500">
             <span className="text-[11px] font-bold uppercase tracking-wider">My Resumes</span>
@@ -82,7 +82,7 @@ export const DashboardPage: React.FC = () => {
         {/* Applications */}
         <Link
           to="/applications"
-          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-card-subtle hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all space-y-1.5 group"
+          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-layer-sm hover:shadow-layer-md hover:border-indigo-500/40 dark:hover:border-indigo-500/40 transition-all space-y-1.5 group"
         >
           <div className="flex justify-between items-center text-slate-400 dark:text-slate-500">
             <span className="text-[11px] font-bold uppercase tracking-wider">Applications</span>
@@ -95,7 +95,7 @@ export const DashboardPage: React.FC = () => {
         {/* Interviews */}
         <Link
           to="/applications"
-          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-card-subtle hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all space-y-1.5 group"
+          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-layer-sm hover:shadow-layer-md hover:border-indigo-500/40 dark:hover:border-indigo-500/40 transition-all space-y-1.5 group"
         >
           <div className="flex justify-between items-center text-slate-400 dark:text-slate-500">
             <span className="text-[11px] font-bold uppercase tracking-wider">Interviews</span>
@@ -108,7 +108,7 @@ export const DashboardPage: React.FC = () => {
         {/* Offers */}
         <Link
           to="/applications"
-          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-card-subtle hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all space-y-1.5 group"
+          className="bg-white dark:bg-[#0c101b] p-5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-layer-sm hover:shadow-layer-md hover:border-emerald-500/40 dark:hover:border-emerald-500/40 transition-all space-y-1.5 group"
         >
           <div className="flex justify-between items-center text-slate-400 dark:text-slate-500">
             <span className="text-[11px] font-bold uppercase tracking-wider">Offers</span>

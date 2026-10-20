@@ -114,7 +114,7 @@ export const LoginPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="relative max-w-md w-full bg-white dark:bg-[#0c101b] rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] p-6 sm:p-8 text-left transition-all">
+      <div className="relative max-w-md w-full bg-white dark:bg-[#0c101b] rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-layer-lg dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-6 sm:p-8 text-left transition-all">
         {/* Clean Logo Header - No features displayed */}
         <div className="text-center mb-6">
           <div className="size-12 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 dark:from-indigo-600 dark:to-indigo-900 border border-slate-700/30 text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-3 shadow-md">

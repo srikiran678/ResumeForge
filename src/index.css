@@ -51,6 +51,17 @@
     background-color: #3730a3;
     color: #ffffff;
   }
+
+  /* Accessible and crisp focus styles */
+  :focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+  }
+
+  html.dark :focus-visible {
+    outline: 2px solid #818cf8;
+    outline-offset: 2px;
+  }
 }
 
 /* Custom subtle scrollbar */
