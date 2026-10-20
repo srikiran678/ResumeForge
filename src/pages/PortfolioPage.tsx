@@ -14,7 +14,7 @@ import {
 import { useWorkspace } from '../context/WorkspaceContext';
 
 export const PortfolioPage: React.FC = () => {
-  const { masterProfile, portfolio, updatePortfolio } = useWorkspace();
+  const { resumes, portfolio, updatePortfolio } = useWorkspace();
   const [copied, setCopied] = useState(false);
   const [showQr, setShowQr] = useState(portfolio.showQrCode);
 
@@ -30,47 +30,94 @@ export const PortfolioPage: React.FC = () => {
     updatePortfolio({ ...portfolio, theme });
   };
 
-  const { personalInfo, education, experience, projects, skills, hackathons, certifications, achievements } = masterProfile;
+  const activeResume = resumes[0];
+
+  const githubProfile = activeResume?.basics?.profiles?.find((p) => p.network.toLowerCase().includes('github'))?.url;
+  const linkedInProfile = activeResume?.basics?.profiles?.find((p) => p.network.toLowerCase().includes('linkedin'))?.url;
+
+  const personalInfo = {
+    fullName: activeResume?.basics?.name || 'Career Professional',
+    label: activeResume?.basics?.label || 'Software Engineer',
+    summary: activeResume?.basics?.summary || 'Passionate software builder with expertise in high-scale systems and web engineering.',
+    email: activeResume?.basics?.email || '',
+    github: githubProfile || '',
+    linkedIn: linkedInProfile || '',
+    website: activeResume?.basics?.url || '',
+  };
+
+  const projects = activeResume?.projects?.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.highlights?.[0] || p.description || 'Technical implementation and architecture.',
+    githubUrl: p.githubUrl || p.url,
+    technologies: p.technologies || ['TypeScript', 'React'],
+  })) || [];
+
+  const skillsList = activeResume?.skills?.flatMap((s) => s.items || []) || [
+    'TypeScript',
+    'React',
+    'PostgreSQL',
+    'Node.js',
+    'Docker',
+    'Git',
+  ];
+
+  const experience = activeResume?.work?.map((w) => ({
+    id: w.id,
+    position: w.position,
+    company: w.company,
+    startDate: w.startDate,
+    endDate: w.endDate,
+    responsibilities: w.responsibilities,
+  })) || [];
+
+  const education = activeResume?.education?.map((e) => ({
+    id: e.id,
+    institution: e.institution,
+    degree: e.degree,
+    field: e.field,
+    cgpa: e.cgpa,
+  })) || [];
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left space-y-8">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-forge-200 shadow-sm no-print">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-[#121316] p-6 rounded-2xl border border-forge-200 dark:border-white/[0.07] shadow-xs no-print">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold text-forge-400 uppercase tracking-wider">Web Showcase</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
-              Generated from Master Profile
+            <span className="text-xs font-bold text-forge-400 dark:text-slate-500 uppercase tracking-wider">Web Showcase</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+              Live Interactive Portfolio
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold text-forge-900 tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight mt-1">
             Personal Portfolio Webpage
           </h1>
-          <p className="text-xs text-forge-500 mt-0.5">
-            Auto-generated live web page. Never enter the same information twice.
+          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5">
+            Auto-generated live web page derived from your active resume.
           </p>
         </div>
 
         {/* Action Controls */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Theme Selector */}
-          <div className="flex items-center space-x-1.5 p-1 bg-forge-100 rounded-lg text-xs font-semibold">
-            <Palette className="w-3.5 h-3.5 text-forge-500 ml-1.5" />
+          <div className="flex items-center space-x-1.5 p-1 bg-forge-100 dark:bg-white/[0.06] rounded-lg text-xs font-semibold">
+            <Palette className="w-3.5 h-3.5 text-forge-500 dark:text-slate-400 ml-1.5" />
             <button
               onClick={() => handleThemeChange('clean')}
-              className={`px-2.5 py-1 rounded ${portfolio.theme === 'clean' ? 'bg-white shadow-xs text-forge-900' : 'text-forge-600'}`}
+              className={`px-2.5 py-1 rounded transition-colors ${portfolio.theme === 'clean' ? 'bg-white dark:bg-[#121316] shadow-xs text-forge-900 dark:text-white' : 'text-forge-600 dark:text-slate-400'}`}
             >
               Clean
             </button>
             <button
               onClick={() => handleThemeChange('slate')}
-              className={`px-2.5 py-1 rounded ${portfolio.theme === 'slate' ? 'bg-white shadow-xs text-forge-900' : 'text-forge-600'}`}
+              className={`px-2.5 py-1 rounded transition-colors ${portfolio.theme === 'slate' ? 'bg-white dark:bg-[#121316] shadow-xs text-forge-900 dark:text-white' : 'text-forge-600 dark:text-slate-400'}`}
             >
               Slate
             </button>
             <button
               onClick={() => handleThemeChange('editorial')}
-              className={`px-2.5 py-1 rounded ${portfolio.theme === 'editorial' ? 'bg-white shadow-xs text-forge-900' : 'text-forge-600'}`}
+              className={`px-2.5 py-1 rounded transition-colors ${portfolio.theme === 'editorial' ? 'bg-white dark:bg-[#121316] shadow-xs text-forge-900 dark:text-white' : 'text-forge-600 dark:text-slate-400'}`}
             >
               Editorial
             </button>
@@ -78,9 +125,9 @@ export const PortfolioPage: React.FC = () => {
 
           <button
             onClick={handleCopyLink}
-            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-800 rounded-lg hover:bg-forge-50 shadow-sm"
+            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white dark:bg-[#121316] border border-forge-300 dark:border-white/[0.08] text-forge-800 dark:text-slate-200 rounded-lg hover:bg-forge-50 dark:hover:bg-[#1a1b20] shadow-xs transition-colors"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? 'Link Copied!' : 'Copy Share Link'}</span>
           </button>
         </div>
@@ -178,7 +225,7 @@ export const PortfolioPage: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-1 pt-2">
-                    {proj.technologies.map((t, idx) => (
+                    {proj.technologies.map((t: string, idx: number) => (
                       <span
                         key={idx}
                         className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-forge-200/30 opacity-80"
@@ -197,13 +244,7 @@ export const PortfolioPage: React.FC = () => {
         <section className="py-10 border-b border-forge-200/50 space-y-4">
           <h2 className="text-lg font-bold uppercase tracking-wider opacity-90">Core Competencies</h2>
           <div className="flex flex-wrap gap-2 text-xs">
-            {[
-              ...skills.languages,
-              ...skills.frameworks,
-              ...skills.databases,
-              ...skills.cloud,
-              ...skills.tools,
-            ].map((s, idx) => (
+            {skillsList.map((s, idx) => (
               <span
                 key={idx}
                 className="px-3 py-1 rounded-lg border border-forge-200/60 font-medium"
@@ -214,7 +255,7 @@ export const PortfolioPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Experience & Hackathons */}
+        {/* Experience & Education */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
           {/* Experience */}
           <div className="space-y-4">
@@ -234,23 +275,17 @@ export const PortfolioPage: React.FC = () => {
             )}
           </div>
 
-          {/* Education & Hackathons */}
+          {/* Education */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold uppercase tracking-wider opacity-90">Education & Honors</h2>
-            {education.length === 0 && hackathons.length === 0 ? (
-              <p className="text-xs opacity-70 italic">No education or honors added yet.</p>
+            <h2 className="text-lg font-bold uppercase tracking-wider opacity-90">Education & Academic Background</h2>
+            {education.length === 0 ? (
+              <p className="text-xs opacity-70 italic">No education records added yet.</p>
             ) : (
               <div className="space-y-4">
                 {education.map((edu) => (
                   <div key={edu.id} className="text-xs space-y-1">
                     <div className="font-bold text-sm">{edu.institution}</div>
                     <div className="opacity-75">{edu.degree} in {edu.field} (GPA: {edu.cgpa})</div>
-                  </div>
-                ))}
-                {hackathons.map((h) => (
-                  <div key={h.id} className="text-xs space-y-0.5 pt-2">
-                    <div className="font-bold">{h.name} — {h.achievement}</div>
-                    <div className="opacity-70">{h.project} ({h.technologies.join(', ')})</div>
                   </div>
                 ))}
               </div>

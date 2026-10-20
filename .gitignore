@@ -20,7 +20,8 @@ dist-ssr
 # Scratch, agent artifacts, and dumps
 scratch/
 .agent/
-.agents/
+.agents/*
+!.agents/skills/
 .vercel/
 *.mjs.bak
 *.json.bak

@@ -47,16 +47,26 @@ export default {
         },
         surface: {
           light: '#ffffff',
-          dark: '#0c101b',
-          darker: '#07090e',
+          dark: '#121316',
+          darker: '#08090a',
+          elevated: '#1a1b20',
+          active: '#22242b',
+        }
+      },
+      borderColor: {
+        hairline: {
+          dark: 'rgba(255, 255, 255, 0.07)',
+          light: 'rgba(15, 23, 42, 0.08)',
         }
       },
       boxShadow: {
         'glow-indigo': '0 0 20px -3px rgba(99, 102, 241, 0.25)',
         'glow-emerald': '0 0 20px -3px rgba(16, 185, 129, 0.25)',
         'card-subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)',
+        'modal-elevated': '0 12px 36px -4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08)',
       },
       fontFamily: {
+        display: ['Inter Tight', 'Inter', 'system-ui', 'sans-serif'],
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
         resumeClassic: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],

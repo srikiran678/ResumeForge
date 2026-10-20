@@ -48,8 +48,7 @@ export const ResumeEditorPage: React.FC = () => {
     saveStatus,
     versions,
     createVersionSnapshot,
-    restoreVersion,
-    masterProfile
+    restoreVersion
   } = useWorkspace();
 
   // Active section accordion in editor
@@ -189,7 +188,7 @@ export const ResumeEditorPage: React.FC = () => {
       const result = await AIService.improveBullet(
         bullet,
         { section, title },
-        masterProfile
+        null as any
       );
       setAiSuggestions(result.suggestions);
     } catch (err: any) {
@@ -230,14 +229,14 @@ export const ResumeEditorPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-forge-50 flex flex-col text-left">
+    <div className="min-h-screen bg-forge-50 dark:bg-[#08090a] flex flex-col text-left transition-colors duration-150">
       {/* Top Editor Bar */}
-      <header className="bg-white border-b border-forge-200 sticky top-16 z-30 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-xs no-print">
+      <header className="bg-white/90 dark:bg-[#08090a]/90 backdrop-blur-md border-b border-forge-200 dark:border-white/[0.07] sticky top-16 z-30 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-xs no-print">
         {/* Left: Back & Title & Autosave status */}
         <div className="flex items-center space-x-3">
           <Link
             to="/resumes"
-            className="p-1.5 rounded-lg text-forge-500 hover:text-forge-900 hover:bg-forge-100"
+            className="p-1.5 rounded-lg text-forge-500 hover:text-forge-900 dark:hover:text-white hover:bg-forge-100 dark:hover:bg-white/[0.06] transition-colors"
             title="Back to resumes"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -251,29 +250,29 @@ export const ResumeEditorPage: React.FC = () => {
                 onChange={(e) =>
                   updateCurrentResume((prev) => ({ ...prev, title: e.target.value }))
                 }
-                className="text-sm font-extrabold text-forge-900 bg-transparent hover:bg-forge-50 px-1 py-0.5 rounded border border-transparent hover:border-forge-200 focus:border-forge-400 focus:bg-white focus:outline-none"
+                className="text-sm font-extrabold text-forge-900 dark:text-white bg-transparent hover:bg-forge-50 dark:hover:bg-white/[0.05] px-1 py-0.5 rounded border border-transparent hover:border-forge-200 dark:hover:border-white/[0.1] focus:border-indigo-500 focus:bg-white dark:focus:bg-[#121316] focus:outline-none"
               />
-              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-forge-100 text-forge-700 rounded font-semibold">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 bg-forge-100 dark:bg-white/[0.06] text-forge-700 dark:text-slate-300 rounded font-semibold border border-transparent dark:border-white/[0.08]">
                 v{currentResume.meta.version}
               </span>
             </div>
 
             {/* Autosave Indicator (Section 11) */}
-            <div className="flex items-center space-x-1.5 text-[11px] text-forge-500 px-1">
+            <div className="flex items-center space-x-1.5 text-[11px] text-forge-500 dark:text-slate-400 px-1">
               {saveStatus === 'saving' && (
-                <span className="text-amber-600 font-medium">Saving...</span>
+                <span className="text-amber-600 dark:text-amber-400 font-medium">Saving...</span>
               )}
               {saveStatus === 'saved' && (
-                <span className="text-emerald-700 flex items-center space-x-1">
-                  <Check className="w-3 h-3 text-emerald-600" />
+                <span className="text-emerald-700 dark:text-emerald-400 flex items-center space-x-1">
+                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                   <span>Saved</span>
                 </span>
               )}
               {saveStatus === 'unsaved' && (
-                <span className="text-forge-400 italic">Unsaved changes</span>
+                <span className="text-forge-400 dark:text-slate-500 italic">Unsaved changes</span>
               )}
               {saveStatus === 'error' && (
-                <span className="text-rose-600 font-bold">Save failed</span>
+                <span className="text-rose-600 dark:text-rose-400 font-bold">Save failed</span>
               )}
             </div>
           </div>
@@ -282,11 +281,11 @@ export const ResumeEditorPage: React.FC = () => {
         {/* Center: Template & Font Selector */}
         <div className="hidden xl:flex items-center space-x-3 text-xs">
           <div className="flex items-center space-x-1.5">
-            <span className="text-forge-500 font-medium">Template:</span>
+            <span className="text-forge-500 dark:text-slate-400 font-medium">Template:</span>
             <select
               value={currentResume.meta.template}
               onChange={(e) => handleTemplateChange(e.target.value as TemplateId)}
-              className="text-xs p-1.5 border border-forge-300 rounded font-semibold bg-white focus:outline-none"
+              className="text-xs p-1.5 border border-forge-300 dark:border-white/[0.08] rounded-lg font-semibold bg-white dark:bg-[#121316] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="classic">Classic (Standard Minimal ATS)</option>
               <option value="compact">Compact (Dense 1-Page Technical)</option>
@@ -297,11 +296,11 @@ export const ResumeEditorPage: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-1.5">
-            <span className="text-forge-500 font-medium">Font:</span>
+            <span className="text-forge-500 dark:text-slate-400 font-medium">Font:</span>
             <select
               value={currentResume.meta.fontFamily}
               onChange={(e) => handleFontChange(e.target.value as any)}
-              className="text-xs p-1.5 border border-forge-300 rounded font-semibold bg-white focus:outline-none"
+              className="text-xs p-1.5 border border-forge-300 dark:border-white/[0.08] rounded-lg font-semibold bg-white dark:bg-[#121316] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="Inter">Inter (Clean modern)</option>
               <option value="Arial">Arial (Standard sans)</option>
@@ -318,19 +317,19 @@ export const ResumeEditorPage: React.FC = () => {
           <Link
             to={`/analyzer/${currentResume.id}`}
             title="Open comprehensive ATS compatibility analyzer"
-            className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold hover:bg-emerald-100 transition-colors"
+            className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
           >
-            <FileCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <FileCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>{atsScore}% ATS</span>
           </Link>
 
           {/* Versions */}
           <button
             onClick={() => setVersionModalOpen(true)}
-            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-forge-700 hover:text-forge-900 bg-white hover:bg-forge-100 border border-forge-200 text-xs font-semibold"
+            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-forge-700 dark:text-slate-200 hover:text-forge-900 dark:hover:text-white bg-white dark:bg-[#121316] hover:bg-forge-100 dark:hover:bg-[#1a1b20] border border-forge-200 dark:border-white/[0.08] text-xs font-semibold transition-colors"
             title="Version History & Snapshots"
           >
-            <History className="w-3.5 h-3.5 text-forge-500" />
+            <History className="w-3.5 h-3.5 text-forge-500 dark:text-slate-400" />
             <span className="hidden md:inline">Snapshots</span>
           </button>
 
@@ -338,16 +337,16 @@ export const ResumeEditorPage: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setMoreToolsOpen(!moreToolsOpen)}
-              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-forge-700 hover:text-forge-900 bg-white hover:bg-forge-50 border border-forge-200 text-xs font-semibold"
+              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-forge-700 dark:text-slate-200 hover:text-forge-900 dark:hover:text-white bg-white dark:bg-[#121316] hover:bg-forge-50 dark:hover:bg-[#1a1b20] border border-forge-200 dark:border-white/[0.08] text-xs font-semibold transition-colors"
               title="More Tools"
             >
               <span>Tools</span>
-              <ChevronDown className="w-3 h-3 text-forge-400" />
+              <ChevronDown className="w-3 h-3 text-forge-400 dark:text-slate-500" />
             </button>
 
             {moreToolsOpen && (
               <div 
-                className="absolute right-0 mt-1 w-48 bg-white border border-forge-200 rounded-xl shadow-lg p-1.5 z-40 text-xs text-left animate-fade-in"
+                className="absolute right-0 mt-1 w-48 bg-white dark:bg-[#121316] border border-forge-200 dark:border-white/[0.08] rounded-xl shadow-lg p-1.5 z-40 text-xs text-left animate-fade-in"
                 onMouseLeave={() => setMoreToolsOpen(false)}
               >
                 <button
@@ -355,9 +354,9 @@ export const ResumeEditorPage: React.FC = () => {
                     handleAutoFitOnePage();
                     setMoreToolsOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 text-forge-800 font-medium flex items-center space-x-2"
+                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 dark:hover:bg-white/[0.06] text-forge-800 dark:text-slate-200 font-medium flex items-center space-x-2"
                 >
-                  <Zap className="w-3.5 h-3.5 text-amber-600" />
+                  <Zap className="w-3.5 h-3.5 text-amber-500" />
                   <span>1-Page Smart Fit</span>
                 </button>
 
@@ -366,9 +365,9 @@ export const ResumeEditorPage: React.FC = () => {
                     setPersonaModalOpen(true);
                     setMoreToolsOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 text-forge-800 font-medium flex items-center space-x-2"
+                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 dark:hover:bg-white/[0.06] text-forge-800 dark:text-slate-200 font-medium flex items-center space-x-2"
                 >
-                  <Users className="w-3.5 h-3.5 text-purple-600" />
+                  <Users className="w-3.5 h-3.5 text-indigo-400" />
                   <span>Persona Reviews</span>
                 </button>
 
@@ -377,22 +376,22 @@ export const ResumeEditorPage: React.FC = () => {
                     setScanSimOpen(true);
                     setMoreToolsOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 text-forge-800 font-medium flex items-center space-x-2"
+                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 dark:hover:bg-white/[0.06] text-forge-800 dark:text-slate-200 font-medium flex items-center space-x-2"
                 >
-                  <Eye className="w-3.5 h-3.5 text-blue-600" />
+                  <Eye className="w-3.5 h-3.5 text-blue-400" />
                   <span>6s Recruiter Scan</span>
                 </button>
 
-                <div className="my-1 border-t border-forge-100" />
+                <div className="my-1 border-t border-forge-100 dark:border-white/[0.07]" />
 
                 <button
                   onClick={() => {
                     handleExportJSON();
                     setMoreToolsOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 text-forge-800 font-medium flex items-center space-x-2"
+                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 dark:hover:bg-white/[0.06] text-forge-800 dark:text-slate-200 font-medium flex items-center space-x-2"
                 >
-                  <Download className="w-3.5 h-3.5 text-forge-500" />
+                  <Download className="w-3.5 h-3.5 text-forge-400 dark:text-slate-400" />
                   <span>Export JSON</span>
                 </button>
 
@@ -401,9 +400,9 @@ export const ResumeEditorPage: React.FC = () => {
                     window.print();
                     setMoreToolsOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 text-forge-800 font-medium flex items-center space-x-2"
+                  className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-forge-50 dark:hover:bg-white/[0.06] text-forge-800 dark:text-slate-200 font-medium flex items-center space-x-2"
                 >
-                  <Printer className="w-3.5 h-3.5 text-forge-500" />
+                  <Printer className="w-3.5 h-3.5 text-forge-400 dark:text-slate-400" />
                   <span>Print Sheet</span>
                 </button>
               </div>
@@ -414,7 +413,7 @@ export const ResumeEditorPage: React.FC = () => {
           <button
             disabled={isExporting}
             onClick={handleDownloadPDF}
-            className="flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 rounded-lg shadow-sm transition-colors disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-xs transition-colors disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{isExporting ? 'Generating...' : 'Download PDF'}</span>
@@ -430,25 +429,25 @@ export const ResumeEditorPage: React.FC = () => {
           <SectionManager resume={currentResume} onUpdate={updateCurrentResume} />
 
           {/* Accordion 1: Basics & Contact Info */}
-          <div className="bg-white border border-forge-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-[#121316] border border-forge-200 dark:border-white/[0.07] rounded-xl overflow-hidden shadow-xs">
             <button
               onClick={() =>
                 setActiveAccordion(activeAccordion === 'basics' ? '' : 'basics')
               }
-              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 bg-forge-50/50 hover:bg-forge-50"
+              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 dark:text-white bg-forge-50/50 dark:bg-[#1a1b20]/60 hover:bg-forge-50 dark:hover:bg-[#1a1b20] transition-colors"
             >
               <span>Personal Information & Basics</span>
               {activeAccordion === 'basics' ? (
-                <ChevronUp className="w-4 h-4 text-forge-400" />
+                <ChevronUp className="w-4 h-4 text-forge-400 dark:text-slate-500" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-forge-400" />
+                <ChevronDown className="w-4 h-4 text-forge-400 dark:text-slate-500" />
               )}
             </button>
 
             {activeAccordion === 'basics' && (
-              <div className="p-4 space-y-3 border-t border-forge-100 text-xs">
+              <div className="p-4 space-y-3 border-t border-forge-100 dark:border-white/[0.07] text-xs">
                 <div>
-                  <label className="block font-semibold text-forge-700 mb-1">Full Name</label>
+                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Full Name</label>
                   <input
                     type="text"
                     value={currentResume.basics.name}
@@ -458,12 +457,12 @@ export const ResumeEditorPage: React.FC = () => {
                         basics: { ...prev.basics, name: e.target.value },
                       }))
                     }
-                    className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-forge-700 mb-1">Target Headline</label>
+                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Target Headline</label>
                   <input
                     type="text"
                     value={currentResume.basics.label}
@@ -473,13 +472,13 @@ export const ResumeEditorPage: React.FC = () => {
                         basics: { ...prev.basics, label: e.target.value },
                       }))
                     }
-                    className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block font-semibold text-forge-700 mb-1">Email</label>
+                    <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Email</label>
                     <input
                       type="email"
                       value={currentResume.basics.email}
@@ -489,11 +488,11 @@ export const ResumeEditorPage: React.FC = () => {
                           basics: { ...prev.basics, email: e.target.value },
                         }))
                       }
-                      className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                      className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-forge-700 mb-1">Phone</label>
+                    <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Phone</label>
                     <input
                       type="text"
                       value={currentResume.basics.phone}
@@ -503,13 +502,13 @@ export const ResumeEditorPage: React.FC = () => {
                           basics: { ...prev.basics, phone: e.target.value },
                         }))
                       }
-                      className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                      className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-forge-700 mb-1">Location (City, State)</label>
+                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Location (City, State)</label>
                   <input
                     type="text"
                     value={currentResume.basics.location}
@@ -519,12 +518,12 @@ export const ResumeEditorPage: React.FC = () => {
                         basics: { ...prev.basics, location: e.target.value },
                       }))
                     }
-                    className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-forge-700 mb-1">Summary</label>
+                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Summary</label>
                   <textarea
                     rows={3}
                     value={currentResume.basics.summary}
@@ -534,7 +533,7 @@ export const ResumeEditorPage: React.FC = () => {
                         basics: { ...prev.basics, summary: e.target.value },
                       }))
                     }
-                    className="w-full p-2 border border-forge-300 rounded focus:ring-1 focus:ring-forge-900"
+                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>
               </div>
@@ -714,26 +713,26 @@ export const ResumeEditorPage: React.FC = () => {
           </div>
 
           {/* Accordion 3: Experience & Bullets */}
-          <div className="bg-white border border-forge-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-[#121316] border border-forge-200 dark:border-white/[0.07] rounded-xl overflow-hidden shadow-xs">
             <button
               onClick={() =>
                 setActiveAccordion(activeAccordion === 'work' ? '' : 'work')
               }
-              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 bg-forge-50/50 hover:bg-forge-50"
+              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 dark:text-white bg-forge-50/50 dark:bg-[#1a1b20]/60 hover:bg-forge-50 dark:hover:bg-[#1a1b20] transition-colors"
             >
               <span>Experience ({currentResume.work.length})</span>
               {activeAccordion === 'work' ? (
-                <ChevronUp className="w-4 h-4 text-forge-400" />
+                <ChevronUp className="w-4 h-4 text-forge-400 dark:text-slate-500" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-forge-400" />
+                <ChevronDown className="w-4 h-4 text-forge-400 dark:text-slate-500" />
               )}
             </button>
 
             {activeAccordion === 'work' && (
-              <div className="p-4 space-y-4 border-t border-forge-100 text-xs">
+              <div className="p-4 space-y-4 border-t border-forge-100 dark:border-white/[0.07] text-xs">
                 {currentResume.work.map((exp, eIdx) => (
-                  <div key={exp.id} className="p-3 bg-forge-50 rounded-lg border border-forge-200 space-y-2">
-                    <div className="flex justify-between font-bold text-forge-900">
+                  <div key={exp.id} className="p-3 bg-forge-50 dark:bg-[#08090a] rounded-xl border border-forge-200 dark:border-white/[0.07] space-y-2">
+                    <div className="flex justify-between font-bold text-forge-900 dark:text-white">
                       <span>{exp.position} — {exp.company}</span>
                       <button
                         onClick={() =>
@@ -742,7 +741,7 @@ export const ResumeEditorPage: React.FC = () => {
                             work: prev.work.filter((_, idx) => idx !== eIdx),
                           }))
                         }
-                        className="text-forge-400 hover:text-rose-600"
+                        className="text-forge-400 hover:text-rose-600 dark:hover:text-rose-400"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -750,22 +749,22 @@ export const ResumeEditorPage: React.FC = () => {
 
                     {/* Bullets with Improve Button */}
                     <div className="space-y-1.5 pt-1">
-                      <label className="block text-[11px] font-semibold text-forge-600">
+                      <label className="block text-[11px] font-semibold text-forge-600 dark:text-slate-400">
                         Responsibility Bullets:
                       </label>
                       {exp.responsibilities.map((b, bIdx) => {
                         const tele = getBulletTelemetry(b);
                         return (
-                          <div key={bIdx} className="space-y-1 bg-white p-2.5 rounded-lg border border-forge-200">
+                          <div key={bIdx} className="space-y-1 bg-white dark:bg-[#121316] p-2.5 rounded-lg border border-forge-200 dark:border-white/[0.07]">
                             <div className="flex items-center justify-between text-[10px]">
-                              <span className="font-mono text-slate-400">Bullet #{bIdx + 1}</span>
+                              <span className="font-mono text-slate-400 dark:text-slate-500">Bullet #{bIdx + 1}</span>
                               <span
                                 className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
                                   tele.status === 'strong'
-                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                                     : tele.status === 'metric'
-                                    ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                    : 'bg-slate-100 text-slate-500 border-slate-200'
+                                    ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                                    : 'bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/[0.08]'
                                 }`}
                               >
                                 {tele.label}
@@ -782,7 +781,7 @@ export const ResumeEditorPage: React.FC = () => {
                                   return { ...prev, work: updated };
                                 });
                               }}
-                              className="w-full text-xs p-1.5 border border-forge-200 rounded focus:outline-none"
+                              className="w-full text-xs p-1.5 border border-forge-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                             />
                           <div className="flex justify-between items-center text-[10px]">
                             <div className="flex items-center space-x-2">
@@ -802,7 +801,7 @@ export const ResumeEditorPage: React.FC = () => {
                                     }
                                   )
                                 }
-                                className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-slate-700 bg-slate-100 hover:bg-slate-200 font-medium"
+                                className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] font-medium"
                               >
                                 <Sparkles className="w-3 h-3 text-amber-500" />
                                 <span>Improve</span>
@@ -823,7 +822,7 @@ export const ResumeEditorPage: React.FC = () => {
                                   });
                                   setXyzModalOpen(true);
                                 }}
-                                className="inline-flex items-center space-x-1 text-slate-500 hover:text-slate-800"
+                                className="inline-flex items-center space-x-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white"
                               >
                                 <Target className="w-3 h-3 text-slate-400" />
                                 <span>XYZ metric</span>
@@ -841,7 +840,7 @@ export const ResumeEditorPage: React.FC = () => {
                                   return { ...prev, work: updated };
                                 });
                               }}
-                              className="text-slate-400 hover:text-rose-600"
+                              className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400"
                             >
                               Remove
                             </button>
@@ -852,6 +851,33 @@ export const ResumeEditorPage: React.FC = () => {
                     </div>
                   </div>
                 ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateCurrentResume((prev) => ({
+                      ...prev,
+                      work: [
+                        ...prev.work,
+                        {
+                          id: `work_${Date.now()}`,
+                          company: 'Company Name',
+                          position: 'Role Title',
+                          startDate: '2023',
+                          endDate: 'Present',
+                          current: true,
+                          location: 'Remote',
+                          summary: '',
+                          responsibilities: ['Engineered mission-critical software systems.'],
+                        },
+                      ],
+                    }));
+                  }}
+                  className="w-full py-2 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] text-forge-800 dark:text-slate-200 rounded-lg font-bold text-xs flex items-center justify-center space-x-1 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Experience</span>
+                </button>
               </div>
             )}
           </div>
@@ -861,10 +887,10 @@ export const ResumeEditorPage: React.FC = () => {
         <div className="lg:col-span-7 flex flex-col items-center">
           <div className="w-full sticky top-32">
             {/* Live Preview Controls Header */}
-            <div className="mb-2 flex items-center justify-between text-xs text-forge-500 px-1">
+            <div className="mb-2 flex items-center justify-between text-xs text-forge-500 dark:text-slate-400 px-1">
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-forge-800">Live Vector Document</span>
-                <span className="text-[10px] text-forge-400">• Single Column AST</span>
+                <span className="font-bold text-forge-800 dark:text-white">Live Vector Document</span>
+                <span className="text-[10px] text-forge-400 dark:text-slate-500">• Single Column AST</span>
               </div>
 
               {/* Dynamic Zoom & Inspector Toolbar */}
@@ -876,7 +902,7 @@ export const ResumeEditorPage: React.FC = () => {
                   className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                     atsInspectorActive
                       ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'bg-white hover:bg-forge-100 text-forge-700 border border-forge-300'
+                      : 'bg-white dark:bg-[#121316] hover:bg-forge-100 dark:hover:bg-[#1a1b20] text-forge-700 dark:text-slate-200 border border-forge-300 dark:border-white/[0.08]'
                   }`}
                   title="Toggle AST Natural Reading Order Inspector"
                 >
@@ -885,22 +911,22 @@ export const ResumeEditorPage: React.FC = () => {
                 </button>
 
                 {/* Zoom Controls */}
-                <div className="flex items-center space-x-1 bg-white border border-forge-300 rounded-md p-0.5 text-[11px]">
+                <div className="flex items-center space-x-1 bg-white dark:bg-[#121316] border border-forge-300 dark:border-white/[0.08] rounded-md p-0.5 text-[11px]">
                   <button
                     type="button"
                     onClick={() => setPreviewScale((prev) => Math.max(0.6, prev - 0.1))}
-                    className="p-1 hover:bg-forge-100 rounded text-forge-600"
+                    className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom out"
                   >
                     <ZoomOut className="w-3 h-3" />
                   </button>
-                  <span className="font-mono font-semibold px-1 text-forge-700 text-[10px]">
+                  <span className="font-mono font-semibold px-1 text-forge-700 dark:text-slate-300 text-[10px]">
                     {Math.round(previewScale * 100)}%
                   </span>
                   <button
                     type="button"
                     onClick={() => setPreviewScale((prev) => Math.min(1.4, prev + 0.1))}
-                    className="p-1 hover:bg-forge-100 rounded text-forge-600"
+                    className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom in"
                   >
                     <ZoomIn className="w-3 h-3" />
@@ -908,7 +934,7 @@ export const ResumeEditorPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setPreviewScale(1)}
-                    className="px-1 text-[10px] hover:bg-forge-100 rounded text-forge-500 font-semibold"
+                    className="px-1 text-[10px] hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-500 dark:text-slate-400 font-semibold"
                     title="Reset to 100%"
                   >
                     Reset
@@ -918,7 +944,7 @@ export const ResumeEditorPage: React.FC = () => {
             </div>
 
             {/* Document Render Container with Inspector Overlay */}
-            <div className="relative border border-forge-300 rounded-xl overflow-auto p-4 bg-forge-200 shadow-inner max-h-[85vh] flex justify-center">
+            <div className="relative border border-forge-300 dark:border-white/[0.08] rounded-xl overflow-auto p-4 bg-slate-200/80 dark:bg-[#050607] shadow-inner max-h-[85vh] flex justify-center">
               <ATSInspectorOverlay resume={currentResume} active={atsInspectorActive} />
               <ResumeDocument resume={currentResume} scale={previewScale} />
             </div>
@@ -979,7 +1005,6 @@ export const ResumeEditorPage: React.FC = () => {
       {activeXyzTarget && (
         <XYZFormulaModal
           isOpen={xyzModalOpen}
-          masterProfile={masterProfile}
           initialBullet={activeXyzTarget.initialBullet}
           onApply={activeXyzTarget.onApply}
           onClose={() => {
