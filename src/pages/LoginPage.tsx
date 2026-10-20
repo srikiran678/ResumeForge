@@ -9,7 +9,7 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signInWithEmail, signUpWithEmail, signInWithGoogle, authError, clearAuthError } = useAuth();
-  const { theme, actualTheme, setTheme, toggleTheme } = useTheme();
+  const { theme, actualTheme, toggleTheme } = useTheme();
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
@@ -92,17 +92,20 @@ export const LoginPage: React.FC = () => {
   const activeError = error || authError;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-slate-50 dark:bg-slate-950 transition-colors duration-150">
+    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-slate-50 dark:bg-[#07090e] transition-colors duration-150">
+      {/* Vercel-style ambient background gradient glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
       {/* Top right theme toggle for compact access on all devices */}
       <div className="absolute top-4 right-4 z-10">
         <button
           onClick={toggleTheme}
           title={`Current theme: ${actualTheme}. Click to toggle.`}
           aria-label="Toggle theme mode"
-          className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 shadow-xs transition-colors"
+          className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-white/80 dark:bg-[#0c101b]/80 backdrop-blur-md hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 shadow-xs transition-all"
         >
           {theme === 'system' ? (
-            <Laptop className="w-4 h-4 text-accent-500" />
+            <Laptop className="w-4 h-4 text-indigo-500" />
           ) : actualTheme === 'dark' ? (
             <Moon className="w-4 h-4 text-indigo-400" />
           ) : (
@@ -111,15 +114,15 @@ export const LoginPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 sm:p-8 text-left transition-colors duration-150">
+      <div className="relative max-w-md w-full bg-white dark:bg-[#0c101b] rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] p-6 sm:p-8 text-left transition-all">
         {/* Clean Logo Header - No features displayed */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-slate-950 dark:bg-slate-800 border border-transparent dark:border-slate-700 text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 dark:from-indigo-600 dark:to-indigo-900 border border-slate-700/30 text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-3 shadow-md">
             RF
           </div>
           <h1 className="text-2xl font-bold text-slate-950 dark:text-white tracking-tight">ResumeForge</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {mode === 'signin' ? 'Sign in to access your workspace' : 'Create your free ATS-first account'}
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+            {mode === 'signin' ? 'Sign in to access your career workspace' : 'Create your free ATS-first account'}
           </p>
         </div>
 
@@ -150,7 +153,7 @@ export const LoginPage: React.FC = () => {
           type="button"
           disabled={loading}
           onClick={handleGoogleLogin}
-          className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs transition-all shadow-2xs flex items-center justify-center space-x-2.5 disabled:opacity-50"
+          className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 text-slate-800 dark:text-slate-100 font-bold text-xs transition-all shadow-2xs flex items-center justify-center space-x-2.5 disabled:opacity-50"
         >
           <GoogleIcon className="w-4 h-4" />
           <span>{loading ? 'Connecting to InsForge...' : 'Continue with Google'}</span>
@@ -161,7 +164,7 @@ export const LoginPage: React.FC = () => {
             <div className="w-full border-t border-slate-200 dark:border-slate-800" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="px-2 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 font-medium">
+            <span className="px-2 bg-white dark:bg-[#0c101b] text-slate-400 dark:text-slate-500 font-medium">
               Or continue with email
             </span>
           </div>
@@ -178,7 +181,7 @@ export const LoginPage: React.FC = () => {
             }}
             className={`flex-1 py-2 text-xs font-bold border-b-2 text-center transition-colors ${
               mode === 'signin'
-                ? 'border-slate-950 dark:border-emerald-500 text-slate-950 dark:text-white'
+                ? 'border-indigo-600 dark:border-indigo-400 text-slate-950 dark:text-white'
                 : 'border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
@@ -193,7 +196,7 @@ export const LoginPage: React.FC = () => {
             }}
             className={`flex-1 py-2 text-xs font-bold border-b-2 text-center transition-colors ${
               mode === 'signup'
-                ? 'border-slate-950 dark:border-emerald-500 text-slate-950 dark:text-white'
+                ? 'border-indigo-600 dark:border-indigo-400 text-slate-950 dark:text-white'
                 : 'border-transparent text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
@@ -213,7 +216,7 @@ export const LoginPage: React.FC = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Alex Morgan"
-                className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
+                className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-slate-850 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
               />
             </div>
           )}
@@ -228,7 +231,7 @@ export const LoginPage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="alex@university.edu"
-              className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
+              className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
             />
           </div>
 
@@ -242,14 +245,14 @@ export const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               minLength={6}
-              className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 bg-white dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
+              className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 text-xs font-bold bg-slate-950 dark:bg-emerald-600 text-white rounded-lg hover:bg-slate-800 dark:hover:bg-emerald-500 transition-colors shadow-sm disabled:opacity-50"
+            className="w-full py-2.5 px-4 text-xs font-bold bg-slate-950 hover:bg-slate-850 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-xl transition-all shadow-xs hover:shadow-indigo-500/25 disabled:opacity-50"
           >
             {loading ? 'Processing...' : mode === 'signin' ? 'Sign In to Workspace' : 'Create Free Account'}
           </button>

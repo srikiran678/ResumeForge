@@ -41,13 +41,13 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-slate-900 border-b border-forge-200 dark:border-slate-800 sticky top-0 z-40 no-print transition-colors duration-150">
+    <nav className="bg-white/95 dark:bg-[#0c101b]/95 backdrop-blur-md border-b border-forge-200/80 dark:border-slate-800/80 sticky top-0 z-40 no-print transition-colors duration-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo & Brand */}
           <div className="flex items-center space-x-3">
             <Link to={user ? "/dashboard" : "/"} className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-lg bg-forge-900 dark:bg-slate-800 border border-transparent dark:border-slate-700 flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-900 to-indigo-950 dark:from-indigo-600 dark:to-indigo-900 border border-slate-700/30 flex items-center justify-center text-white font-extrabold text-base shadow-sm group-hover:scale-105 transition-transform">
                 RF
               </div>
               <div>
@@ -69,10 +69,10 @@ export const Navbar: React.FC = () => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-md text-xs font-semibold transition-colors ${
+                    className={`flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
                       active
-                        ? 'bg-forge-100 dark:bg-slate-800 text-forge-900 dark:text-white font-bold'
-                        : 'text-forge-600 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white hover:bg-forge-50 dark:hover:bg-slate-800/60'
+                        ? 'bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-white font-bold border border-slate-200/50 dark:border-slate-700/50'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/60 dark:hover:bg-slate-800/40'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -90,7 +90,7 @@ export const Navbar: React.FC = () => {
               onClick={toggleTheme}
               title={`Current theme: ${actualTheme}. Click to toggle.`}
               aria-label="Toggle theme mode"
-              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors shadow-2xs"
+              className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800/70 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700/80 transition-colors shadow-2xs"
             >
               {theme === 'system' ? (
                 <Laptop className="w-4 h-4 text-accent-500" />
