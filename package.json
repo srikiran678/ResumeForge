@@ -38,6 +38,7 @@
     "oxlint": "^1.88.0",
     "puppeteer-core": "^25.14.0",
     "typescript": "~6.0.3",
+    "ui-skills": "^0.2.4",
     "vite": "^8.3.4"
   }
 }
