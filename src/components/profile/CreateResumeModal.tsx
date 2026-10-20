@@ -66,18 +66,19 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-forge-100 dark:border-slate-800">
           <div className="flex items-center space-x-2.5">
-            <div className="w-9 h-9 rounded-xl bg-forge-900 dark:bg-slate-800 border border-transparent dark:border-slate-700 flex items-center justify-center text-white">
+            <div className="size-9 rounded-xl bg-forge-900 dark:bg-slate-800 border border-transparent dark:border-slate-700 flex items-center justify-center text-white">
               <FileText className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-forge-900 dark:text-white">Create New ATS Resume</h2>
-              <p className="text-[11px] text-forge-500 dark:text-slate-400">
+              <h2 className="text-base font-bold text-forge-900 dark:text-white text-balance">Create New ATS Resume</h2>
+              <p className="text-[11px] text-forge-500 dark:text-slate-400 text-pretty">
                 100% single-column layout guaranteed to parse cleanly into any ATS.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
+            aria-label="Close dialog"
             className="p-1.5 rounded-lg text-forge-400 dark:text-slate-400 hover:text-forge-700 dark:hover:text-white hover:bg-forge-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-4 h-4" />

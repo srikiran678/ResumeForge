@@ -77,17 +77,17 @@ export const AIToolsPage: React.FC = () => {
               Zero Hallucination Guaranteed
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight mt-1 text-balance">
             Job Description Analyzer & Honest Tailoring
           </h1>
-          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5 text-pretty">
             Compare target job descriptions against your tailored resume. AI highlights real matches and genuine gaps—never fabricating missing skills.
           </p>
         </div>
 
         {/* Quota Pill (Section 28) */}
         <div className="bg-forge-50 dark:bg-white/[0.04] p-3 rounded-xl border border-forge-200 dark:border-white/[0.07] text-xs text-right">
-          <div className="font-bold text-forge-900 dark:text-white">
+          <div className="font-bold text-forge-900 dark:text-white tabular-nums">
             {Math.max(0, aiUsage.maxDailyCalls - aiUsage.callsUsedToday)} / {aiUsage.maxDailyCalls} Calls Remaining Today
           </div>
           <div className="text-[11px] text-forge-500 dark:text-slate-400">Resets automatically at midnight</div>

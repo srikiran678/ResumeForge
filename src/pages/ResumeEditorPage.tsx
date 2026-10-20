@@ -229,13 +229,14 @@ export const ResumeEditorPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-forge-50 dark:bg-[#08090a] flex flex-col text-left transition-colors duration-150">
+    <div className="min-h-dvh bg-forge-50 dark:bg-[#08090a] flex flex-col text-left transition-colors duration-150">
       {/* Top Editor Bar */}
       <header className="bg-white/90 dark:bg-[#08090a]/90 backdrop-blur-md border-b border-forge-200 dark:border-white/[0.07] sticky top-16 z-30 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-xs no-print">
         {/* Left: Back & Title & Autosave status */}
         <div className="flex items-center space-x-3">
           <Link
             to="/resumes"
+            aria-label="Back to resumes"
             className="p-1.5 rounded-lg text-forge-500 hover:text-forge-900 dark:hover:text-white hover:bg-forge-100 dark:hover:bg-white/[0.06] transition-colors"
             title="Back to resumes"
           >
@@ -320,7 +321,7 @@ export const ResumeEditorPage: React.FC = () => {
             className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
           >
             <FileCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>{atsScore}% ATS</span>
+            <span><span className="tabular-nums">{atsScore}</span>% ATS</span>
           </Link>
 
           {/* Versions */}
@@ -917,10 +918,11 @@ export const ResumeEditorPage: React.FC = () => {
                     onClick={() => setPreviewScale((prev) => Math.max(0.6, prev - 0.1))}
                     className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom out"
+                    aria-label="Zoom out preview"
                   >
                     <ZoomOut className="w-3 h-3" />
                   </button>
-                  <span className="font-mono font-semibold px-1 text-forge-700 dark:text-slate-300 text-[10px]">
+                  <span className="font-mono font-semibold px-1 text-forge-700 dark:text-slate-300 text-[10px] tabular-nums">
                     {Math.round(previewScale * 100)}%
                   </span>
                   <button
@@ -928,6 +930,7 @@ export const ResumeEditorPage: React.FC = () => {
                     onClick={() => setPreviewScale((prev) => Math.min(1.4, prev + 0.1))}
                     className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom in"
+                    aria-label="Zoom in preview"
                   >
                     <ZoomIn className="w-3 h-3" />
                   </button>
@@ -936,6 +939,7 @@ export const ResumeEditorPage: React.FC = () => {
                     onClick={() => setPreviewScale(1)}
                     className="px-1 text-[10px] hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-500 dark:text-slate-400 font-semibold"
                     title="Reset to 100%"
+                    aria-label="Reset zoom to 100%"
                   >
                     Reset
                   </button>

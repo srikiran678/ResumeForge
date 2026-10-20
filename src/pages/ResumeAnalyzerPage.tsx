@@ -47,17 +47,17 @@ export const ResumeAnalyzerPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-[#121316] p-6 rounded-2xl border border-forge-200 dark:border-white/[0.07] shadow-xs">
         <div>
           <div className="flex items-center space-x-2">
-            <Link to={`/editor/${resume.id}`} className="text-forge-400 dark:text-slate-500 hover:text-forge-700 dark:hover:text-white">
+            <Link to={`/editor/${resume.id}`} aria-label="Back to editor" className="text-forge-400 dark:text-slate-500 hover:text-forge-700 dark:hover:text-white">
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <span className="text-xs font-bold text-forge-400 dark:text-slate-500 uppercase tracking-wider">
               Verification Engine
             </span>
           </div>
-          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight mt-1">
+          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight mt-1 text-balance">
             Resume Compatibility & Quality Analyzer
           </h1>
-          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5 text-pretty">
             Analyzing: <strong className="text-forge-800 dark:text-slate-200">{resume.title}</strong> (Template: {resume.meta.template})
           </p>
         </div>
@@ -83,7 +83,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
           }`}
         >
           <FileCheck className="w-4 h-4" />
-          <span>ATS Compatibility Score ({ats.overallScore}%)</span>
+          <span>ATS Compatibility Score (<span className="tabular-nums">{ats.overallScore}</span>%)</span>
         </button>
 
         <button
@@ -95,7 +95,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
           }`}
         >
           <Zap className="w-4 h-4" />
-          <span>Quality & Completeness ({quality.completeness.overall}%)</span>
+          <span>Quality & Completeness (<span className="tabular-nums">{quality.completeness.overall}</span>%)</span>
         </button>
 
         <button
@@ -119,12 +119,12 @@ export const ResumeAnalyzerPage: React.FC = () => {
             <div className="space-y-2 text-center md:text-left">
               <div className="text-xs font-bold uppercase tracking-wider text-forge-400 dark:text-slate-500">Overall ATS Assessment</div>
               <div className="text-4xl sm:text-5xl font-black text-forge-900 dark:text-white flex items-center justify-center md:justify-start space-x-3">
-                <span>{ats.overallScore}%</span>
+                <span className="tabular-nums">{ats.overallScore}%</span>
                 <span className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   ATS Verified
                 </span>
               </div>
-              <p className="text-xs text-forge-500 dark:text-slate-400 max-w-xl">
+              <p className="text-xs text-forge-500 dark:text-slate-400 max-w-xl text-pretty">
                 Structural & text compatibility evaluation. Assesses plain text extraction, absence of broken tables, single-column reading order, and heading vocabulary.
               </p>
             </div>
@@ -133,7 +133,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
             <div className="w-full md:w-80 space-y-2 text-xs">
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Parsing Stream:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">{ats.categories.parsing}%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.parsing}%</span>
               </div>
               <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.parsing}%` }} />
@@ -141,7 +141,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Single-Column Structure:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">{ats.categories.structure}%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.structure}%</span>
               </div>
               <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.structure}%` }} />
@@ -149,7 +149,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Contact Info Text:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">{ats.categories.contactInfo}%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.contactInfo}%</span>
               </div>
               <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.contactInfo}%` }} />
@@ -157,7 +157,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Standard Sections:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">{ats.categories.sections}%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.sections}%</span>
               </div>
               <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.sections}%` }} />
@@ -165,7 +165,7 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
               <div className="flex justify-between font-semibold text-forge-700 dark:text-slate-300">
                 <span>Formatting & Glyphs:</span>
-                <span className="font-mono text-emerald-600 dark:text-emerald-400">{ats.categories.formatting}%</span>
+                <span className="font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{ats.categories.formatting}%</span>
               </div>
               <div className="w-full bg-forge-100 dark:bg-white/[0.08] h-1.5 rounded-full overflow-hidden">
                 <div className="bg-emerald-600 dark:bg-emerald-400 h-1.5" style={{ width: `${ats.categories.formatting}%` }} />

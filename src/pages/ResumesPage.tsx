@@ -86,7 +86,7 @@ export const ResumesPage: React.FC = () => {
               filter === 'active' ? 'bg-white dark:bg-slate-900 text-forge-900 dark:text-white shadow-xs' : 'text-forge-600 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white'
             }`}
           >
-            Active ({activeCount})
+            Active (<span className="tabular-nums">{activeCount}</span>)
           </button>
           <button
             onClick={() => setFilter('archived')}
@@ -94,7 +94,7 @@ export const ResumesPage: React.FC = () => {
               filter === 'archived' ? 'bg-white dark:bg-slate-900 text-forge-900 dark:text-white shadow-xs' : 'text-forge-600 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white'
             }`}
           >
-            Archived ({archivedCount})
+            Archived (<span className="tabular-nums">{archivedCount}</span>)
           </button>
           <button
             onClick={() => setFilter('trash')}
@@ -102,7 +102,7 @@ export const ResumesPage: React.FC = () => {
               filter === 'trash' ? 'bg-white dark:bg-slate-900 text-forge-900 dark:text-white shadow-xs' : 'text-forge-600 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white'
             }`}
           >
-            Trash ({trashCount})
+            Trash (<span className="tabular-nums">{trashCount}</span>)
           </button>
         </div>
 
@@ -122,9 +122,9 @@ export const ResumesPage: React.FC = () => {
       {/* Resumes Grid */}
       {filteredResumes.length === 0 ? (
         <div className="py-16 text-center bg-white dark:bg-slate-900/60 rounded-2xl border border-forge-200 dark:border-slate-800 p-8 space-y-3">
-          <FileText className="w-10 h-10 text-forge-300 dark:text-slate-600 mx-auto" />
-          <h3 className="text-sm font-bold text-forge-800 dark:text-white">No resumes found</h3>
-          <p className="text-xs text-forge-500 dark:text-slate-400 max-w-sm mx-auto">
+          <FileText className="size-10 text-forge-300 dark:text-slate-600 mx-auto" />
+          <h3 className="text-sm font-bold text-forge-800 dark:text-white text-balance">No resumes found</h3>
+          <p className="text-xs text-forge-500 dark:text-slate-400 max-w-sm mx-auto text-pretty">
             {filter === 'trash'
               ? 'Trash is empty.'
               : 'Create a tailored ATS-compliant resume.'}
@@ -197,6 +197,7 @@ export const ResumesPage: React.FC = () => {
                         <button
                           onClick={() => restoreFromTrash(resume.id)}
                           title="Restore from trash"
+                          aria-label="Restore from trash"
                           className="p-1.5 rounded text-forge-600 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white hover:bg-forge-100 dark:hover:bg-slate-800"
                         >
                           <RotateCcw className="w-4 h-4" />
@@ -208,6 +209,7 @@ export const ResumesPage: React.FC = () => {
                             }
                           }}
                           title="Delete permanently"
+                          aria-label="Delete permanently"
                           className="p-1.5 rounded text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -218,6 +220,7 @@ export const ResumesPage: React.FC = () => {
                         <button
                           onClick={() => duplicateResume(resume.id)}
                           title="Duplicate resume"
+                          aria-label="Duplicate resume"
                           className="p-1.5 rounded text-forge-500 dark:text-slate-400 hover:text-forge-900 dark:hover:text-white hover:bg-forge-100 dark:hover:bg-slate-800"
                         >
                           <Copy className="w-4 h-4" />
@@ -226,6 +229,7 @@ export const ResumesPage: React.FC = () => {
                         <button
                           onClick={() => moveToTrash(resume.id)}
                           title="Move to trash"
+                          aria-label="Move to trash"
                           className="p-1.5 rounded text-forge-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
                         >
                           <Trash2 className="w-4 h-4" />

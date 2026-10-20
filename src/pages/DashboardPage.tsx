@@ -75,7 +75,7 @@ export const DashboardPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider">My Resumes</span>
             <FileText className="w-4 h-4 text-slate-600 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
           </div>
-          <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{activeResumes.length}</div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">{activeResumes.length}</div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400">100% single-column ATS safe</div>
         </Link>
 
@@ -88,7 +88,7 @@ export const DashboardPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider">Applications</span>
             <Briefcase className="w-4 h-4 text-slate-600 dark:text-slate-400 group-hover:text-indigo-500 transition-colors" />
           </div>
-          <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{activeApplications.length}</div>
+          <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight tabular-nums">{activeApplications.length}</div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400">Tracked with immutable snapshots</div>
         </Link>
 
@@ -101,7 +101,7 @@ export const DashboardPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider">Interviews</span>
             <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform" />
           </div>
-          <div className="text-3xl font-black text-blue-600 dark:text-blue-400 tracking-tight">{interviewCount}</div>
+          <div className="text-3xl font-black text-blue-600 dark:text-blue-400 tracking-tight tabular-nums">{interviewCount}</div>
           <div className="text-[11px] text-slate-500 dark:text-slate-400">Technical rounds scheduled</div>
         </Link>
 
@@ -114,7 +114,7 @@ export const DashboardPage: React.FC = () => {
             <span className="text-[11px] font-bold uppercase tracking-wider">Offers</span>
             <Award className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform" />
           </div>
-          <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">{offerCount}</div>
+          <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight tabular-nums">{offerCount}</div>
           <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">Verified outcomes</div>
         </Link>
       </div>
@@ -184,7 +184,7 @@ export const DashboardPage: React.FC = () => {
               to="/resumes"
               className="text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center space-x-1"
             >
-              <span>View all ({activeResumes.length})</span>
+              <span>View all (<span className="tabular-nums">{activeResumes.length}</span>)</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -192,12 +192,12 @@ export const DashboardPage: React.FC = () => {
           <div className="space-y-3">
             {activeResumes.length === 0 ? (
               <div className="bg-white dark:bg-[#0c101b] p-8 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 text-center space-y-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center mx-auto">
+                <div className="size-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 flex items-center justify-center mx-auto">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">No resumes created yet</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white text-balance">No resumes created yet</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto text-pretty">
                     Create single-column ATS-compliant resumes tailored for specific jobs with real-time formatting and deterministic ATS checks.
                   </p>
                 </div>

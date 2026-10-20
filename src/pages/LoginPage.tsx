@@ -92,7 +92,7 @@ export const LoginPage: React.FC = () => {
   const activeError = error || authError;
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-slate-50 dark:bg-[#07090e] transition-colors duration-150">
+    <div className="min-h-dvh relative overflow-hidden flex flex-col items-center justify-center px-4 py-8 sm:py-12 bg-slate-50 dark:bg-[#07090e] transition-colors duration-150">
       {/* Vercel-style ambient background gradient glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-indigo-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
@@ -117,11 +117,11 @@ export const LoginPage: React.FC = () => {
       <div className="relative max-w-md w-full bg-white dark:bg-[#0c101b] rounded-2xl border border-slate-200/90 dark:border-slate-800/80 shadow-xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] p-6 sm:p-8 text-left transition-all">
         {/* Clean Logo Header - No features displayed */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 dark:from-indigo-600 dark:to-indigo-900 border border-slate-700/30 text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+          <div className="size-12 rounded-xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 dark:from-indigo-600 dark:to-indigo-900 border border-slate-700/30 text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-3 shadow-md">
             RF
           </div>
-          <h1 className="text-2xl font-bold text-slate-950 dark:text-white tracking-tight">ResumeForge</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          <h1 className="text-2xl font-bold text-slate-950 dark:text-white tracking-tight text-balance">ResumeForge</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium text-pretty">
             {mode === 'signin' ? 'Sign in to access your career workspace' : 'Create your free ATS-first account'}
           </p>
         </div>
@@ -135,6 +135,7 @@ export const LoginPage: React.FC = () => {
                 setError(null);
                 clearAuthError();
               }}
+              aria-label="Dismiss error alert"
               className="text-rose-500 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-200 text-sm font-bold ml-1"
             >
               ×

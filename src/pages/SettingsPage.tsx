@@ -124,10 +124,10 @@ export const SettingsPage: React.FC = () => {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 text-left space-y-6 sm:space-y-8 transition-colors duration-150">
       {/* Header */}
       <div className="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-forge-200 dark:border-slate-800 shadow-xs">
-        <h1 className="text-xl sm:text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight text-balance">
           Privacy Center & Workspace Settings
         </h1>
-        <p className="text-xs text-forge-500 dark:text-slate-400 mt-1">
+        <p className="text-xs text-forge-500 dark:text-slate-400 mt-1 text-pretty">
           You own 100% of your career information. Export your data anytime, customize your device theme, or revoke public links.
         </p>
       </div>
@@ -146,7 +146,7 @@ export const SettingsPage: React.FC = () => {
           </span>
         </div>
 
-        <p className="text-xs text-forge-600 dark:text-slate-300">
+        <p className="text-xs text-forge-600 dark:text-slate-300 text-pretty">
           Select your preferred workspace theme. Compatible across mobile phones, tablets, laptops, and ultra-wide screens. Settings persist automatically.
         </p>
 

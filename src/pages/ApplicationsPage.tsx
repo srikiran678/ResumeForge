@@ -88,10 +88,10 @@ export const ApplicationsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-forge-200 dark:border-slate-800 shadow-xs">
         <div>
-          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl font-extrabold text-forge-900 dark:text-white tracking-tight text-balance">
             Application Tracker
           </h1>
-          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-forge-500 dark:text-slate-400 mt-0.5 text-pretty">
             Track interview pipelines. When status moves to "Applied", an immutable resume snapshot is saved automatically.
           </p>
         </div>
@@ -109,25 +109,25 @@ export const ApplicationsPage: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-forge-200 dark:border-slate-800 shadow-xs">
           <div className="text-xs font-bold text-forge-500 dark:text-slate-400 uppercase tracking-wider">Total Tracked</div>
-          <div className="text-2xl font-black text-forge-900 dark:text-white mt-1">{total}</div>
+          <div className="text-2xl font-black text-forge-900 dark:text-white mt-1 tabular-nums">{total}</div>
           <div className="text-[11px] text-forge-400 dark:text-slate-500">Applications logged</div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-forge-200 dark:border-slate-800 shadow-xs">
           <div className="text-xs font-bold text-forge-500 dark:text-slate-400 uppercase tracking-wider">Submitted</div>
-          <div className="text-2xl font-black text-forge-900 dark:text-white mt-1">{appliedCount}</div>
+          <div className="text-2xl font-black text-forge-900 dark:text-white mt-1 tabular-nums">{appliedCount}</div>
           <div className="text-[11px] text-forge-400 dark:text-slate-500">Past preparation stage</div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-forge-200 dark:border-slate-800 shadow-xs">
           <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Interview Rate</div>
-          <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">{interviewRate}%</div>
+          <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1 tabular-nums">{interviewRate}%</div>
           <div className="text-[11px] text-forge-400 dark:text-slate-500">{interviewCount} rounds reached</div>
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-forge-200 dark:border-slate-800 shadow-xs">
           <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Offers Received</div>
-          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">{offerCount}</div>
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">{offerCount}</div>
           <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">Offer rate: {offerRate}%</div>
         </div>
       </div>
@@ -297,7 +297,11 @@ export const ApplicationsPage: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-lg w-full p-6 text-left border border-forge-200 dark:border-slate-800">
             <div className="flex justify-between items-center pb-3 border-b border-forge-100 dark:border-slate-800 mb-4">
               <h2 className="text-sm font-bold text-forge-900 dark:text-white">Track New Job Application</h2>
-              <button onClick={() => setShowNewModal(false)} className="text-forge-400 hover:text-forge-700 dark:hover:text-slate-200">
+              <button 
+                onClick={() => setShowNewModal(false)} 
+                aria-label="Close dialog"
+                className="text-forge-400 hover:text-forge-700 dark:hover:text-slate-200"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>

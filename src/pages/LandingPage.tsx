@@ -50,7 +50,7 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen text-slate-900 overflow-hidden">
+    <div className="bg-slate-50 min-h-dvh text-slate-900 overflow-hidden">
       {/* 1. Hero Section with Motion Graphics & Starting Login/Signup Card */}
       <section className="relative pt-10 pb-16 lg:pt-14 lg:pb-20 border-b border-slate-200/80 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

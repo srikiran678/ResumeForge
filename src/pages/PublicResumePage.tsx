@@ -57,7 +57,7 @@ export const PublicResumePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-forge-100 py-8 px-4 text-left">
+    <div className="min-h-dvh bg-forge-100 py-8 px-4 text-left">
       {/* Public Bar */}
       <div className="max-w-4xl mx-auto bg-white p-4 rounded-xl border border-forge-200 shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
         <div className="flex items-center space-x-2">

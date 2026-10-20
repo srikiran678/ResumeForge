@@ -128,7 +128,7 @@ export const Navbar: React.FC = () => {
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                   <span>
-                    <strong className="text-forge-900 dark:text-white font-bold">
+                    <strong className="text-forge-900 dark:text-white font-bold tabular-nums">
                       {Math.max(0, aiUsage.maxDailyCalls - aiUsage.callsUsedToday)}
                     </strong>
                     /{aiUsage.maxDailyCalls} AI
@@ -144,6 +144,7 @@ export const Navbar: React.FC = () => {
                   <button
                     onClick={() => signOut()}
                     title="Sign out"
+                    aria-label="Sign out"
                     className="p-1.5 rounded-md text-forge-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
