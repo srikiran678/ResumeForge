@@ -4,18 +4,14 @@ import {
   ShieldCheck, 
   Download, 
   Upload, 
-  Trash2, 
-  Lock, 
   Check, 
   AlertTriangle, 
-  FileText, 
   Key, 
   Globe,
   Sun,
   Moon,
   Laptop,
   Palette,
-  Sparkles,
   Eye,
   ExternalLink
 } from 'lucide-react';

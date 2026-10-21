@@ -130,7 +130,7 @@ export const QualityAnalyzer = {
       resume.skills.forEach((cat) => {
         if (Array.isArray(cat.items)) {
           cat.items.forEach((skill) => {
-            const normalized = skill.trim().toLowerCase().replace(/[\.\s-]/g, '');
+            const normalized = skill.trim().toLowerCase().replace(/[.\s-]/g, '');
             const existing = seenSkills.get(normalized) || [];
             existing.push(`${skill} (in ${cat.category})`);
             seenSkills.set(normalized, existing);

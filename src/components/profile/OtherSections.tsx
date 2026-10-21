@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Trash2, Award, Trophy, HeartHandshake, GitFork, BookOpen, ShieldCheck } from 'lucide-react';
+import { Plus, Trash2, Award, Trophy, HeartHandshake, ShieldCheck } from 'lucide-react';
 import { 
   CertificationItem, 
   AchievementItem, 
@@ -31,8 +31,8 @@ export const OtherSections: React.FC<OtherSectionsProps> = ({
   achievements,
   hackathons,
   volunteering,
-  openSource,
-  publications,
+  openSource: _openSource,
+  publications: _publications,
   onChange,
 }) => {
   // Hackathon handlers

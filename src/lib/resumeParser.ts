@@ -125,8 +125,9 @@ export const ResumeParser = {
       };
 
       eduLines.forEach((l) => {
-        if (l.match(/(?:gpa|cgpa):\s*([\d\.\/]+)/i)) {
-          eduItem.cgpa = l.match(/(?:gpa|cgpa):\s*([\d\.\/]+)/i)![1];
+        const match = l.match(/(?:gpa|cgpa):\s*([\d./]+)/i);
+        if (match) {
+          eduItem.cgpa = match[1];
         }
         if (l.toLowerCase().includes('coursework')) {
           eduItem.coursework = l.replace(/coursework:?/i, '').split(/[,;]/).map((s) => s.trim()).filter(Boolean);
@@ -152,7 +153,7 @@ export const ResumeParser = {
       const projLines = sectionBuffers.projects;
       const highlights = projLines
         .filter((l) => l.startsWith('•') || l.startsWith('-') || l.startsWith('*'))
-        .map((l) => l.replace(/^[•\-\*]\s*/, ''));
+        .map((l) => l.replace(/^[•\-*]\s*/, ''));
       if (highlights.length === 0 && projLines.length > 1) {
         highlights.push(projLines[1]);
       }
@@ -172,7 +173,7 @@ export const ResumeParser = {
       const expLines = sectionBuffers.experience;
       const responsibilities = expLines
         .filter((l) => l.startsWith('•') || l.startsWith('-') || l.startsWith('*'))
-        .map((l) => l.replace(/^[•\-\*]\s*/, ''));
+        .map((l) => l.replace(/^[•\-*]\s*/, ''));
       if (responsibilities.length === 0 && expLines.length > 2) {
         responsibilities.push(expLines[2]);
       }

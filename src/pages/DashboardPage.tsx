@@ -10,13 +10,9 @@ import {
   ArrowRight,
   FileCheck, 
   Award,
-  TrendingUp,
-  Sliders,
-  ChevronRight,
   Camera,
   Layout,
-  User,
-  CheckCircle2
+  User
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -26,6 +22,11 @@ import { StepByStepProfileWizard } from '../components/profile/StepByStepProfile
 import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
 import { TemplateId } from '../types';
 import { ATSAnalyzer } from '../lib/atsAnalyzer';
+
+const getInitialGreeting = (): string => {
+  const currentHour = new Date().getHours();
+  return currentHour < 12 ? 'Good morning' : currentHour < 18 ? 'Good afternoon' : 'Good evening';
+};
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -50,8 +51,7 @@ export const DashboardPage: React.FC = () => {
     .slice(0, 3);
 
   // Greeting
-  const currentHour = new Date().getHours();
-  const greeting = currentHour < 12 ? 'Good morning' : currentHour < 18 ? 'Good afternoon' : 'Good evening';
+  const [greeting] = useState(getInitialGreeting);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left space-y-8 transition-colors duration-150">

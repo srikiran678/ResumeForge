@@ -208,6 +208,42 @@ export const AcademicTemplate: React.FC<TemplateProps> = ({ resume }) => {
           );
         }
 
+        if (sectionKey === 'certificates' && certificates.length > 0) {
+          return (
+            <section key="certificates" className="mb-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5 text-black">
+                Certifications & Credentials
+              </h2>
+              <div className="space-y-1.5 text-neutral-900">
+                {certificates.map((c) => (
+                  <div key={c.id} className="flex justify-between">
+                    <span><span className="font-bold">{c.name}</span> — {c.issuer}</span>
+                    <span>{c.date}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
+        if (sectionKey === 'hackathons' && hackathons.length > 0) {
+          return (
+            <section key="hackathons" className="mb-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider border-b border-black pb-0.5 mb-1.5 text-black">
+                Hackathons & Competitions
+              </h2>
+              <div className="space-y-1.5 text-neutral-900">
+                {hackathons.map((h) => (
+                  <div key={h.id} className="flex justify-between">
+                    <span><span className="font-bold">{h.name}</span> — {h.project} ({h.achievement})</span>
+                    <span>{h.date || ''}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
         return null;
       })}
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Sparkles, 
   Send, 
@@ -7,9 +7,6 @@ import {
   Check, 
   Bot, 
   User, 
-  RotateCcw, 
-  ExternalLink,
-  ChevronDown,
   Minimize2,
   Maximize2
 } from 'lucide-react';
@@ -24,6 +21,9 @@ interface Message {
   evidenceTraced?: boolean;
 }
 
+const getTimestamp = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const createMsgId = (prefix: string) => `${prefix}_${Date.now()}`;
+
 const QUICK_PROMPTS = [
   '⚡ Rewrite my project bullet with strong action verbs',
   '🎯 What are the top 3 ATS rejection mistakes?',
@@ -32,15 +32,15 @@ const QUICK_PROMPTS = [
 ];
 
 export const AIChatWidget: React.FC = () => {
-  const { masterProfile, resumes, currentResume } = useWorkspace();
+  const { masterProfile } = useWorkspace();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     {
       id: 'welcome',
       sender: 'ai',
       text: `Hello ${masterProfile.personalInfo.fullName.split(' ')[0] || 'there'}! 👋 I am your **ResumeForge Honest Career Copilot**.\n\nI can help you:\n• Improve your project & experience bullet points with strong action verbs.\n• Explain ATS parsing rules and check formatting issues.\n• Prepare for technical interviews and resume reviews.\n\n*(You can plug in your own Claude / OpenAI / Gemini API key anytime via the 🔑 key button above, or chat with my built-in career model right now!)*`,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: getTimestamp(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
@@ -70,54 +70,7 @@ export const AIChatWidget: React.FC = () => {
     }, 1500);
   };
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const text = (textToSend || inputValue).trim();
-    if (!text) return;
-
-    const userMsg: Message = {
-      id: `usr_${Date.now()}`,
-      sender: 'user',
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInputValue('');
-    setIsTyping(true);
-
-    // Call custom API if key provided, otherwise use intelligent built-in advisor
-    if (apiKey) {
-      try {
-        const responseText = await callLiveLLM(text, apiKey, apiProvider, masterProfile);
-        const aiMsg: Message = {
-          id: `ai_${Date.now()}`,
-          sender: 'ai',
-          text: responseText,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          evidenceTraced: true,
-        };
-        setMessages((prev) => [...prev, aiMsg]);
-      } catch (err: any) {
-        const errorMsg: Message = {
-          id: `ai_${Date.now()}`,
-          sender: 'ai',
-          text: `⚠️ **API Connection Error:** ${err.message}. Falling back to internal career intelligence.`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        };
-        setMessages((prev) => [...prev, errorMsg]);
-        generateBuiltInResponse(text);
-      } finally {
-        setIsTyping(false);
-      }
-    } else {
-      setTimeout(() => {
-        generateBuiltInResponse(text);
-        setIsTyping(false);
-      }, 700);
-    }
-  };
-
-  const generateBuiltInResponse = (query: string) => {
+  const generateBuiltInResponse = useCallback((query: string) => {
     const q = query.toLowerCase();
     let reply = '';
 
@@ -134,14 +87,61 @@ export const AIChatWidget: React.FC = () => {
     }
 
     const aiMsg: Message = {
-      id: `ai_${Date.now()}`,
+      id: createMsgId('ai'),
       sender: 'ai',
       text: reply,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: getTimestamp(),
       evidenceTraced: true,
     };
     setMessages((prev) => [...prev, aiMsg]);
-  };
+  }, [masterProfile]);
+
+  const handleSendMessage = useCallback(async (textToSend?: string) => {
+    const text = (textToSend || inputValue).trim();
+    if (!text) return;
+
+    const userMsg: Message = {
+      id: createMsgId('usr'),
+      sender: 'user',
+      text,
+      timestamp: getTimestamp(),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setInputValue('');
+    setIsTyping(true);
+
+    // Call custom API if key provided, otherwise use intelligent built-in advisor
+    if (apiKey) {
+      try {
+        const responseText = await callLiveLLM(text, apiKey, apiProvider, masterProfile);
+        const aiMsg: Message = {
+          id: createMsgId('ai'),
+          sender: 'ai',
+          text: responseText,
+          timestamp: getTimestamp(),
+          evidenceTraced: true,
+        };
+        setMessages((prev) => [...prev, aiMsg]);
+      } catch (err: any) {
+        const errorMsg: Message = {
+          id: createMsgId('ai'),
+          sender: 'ai',
+          text: `⚠️ **API Connection Error:** ${err.message}. Falling back to internal career intelligence.`,
+          timestamp: getTimestamp(),
+        };
+        setMessages((prev) => [...prev, errorMsg]);
+        generateBuiltInResponse(text);
+      } finally {
+        setIsTyping(false);
+      }
+    } else {
+      setTimeout(() => {
+        generateBuiltInResponse(text);
+        setIsTyping(false);
+      }, 700);
+    }
+  }, [inputValue, apiKey, apiProvider, masterProfile, generateBuiltInResponse]);
 
   return (
     <>

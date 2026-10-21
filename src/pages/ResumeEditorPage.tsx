@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
-  Save, 
   Download, 
   Sparkles, 
   History, 
@@ -10,14 +9,10 @@ import {
   Printer, 
   FileCheck, 
   ArrowLeft, 
-  Layers, 
   Plus, 
   Trash2, 
-  Copy,
-  ChevronDown,
   ChevronUp,
-  Settings,
-  Share2
+  ChevronDown
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { ResumeDocument, downloadResumePDF } from '../templates';
@@ -28,7 +23,7 @@ import confetti from 'canvas-confetti';
 import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 import { PersonaTestingModal } from '../components/testing/PersonaTestingModal';
 import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
-import { Users, Target, Zap, ZoomIn, ZoomOut, Maximize2, Scan, Layout, FileText } from 'lucide-react';
+import { Users, Target, Zap, ZoomIn, ZoomOut, Scan, Layout, FileText } from 'lucide-react';
 
 export const ResumeEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,7 +32,6 @@ export const ResumeEditorPage: React.FC = () => {
     loadResume, 
     currentResume, 
     updateCurrentResume, 
-    saveCurrentResumeImmediately, 
     saveStatus,
     versions,
     createVersionSnapshot,

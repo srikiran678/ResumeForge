@@ -17,13 +17,6 @@ export const LoginPage: React.FC = () => {
     return params.get('mode') === 'signup' ? 'signup' : 'signin';
   });
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const m = params.get('mode');
-    if (m === 'signup' || m === 'signin') {
-      setMode(m);
-    }
-  }, [location.search]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -50,17 +43,10 @@ export const LoginPage: React.FC = () => {
     }
   }, [user, navigate, destination]);
 
-  // Read OAuth callback errors from URL query parameters (e.g. ?error=access_denied)
+  // Clean OAuth callback error params from URL history if present
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const err = params.get('error');
-    const desc = params.get('error_description');
-    if (err) {
-      setError(
-        err === 'access_denied'
-          ? 'Google sign-in was cancelled or access was denied.'
-          : desc || err
-      );
+    if (params.has('error') || params.has('error_description')) {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [location.search]);

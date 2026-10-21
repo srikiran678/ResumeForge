@@ -6,13 +6,9 @@ import {
   CheckCircle2, 
   XCircle, 
   ArrowLeft, 
-  ShieldCheck, 
-  Sparkles, 
-  Copy, 
   Terminal, 
   Zap, 
-  BookOpen, 
-  Layers 
+  BookOpen
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { ATSAnalyzer } from '../lib/atsAnalyzer';

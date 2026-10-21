@@ -25,7 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const saved = localStorage.getItem('resumeforge_current_user');
     return saved ? JSON.parse(saved) : null;
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isInsforgeConfigured);
   const [authError, setAuthError] = useState<string | null>(() => {
     try {
       const saved = sessionStorage.getItem('resumeforge_oauth_error');
@@ -33,32 +33,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sessionStorage.removeItem('resumeforge_oauth_error');
         return saved;
       }
-    } catch (e) {}
+    } catch {
+      // ignore
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const errorParam = params.get('error');
+    const errorDesc = params.get('error_description');
+    if (errorParam) {
+      return errorParam === 'access_denied'
+        ? 'Google sign-in was cancelled or access was denied.'
+        : errorDesc || errorParam;
+    }
+
     return null;
   });
 
   const clearAuthError = () => setAuthError(null);
 
   useEffect(() => {
-    // 1. Inspect session storage and URL parameters for OAuth errors
-    try {
-      const saved = sessionStorage.getItem('resumeforge_oauth_error');
-      if (saved) {
-        setAuthError(saved);
-        sessionStorage.removeItem('resumeforge_oauth_error');
-      }
-    } catch (e) {}
-
+    // Clean OAuth callback error params from URL history if present
     const params = new URLSearchParams(window.location.search);
-    const errorParam = params.get('error');
-    const errorDesc = params.get('error_description');
-
-    if (errorParam) {
-      const message =
-        errorParam === 'access_denied'
-          ? 'Google sign-in was cancelled or access was denied.'
-          : errorDesc || errorParam;
-      setAuthError(message);
+    if (params.has('error') || params.has('error_description')) {
       const cleanUrl = window.location.pathname;
       window.history.replaceState({}, document.title, cleanUrl);
     }
@@ -138,8 +134,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (e) {
         console.debug('onAuthStateChange listener error:', e);
       }
-    } else {
-      setLoading(false);
     }
   }, []);
 

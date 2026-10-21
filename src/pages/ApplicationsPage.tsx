@@ -4,10 +4,7 @@ import {
   Plus, 
   Calendar,
   X, 
-  History,
-  Briefcase,
-  ExternalLink,
-  ChevronRight
+  History
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';

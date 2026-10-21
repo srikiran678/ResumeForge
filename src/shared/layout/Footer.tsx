@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Sparkles, FileCheck } from 'lucide-react';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-white dark:bg-slate-900 border-t border-forge-200 dark:border-slate-800 mt-auto py-10 no-print transition-colors duration-150">
@@ -64,7 +66,7 @@ export const Footer: React.FC = () => {
 
         <div className="pt-6 border-t border-forge-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center text-xs text-forge-500 dark:text-slate-500 gap-2">
           <div>
-            &copy; {new Date().getFullYear()} ResumeForge. Built for student career empowerment.
+            &copy; {CURRENT_YEAR} ResumeForge. Built for student career empowerment.
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-[11px] font-mono">MIT Open Architecture</span>

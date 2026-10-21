@@ -9,7 +9,6 @@ export interface ResumeDocumentProps {
 
 export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ resume, scale = 1 }) => {
   const templateId = resume?.meta?.template || 'classic';
-  const TemplateComponent = getTemplate(templateId);
 
   return (
     <div
@@ -23,7 +22,7 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ resume, scale = 
         minHeight: '1100px',
       }}
     >
-      <TemplateComponent resume={resume} />
+      {React.createElement(getTemplate(templateId), { resume })}
     </div>
   );
 };

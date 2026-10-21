@@ -157,7 +157,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setSaveStatus('saved');
     }
     return found;
-  }, [user?.id, resumes]);
+  }, [user, resumes]);
 
   // Debounced Autosave (Section 11: 800ms debounce)
   const updateCurrentResume = useCallback((updater: (prev: ResumeData) => ResumeData) => {

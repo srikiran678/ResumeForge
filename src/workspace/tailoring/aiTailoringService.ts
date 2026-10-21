@@ -196,7 +196,7 @@ function performDeterministicJobAnalysis(
 ): JobDescriptionAnalysis {
   let jobTitle = 'Software Engineer';
   const titleMatch = jd.match(/(?:title|role|position|job):\s*([^\n\r]+)/i) ||
-    jd.match(/(?:looking for an?|hiring an?|seeking an?)\s+([A-Za-z\s\/\-]{4,35}(?:engineer|developer|intern|scientist|analyst|architect))/i);
+    jd.match(/(?:looking for an?|hiring an?|seeking an?)\s+([A-Za-z\s/-]{4,35}(?:engineer|developer|intern|scientist|analyst|architect))/i);
   if (titleMatch && titleMatch[1]) {
     jobTitle = titleMatch[1].trim();
   }

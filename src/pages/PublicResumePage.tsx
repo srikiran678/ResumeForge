@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Download, ShieldCheck, Copy, Check, Lock, Globe, AlertTriangle } from 'lucide-react';
+import { Download, Copy, Check, Lock, Globe } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { ResumeDocument } from '../components/resume/ResumeDocument';
 import { downloadResumePDF } from '../components/resume/ResumePDF';
 
 export const PublicResumePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { publicLinks, resumes, revokePublicLink, togglePublicLink } = useWorkspace();
+  const { publicLinks, resumes } = useWorkspace();
   const [copied, setCopied] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -49,7 +49,7 @@ export const PublicResumePage: React.FC = () => {
     setIsDownloading(true);
     try {
       await downloadResumePDF(resume);
-    } catch (e) {
+    } catch {
       window.print();
     } finally {
       setIsDownloading(false);
