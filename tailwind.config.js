@@ -52,7 +52,7 @@ export default {
           elevated: '#1a1b20',
           active: '#22242b',
         },
-        // Cybernetic Theme Tokens
+        "background": "#0b0e14",
         "on-secondary-fixed": "#07006c",
         "secondary-fixed-dim": "#c0c1ff",
         "primary-container": "#06b6d4",

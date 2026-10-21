@@ -194,7 +194,7 @@ export const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="bg-background text-on-surface font-body-md antialiased min-h-screen selection:bg-primary/20 selection:text-primary-fixed">
+    <div className="dark bg-[#0b0e14] text-on-surface font-body-md antialiased min-h-screen selection:bg-primary/20 selection:text-primary-fixed">
       {/* =========================================================================
           1. FIXED TOP HEADER BAR
       ========================================================================= */}
