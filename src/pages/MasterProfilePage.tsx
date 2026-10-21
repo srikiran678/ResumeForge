@@ -13,7 +13,8 @@ import {
   Briefcase, 
   Cpu, 
   Trophy, 
-  Layers 
+  Layers,
+  Camera
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { PersonalInfoSection } from '../components/profile/PersonalInfoSection';
@@ -24,6 +25,8 @@ import { SkillsSection } from '../components/profile/SkillsSection';
 import { OtherSections } from '../components/profile/OtherSections';
 import { CreateResumeModal } from '../components/profile/CreateResumeModal';
 import { ResumeImportModal } from '../components/profile/ResumeImportModal';
+import { ResumePhotoUploadModal } from '../components/profile/ResumePhotoUploadModal';
+import { StepByStepProfileWizard } from '../components/profile/StepByStepProfileWizard';
 
 export const MasterProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +34,8 @@ export const MasterProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'personal' | 'education' | 'experience' | 'projects' | 'skills' | 'other'>('personal');
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [importModalOpen, setImportModalOpen] = useState(false);
+  const [photoModalOpen, setPhotoModalOpen] = useState(false);
+  const [wizardModalOpen, setWizardModalOpen] = useState(false);
   const [exportNotice, setExportNotice] = useState(false);
 
   const handleExportProfile = () => {
@@ -68,24 +73,42 @@ export const MasterProfilePage: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           <button
+            onClick={() => setWizardModalOpen(true)}
+            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-700 hover:bg-forge-50 rounded-lg transition-colors shadow-sm cursor-pointer"
+            title="Step-by-step guided profile setup"
+          >
+            <User className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Guided Setup</span>
+          </button>
+
+          <button
+            onClick={() => setPhotoModalOpen(true)}
+            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 rounded-lg transition-colors shadow-sm cursor-pointer"
+            title="Upload photo of resume for OCR scanning"
+          >
+            <Camera className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Upload Photo</span>
+          </button>
+
+          <button
             onClick={() => setImportModalOpen(true)}
-            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-700 hover:bg-forge-50 rounded-lg transition-colors shadow-sm"
+            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-700 hover:bg-forge-50 rounded-lg transition-colors shadow-sm cursor-pointer"
           >
             <Upload className="w-3.5 h-3.5" />
-            <span>Import Resume</span>
+            <span>Import JSON</span>
           </button>
 
           <button
             onClick={handleExportProfile}
-            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-700 hover:bg-forge-50 rounded-lg transition-colors shadow-sm"
+            className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold bg-white border border-forge-300 text-forge-700 hover:bg-forge-50 rounded-lg transition-colors shadow-sm cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export Profile JSON</span>
+            <span>Export JSON</span>
           </button>
 
           <button
             onClick={() => setCreateModalOpen(true)}
-            className="flex items-center space-x-1.5 px-4 py-2 text-xs font-bold bg-forge-900 text-white hover:bg-forge-800 rounded-lg transition-colors shadow-sm"
+            className="flex items-center space-x-1.5 px-4 py-2 text-xs font-bold bg-forge-900 text-white hover:bg-forge-800 rounded-lg transition-colors shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create Resume from Profile</span>
@@ -215,6 +238,29 @@ export const MasterProfilePage: React.FC = () => {
         masterProfile={masterProfile}
         onSaveToProfile={(updated) => updateMasterProfile(updated)}
         onClose={() => setImportModalOpen(false)}
+      />
+
+      {/* Guided Step-by-Step Profile Wizard */}
+      <StepByStepProfileWizard
+        isOpen={wizardModalOpen}
+        onClose={() => setWizardModalOpen(false)}
+        onCompleted={(newResumeId) => {
+          setWizardModalOpen(false);
+          if (newResumeId) {
+            navigate(`/editor/${newResumeId}`);
+          }
+        }}
+      />
+
+      {/* Resume Photo Upload Modal */}
+      <ResumePhotoUploadModal
+        isOpen={photoModalOpen}
+        masterProfile={masterProfile}
+        onSaveToProfile={(updated) => {
+          updateMasterProfile(updated);
+          setPhotoModalOpen(false);
+        }}
+        onClose={() => setPhotoModalOpen(false)}
       />
     </div>
   );

@@ -20,22 +20,15 @@ import {
   Share2
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
-import { ResumeDocument } from '../components/resume/ResumeDocument';
-import { downloadResumePDF } from '../components/resume/ResumePDF';
-import { SectionManager } from '../components/resume/SectionManager';
-import { BulletImproverModal } from '../components/resume/BulletImproverModal';
-import { VersionHistoryModal } from '../components/resume/VersionHistoryModal';
-import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
-import { ATSAnalyzer } from '../lib/atsAnalyzer';
-import { AIService } from '../lib/aiService';
-import { StorageService } from '../lib/storage';
-import { ResumeData, TemplateId, AISuggestion } from '../types';
+import { ResumeDocument, downloadResumePDF } from '../templates';
+import { SectionManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal } from '../editor';
+import { ATSAnalyzer, ATSInspectorOverlay, RecruiterScanSimulator, AIService } from '../workspace';
+import { StorageService, ResumeData, TemplateId, AISuggestion } from '../data';
 import confetti from 'canvas-confetti';
+import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 import { PersonaTestingModal } from '../components/testing/PersonaTestingModal';
-import { XYZFormulaModal } from '../components/resume/XYZFormulaModal';
-import { RecruiterScanSimulator } from '../components/resume/RecruiterScanSimulator';
-import { ATSInspectorOverlay } from '../components/resume/ATSInspectorOverlay';
-import { Users, Target, Zap, ZoomIn, ZoomOut, Maximize2, Scan } from 'lucide-react';
+import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
+import { Users, Target, Zap, ZoomIn, ZoomOut, Maximize2, Scan, Layout, FileText } from 'lucide-react';
 
 export const ResumeEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,9 +47,11 @@ export const ResumeEditorPage: React.FC = () => {
   // Active section accordion in editor
   const [activeAccordion, setActiveAccordion] = useState<string>('basics');
   const [previewScale, setPreviewScale] = useState(1);
+  const [mobileViewTab, setMobileViewTab] = useState<'editor' | 'preview'>('editor');
 
   // Modals state
   const [versionModalOpen, setVersionModalOpen] = useState(false);
+  const [templateGalleryOpen, setTemplateGalleryOpen] = useState(false);
   const [aiPrivacyModalOpen, setAiPrivacyModalOpen] = useState(false);
   const [bulletModalOpen, setBulletModalOpen] = useState(false);
   const [activeBullet, setActiveBullet] = useState<{
@@ -279,24 +274,23 @@ export const ResumeEditorPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Center: Template & Font Selector */}
-        <div className="hidden xl:flex items-center space-x-3 text-xs">
-          <div className="flex items-center space-x-1.5">
-            <span className="text-forge-500 dark:text-slate-400 font-medium">Template:</span>
-            <select
-              value={currentResume.meta.template}
-              onChange={(e) => handleTemplateChange(e.target.value as TemplateId)}
-              className="text-xs p-1.5 border border-forge-300 dark:border-white/[0.08] rounded-lg font-semibold bg-white dark:bg-[#121316] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            >
-              <option value="classic">Classic (Standard Minimal ATS)</option>
-              <option value="compact">Compact (Dense 1-Page Technical)</option>
-              <option value="modern">Modern (Refined Typography)</option>
-              <option value="academic">Academic (Research & Coursework)</option>
-              <option value="hackathon">Hackathon (Tech Badges & Demos)</option>
-            </select>
-          </div>
+        {/* Center: Template Gallery & Font Selector */}
+        <div className="flex items-center space-x-2 text-xs">
+          <button
+            type="button"
+            onClick={() => setTemplateGalleryOpen(true)}
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-slate-800 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 bg-white dark:bg-[#121316] hover:bg-slate-50 dark:hover:bg-[#1a1b20] border border-forge-200 dark:border-white/[0.08] font-semibold transition-colors shadow-2xs cursor-pointer"
+            title="Browse all 10 professional ATS templates"
+          >
+            <Layout className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="hidden sm:inline text-forge-500 dark:text-slate-400 font-normal">Template:</span>
+            <span className="capitalize font-bold">{currentResume.meta.template}</span>
+            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
+              10
+            </span>
+          </button>
 
-          <div className="flex items-center space-x-1.5">
+          <div className="hidden xl:flex items-center space-x-1.5">
             <span className="text-forge-500 dark:text-slate-400 font-medium">Font:</span>
             <select
               value={currentResume.meta.fontFamily}
@@ -410,11 +404,22 @@ export const ResumeEditorPage: React.FC = () => {
             )}
           </div>
 
+          {/* Live Web Portfolio & Public Resume Preview */}
+          <Link
+            to="/portfolio"
+            target="_blank"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-forge-700 dark:text-slate-200 hover:text-forge-900 dark:hover:text-white bg-white dark:bg-[#121316] hover:bg-forge-50 dark:hover:bg-[#1a1b20] border border-forge-200 dark:border-white/[0.08] text-xs font-semibold transition-colors"
+            title="Preview Live Web Showcase & Portfolio"
+          >
+            <Eye className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+            <span className="hidden sm:inline">Preview</span>
+          </Link>
+
           {/* Pure Vector PDF Download */}
           <button
             disabled={isExporting}
             onClick={handleDownloadPDF}
-            className="flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-xs transition-colors disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{isExporting ? 'Generating...' : 'Download PDF'}</span>
@@ -422,10 +427,40 @@ export const ResumeEditorPage: React.FC = () => {
         </div>
       </header>
 
+      {/* Mobile View Switcher (Visible on mobile & tablet < lg screens) */}
+      <div className="lg:hidden w-full max-w-7xl mx-auto px-4 pt-3 pb-1 no-print">
+        <div className="flex bg-slate-200/70 dark:bg-white/[0.06] p-1 rounded-xl border border-slate-300/60 dark:border-white/[0.08]">
+          <button
+            type="button"
+            onClick={() => setMobileViewTab('editor')}
+            className={`flex-1 flex items-center justify-center space-x-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              mobileViewTab === 'editor'
+                ? 'bg-white dark:bg-[#16171c] text-slate-950 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Edit Form</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileViewTab('preview')}
+            className={`flex-1 flex items-center justify-center space-x-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              mobileViewTab === 'preview'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>Live ATS Preview</span>
+          </button>
+        </div>
+      </div>
+
       {/* Main Split Layout: Left Form Editor / Right Live Preview (Section 11) */}
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Editor Accordion (5 Cols on LG) */}
-        <div className="lg:col-span-5 space-y-4 no-print">
+        {/* Left Column: Editor Accordion (5 Cols on LG, hidden on mobile when preview active) */}
+        <div className={`${mobileViewTab === 'preview' ? 'hidden lg:block' : 'block'} lg:col-span-5 space-y-4 no-print`}>
           {/* Section Management Card */}
           <SectionManager resume={currentResume} onUpdate={updateCurrentResume} />
 
@@ -884,8 +919,8 @@ export const ResumeEditorPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Live ATS Preview (7 Cols on LG) */}
-        <div className="lg:col-span-7 flex flex-col items-center">
+        {/* Right Column: Live ATS Preview (7 Cols on LG, hidden on mobile when editor active) */}
+        <div className={`${mobileViewTab === 'editor' ? 'hidden lg:flex' : 'flex'} lg:col-span-7 flex-col items-center w-full`}>
           <div className="w-full sticky top-32">
             {/* Live Preview Controls Header */}
             <div className="mb-2 flex items-center justify-between text-xs text-forge-500 dark:text-slate-400 px-1">
@@ -1023,6 +1058,17 @@ export const ResumeEditorPage: React.FC = () => {
         isOpen={scanSimOpen}
         resume={currentResume}
         onClose={() => setScanSimOpen(false)}
+      />
+
+      {/* 10 Professional ATS Templates Gallery Modal */}
+      <TemplateGalleryModal
+        isOpen={templateGalleryOpen}
+        selectedTemplateId={currentResume.meta.template}
+        onSelectTemplate={(tplId) => {
+          handleTemplateChange(tplId);
+          setTemplateGalleryOpen(false);
+        }}
+        onClose={() => setTemplateGalleryOpen(false)}
       />
     </div>
   );

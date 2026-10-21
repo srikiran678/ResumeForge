@@ -1,0 +1,1 @@
+export { downloadResumePDF } from './ResumePDFDocument';

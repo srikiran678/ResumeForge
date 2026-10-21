@@ -146,14 +146,18 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Load a resume into editor
   const loadResume = useCallback((id: string): ResumeData | undefined => {
-    const found = StorageService.getResumeById(id);
+    const found = 
+      (user?.id ? StorageService.getResumeById(id, user.id) : undefined) ||
+      StorageService.getResumeById(id) ||
+      resumes.find((r) => r.id === id);
+      
     if (found) {
       setCurrentResume(found);
       setVersions(StorageService.getVersions(id));
       setSaveStatus('saved');
     }
     return found;
-  }, []);
+  }, [user?.id, resumes]);
 
   // Debounced Autosave (Section 11: 800ms debounce)
   const updateCurrentResume = useCallback((updater: (prev: ResumeData) => ResumeData) => {

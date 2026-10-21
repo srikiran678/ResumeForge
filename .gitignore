@@ -25,6 +25,7 @@ scratch/
 .vercel/
 *.mjs.bak
 *.json.bak
+graphify-out/
 
 
 # Editor directories and files

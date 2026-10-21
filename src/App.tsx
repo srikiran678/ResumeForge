@@ -12,6 +12,7 @@ import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 // Pages
 import { LoginPage } from './pages/LoginPage';
+import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { MasterProfilePage } from './pages/MasterProfilePage';
 import { ResumesPage } from './pages/ResumesPage';
@@ -30,24 +31,25 @@ const AppContent: React.FC = () => {
 
   const isPublicResumeRoute = location.pathname.startsWith('/r/');
   const isEditorRoute = location.pathname.startsWith('/editor/');
-  const isAuthRoute = location.pathname === '/' || location.pathname === '/login';
+  const isLandingRoute = location.pathname === '/' || location.pathname === '/landing';
+  const isLoginRoute = location.pathname === '/login';
 
-  // For unauthenticated users visiting / or /login:
-  // Render ONLY the login/signup interface with zero features on top (no feature navbar, no footer, no widget).
-  const showHeader = !isPublicResumeRoute && (!isAuthRoute || !!user);
-  const showFooter = !isPublicResumeRoute && (!isAuthRoute || !!user);
-  const hideFloatingWidget = isPublicResumeRoute || isEditorRoute || (isAuthRoute && !user);
+  // Show app-level Navbar/Footer only for authenticated workspace pages
+  // (LandingPage has its own dedicated high-tech 3D header & footer)
+  const showHeader = !isPublicResumeRoute && !isLandingRoute && !isLoginRoute && !!user;
+  const showFooter = !isPublicResumeRoute && !isLandingRoute && !isLoginRoute && !!user;
+  const hideFloatingWidget = isPublicResumeRoute || isEditorRoute || isLandingRoute || (isLoginRoute && !user);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-150">
       {showHeader && <Navbar />}
       <main className="flex-1">
         <Routes>
-          {/* First loading page: contains ONLY login or signup with zero features on top */}
-          <Route
-            path="/"
-            element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />}
-          />
+          {/* Landing Page: High-impact 3D Showcase with interactive ATS demo and account creation */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/landing" element={<LandingPage />} />
+
+          {/* Authentication Route */}
           <Route
             path="/login"
             element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />}
@@ -55,7 +57,7 @@ const AppContent: React.FC = () => {
 
           {/* Protected Workspace Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="/profile" element={<Navigate to="/resumes" replace />} />
+          <Route path="/profile" element={<ProtectedRoute><MasterProfilePage /></ProtectedRoute>} />
           <Route path="/resumes" element={<ProtectedRoute><ResumesPage /></ProtectedRoute>} />
           <Route path="/editor/:id" element={<ProtectedRoute><ResumeEditorPage /></ProtectedRoute>} />
           <Route path="/analyzer/:id" element={<ProtectedRoute><ResumeAnalyzerPage /></ProtectedRoute>} />
