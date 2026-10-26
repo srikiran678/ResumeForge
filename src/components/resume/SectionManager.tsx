@@ -1,1 +1,1 @@
-export * from '../../editor/controls/SectionManager';
+export * from '@/modules/editor/components/SectionManager';

@@ -6,14 +6,11 @@ import {
   Upload, 
   Plus, 
   Check, 
-  Sparkles, 
-  ShieldCheck, 
   FolderGit2, 
   GraduationCap, 
   Briefcase, 
   Cpu, 
   Trophy, 
-  Layers,
   Camera
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';

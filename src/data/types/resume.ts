@@ -20,7 +20,15 @@ export type TemplateId =
   | 'minimal' 
   | 'creative' 
   | 'elegant' 
-  | 'technical';
+  | 'technical'
+  | 'classic-resume';
+
+export interface DeclarationInfo {
+  text: string;
+  place: string;
+  date: string;
+  signature: string;
+}
 
 export interface ResumeMeta {
   sectionOrder: string[]; // ['summary', 'education', 'experience', 'projects', 'skills', 'certifications', 'achievements', 'hackathons', 'volunteering']
@@ -31,6 +39,9 @@ export interface ResumeMeta {
   lastModified: string;
   version: string; // e.g. "1.0", "1.1"
   template: TemplateId;
+  companyTemplateId?: string;
+  targetCompany?: string;
+  targetRole?: string;
 }
 
 // Resume Data Structure (Compatible with JSON export and ATS generation)
@@ -62,6 +73,11 @@ export interface ResumeData {
   hackathons: HackathonItem[];
   volunteering: VolunteeringItem[];
   publications?: PublicationItem[];
+  // Classic Resume & Extended Profile Fields
+  careerObjective?: string;
+  strengths?: string[];
+  extracurricular?: string[];
+  declaration?: DeclarationInfo;
   meta: ResumeMeta;
   isArchived?: boolean;
   isTrash?: boolean;

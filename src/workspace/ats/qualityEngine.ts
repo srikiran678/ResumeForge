@@ -139,7 +139,7 @@ export const QualityAnalyzer = {
       });
     }
 
-    seenSkills.forEach((occurrences, _) => {
+    seenSkills.forEach((occurrences) => {
       if (occurrences.length > 1) {
         duplicateSkills.push({
           skill: occurrences[0].split(' (')[0],

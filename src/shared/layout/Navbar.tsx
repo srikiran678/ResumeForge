@@ -14,7 +14,8 @@ import {
   Moon,
   Laptop,
   Eye,
-  User
+  User,
+  Building2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useWorkspace } from '../../context/WorkspaceContext';
@@ -29,6 +30,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { to: '/dashboard', label: 'Dashboard', icon: Layers },
+    { to: '/templates', label: 'Templates', icon: Building2 },
     { to: '/profile', label: 'Default Profile', icon: User },
     { to: '/resumes', label: 'My Resumes', icon: FileText },
     { to: '/applications', label: 'Applications', icon: Briefcase },

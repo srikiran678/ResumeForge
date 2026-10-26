@@ -2,18 +2,11 @@ import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
-  Briefcase, 
-  Calendar, 
-  MapPin, 
   ExternalLink, 
   History, 
   Save, 
   Trash2, 
-  Check, 
-  Download,
-  Clock,
-  User,
-  Mail
+  Check 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { JobApplication, ApplicationStatus } from '../types';
@@ -22,7 +15,7 @@ import { SnapshotViewer } from '../components/application/SnapshotViewer';
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { applications, resumes, saveApplication, deleteApplication } = useWorkspace();
+  const { applications, saveApplication, deleteApplication } = useWorkspace();
 
   const application = applications.find((a) => a.id === id);
 

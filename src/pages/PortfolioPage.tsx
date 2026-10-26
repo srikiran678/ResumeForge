@@ -2,21 +2,17 @@ import React, { useState } from 'react';
 import { 
   Globe, 
   ExternalLink, 
-  Share2, 
   Copy, 
   Check, 
-  QrCode, 
-  Layers, 
-  Mail,
-  Palette,
-  Code2
+  Mail, 
+  Palette, 
+  Code2 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 
 export const PortfolioPage: React.FC = () => {
   const { resumes, portfolio, updatePortfolio } = useWorkspace();
   const [copied, setCopied] = useState(false);
-  const [showQr, setShowQr] = useState(portfolio.showQrCode);
 
   const portfolioUrl = `${window.location.origin}/portfolio`;
 

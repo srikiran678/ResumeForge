@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Download, Copy, Check, Lock, Globe } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
-import { ResumeDocument } from '../components/resume/ResumeDocument';
-import { downloadResumePDF } from '../components/resume/ResumePDF';
+import { ResumeDocument, downloadResumePDF } from '@/modules/templates';
 
 export const PublicResumePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

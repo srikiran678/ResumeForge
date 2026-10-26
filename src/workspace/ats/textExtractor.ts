@@ -128,6 +128,30 @@ export function generateRawTextStream(resume: ResumeData): string {
         lines.push('');
       });
     }
+
+    if ((sectionKey === 'strengths' || !hidden.includes('strengths')) && Array.isArray(resume.strengths) && resume.strengths.length > 0) {
+      lines.push('STRENGTHS');
+      resume.strengths.forEach((s) => lines.push(`• ${s}`));
+      lines.push('');
+    }
+
+    if ((sectionKey === 'extracurricular' || !hidden.includes('extracurricular')) && Array.isArray(resume.extracurricular) && resume.extracurricular.length > 0) {
+      lines.push('EXTRA-CURRICULAR ACTIVITIES');
+      resume.extracurricular.forEach((act) => lines.push(`• ${act}`));
+      lines.push('');
+    }
+
+    if (resume.declaration && !hidden.includes('declaration')) {
+      lines.push('DECLARATION');
+      lines.push(resume.declaration.text);
+      if (resume.declaration.place || resume.declaration.date) {
+        lines.push(`Place: ${resume.declaration.place || ''} | Date: ${resume.declaration.date || ''}`);
+      }
+      if (resume.declaration.signature) {
+        lines.push(`Signature: ${resume.declaration.signature}`);
+      }
+      lines.push('');
+    }
   });
 
   return lines.join('\n');

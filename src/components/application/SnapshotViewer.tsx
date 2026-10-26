@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, ShieldCheck, Download, History, ExternalLink } from 'lucide-react';
+import { X, ShieldCheck, Download } from 'lucide-react';
 import { JobApplication } from '../../types';
 import { ResumeDocument } from '../resume/ResumeDocument';
 import { downloadResumePDF } from '../resume/ResumePDF';

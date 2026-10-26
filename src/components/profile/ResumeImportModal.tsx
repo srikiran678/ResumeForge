@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Check, AlertCircle, FileText, X, ArrowRight, ShieldAlert } from 'lucide-react';
+import { Upload, Check, X, ArrowRight, ShieldAlert } from 'lucide-react';
 import { ResumeParser, ExtractedResumeDraft } from '../../lib/resumeParser';
 import { MasterProfile } from '../../types';
 

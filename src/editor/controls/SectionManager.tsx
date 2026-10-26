@@ -9,13 +9,18 @@ interface SectionManagerProps {
 
 const SECTION_LABELS: Record<string, string> = {
   summary: 'Summary / Profile',
-  education: 'Education',
-  work: 'Experience / Work History',
-  projects: 'Projects',
+  objective: 'Career Objective',
+  education: 'Educational Qualifications',
   skills: 'Technical Skills',
+  projects: 'Academic Projects',
+  work: 'Internship / Experience',
+  internships: 'Internship / Training',
+  certificates: 'Certifications',
+  strengths: 'Strengths',
+  extracurricular: 'Extra-Curricular Activities',
+  declaration: 'Declaration',
   hackathons: 'Hackathons & Competitions',
   achievements: 'Achievements & Honors',
-  certificates: 'Certifications',
   volunteering: 'Volunteering & Leadership',
 };
 

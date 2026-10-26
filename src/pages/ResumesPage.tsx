@@ -5,18 +5,15 @@ import {
   Plus, 
   Copy, 
   Trash2, 
-  Archive, 
   RotateCcw, 
   Search, 
   FileCheck, 
-  ChevronRight,
-  Sparkles,
-  Camera,
-  Layout,
-  User
+  Camera, 
+  Layout, 
+  User 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
-import { ATSAnalyzer } from '../lib/atsAnalyzer';
+import { ATSAnalyzer } from '@/modules/ats';
 import { CreateResumeModal } from '../components/profile/CreateResumeModal';
 import { ResumePhotoUploadModal } from '../components/profile/ResumePhotoUploadModal';
 import { StepByStepProfileWizard } from '../components/profile/StepByStepProfileWizard';
@@ -109,7 +106,7 @@ export const ResumesPage: React.FC = () => {
             title="Explore 10 professional ATS templates"
           >
             <Layout className="w-3.5 h-3.5 text-indigo-500" />
-            <span>10 Templates</span>
+            <span>Templates Gallery</span>
           </button>
 
           <button

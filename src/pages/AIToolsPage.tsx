@@ -3,18 +3,14 @@ import {
   Sparkles, 
   CheckCircle2, 
   AlertCircle, 
-  ArrowRight, 
-  ShieldCheck, 
   Check, 
   X, 
-  History, 
-  HelpCircle,
-  FileCheck
+  HelpCircle
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { AIService } from '../lib/aiService';
 import { JobDescriptionAnalysis } from '../types';
-import { StorageService } from '../lib/storage';
+import { StorageService } from '@/modules/database';
 import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 
 const SAMPLE_JOB_DESCRIPTION = '';

@@ -1,1 +1,1 @@
-export * from '../../templates/pdf/ResumePDFDocument';
+export * from '@/modules/templates/components/ResumePDF';

@@ -1,1 +1,1 @@
-export * from '../data/client/insforgeClient';
+export * from '../modules/database/core/insforgeClient';

@@ -355,7 +355,7 @@ export const LandingPage: React.FC = () => {
                 type="button"
               >
                 <span className="material-symbols-outlined text-lg text-primary">view_quilt</span>
-                <span>Explore 10 Templates</span>
+                <span>Explore Templates</span>
               </button>
             </div>
 

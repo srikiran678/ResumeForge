@@ -12,7 +12,8 @@ import {
   Award,
   Camera,
   Layout,
-  User
+  User,
+  Building2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -120,12 +121,19 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           <div className="flex items-center space-x-2">
+            <Link
+              to="/templates"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors cursor-pointer"
+            >
+              <Building2 className="w-3.5 h-3.5" />
+              <span>Company Templates</span>
+            </Link>
             <button
               onClick={() => setGalleryModalOpen(true)}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-[#16171c] border border-slate-200 dark:border-white/[0.08] text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1a1b22] transition-colors cursor-pointer"
             >
               <Layout className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Explore 10 Templates</span>
+              <span>Explore Templates</span>
             </button>
           </div>
         </div>

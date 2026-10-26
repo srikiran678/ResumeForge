@@ -22,19 +22,21 @@ export const TemplateGalleryModal: React.FC<TemplateGalleryModalProps> = ({
   if (!isOpen) return null;
 
   const categories = [
-    { id: 'all', label: 'All Templates (10)' },
+    { id: 'all', label: `All Templates (${allTemplates.length})` },
+    { id: 'placement', label: 'Campus Placement & Freshers' },
     { id: 'tech', label: 'Engineering & Tech' },
-    { id: 'leadership', label: 'Leadership & Exec' },
-    { id: 'finance', label: 'Finance & Classic' },
     { id: 'academic', label: 'Research & Academics' },
+    { id: 'finance', label: 'Finance & Classic' },
+    { id: 'leadership', label: 'Leadership & Exec' },
   ];
 
   const filteredTemplates = allTemplates.filter((t) => {
     if (filter === 'all') return true;
-    if (filter === 'tech') return ['modern', 'compact', 'minimal', 'technical', 'hackathon'].includes(t.id);
+    if (filter === 'placement') return ['classic-resume', 'classic', 'compact', 'academic'].includes(t.id);
+    if (filter === 'tech') return ['modern', 'compact', 'minimal', 'technical', 'hackathon', 'classic-resume'].includes(t.id);
+    if (filter === 'academic') return ['academic', 'classic-resume', 'classic', 'compact'].includes(t.id);
+    if (filter === 'finance') return ['classic', 'elegant', 'executive', 'classic-resume'].includes(t.id);
     if (filter === 'leadership') return ['executive', 'modern', 'classic'].includes(t.id);
-    if (filter === 'finance') return ['classic', 'elegant', 'executive'].includes(t.id);
-    if (filter === 'academic') return ['academic', 'classic', 'compact'].includes(t.id);
     return true;
   });
 
@@ -153,7 +155,7 @@ export const TemplateGalleryModal: React.FC<TemplateGalleryModalProps> = ({
 
         {/* Modal Footer */}
         <div className="pt-3 border-t border-slate-100 dark:border-white/[0.08] flex justify-between items-center text-xs text-slate-500">
-          <span>All 10 templates use deterministic ATS-compliant single-column structures.</span>
+          <span>All {allTemplates.length} templates use deterministic ATS-compliant single-column structures.</span>
           <button
             onClick={onClose}
             className="px-4 py-2 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-bold rounded-xl shadow-xs"

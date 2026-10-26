@@ -1,1 +1,1 @@
-export * from '../../templates/preview/ResumeDocument';
+export * from '@/modules/templates/components/ResumeDocument';

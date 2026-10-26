@@ -1,1 +1,1 @@
-export * from '../../editor/modals/VersionHistoryModal';
+export * from '@/modules/editor/components/VersionHistoryModal';

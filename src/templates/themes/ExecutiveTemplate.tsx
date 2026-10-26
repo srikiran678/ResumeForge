@@ -193,6 +193,47 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ resume }) => {
           );
         }
 
+        if (sectionKey === 'volunteering' && volunteering && volunteering.length > 0) {
+          return (
+            <section key="volunteering" className="mb-3 font-sans">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-0.5 mb-1.5">
+                Leadership & Community
+              </h2>
+              <div className="space-y-1.5 text-xs text-slate-800">
+                {volunteering.map((v) => (
+                  <div key={v.id}>
+                    <div className="flex justify-between font-bold text-slate-900">
+                      <span>{v.role} — {v.organization}</span>
+                      {v.date && <span className="text-slate-500 font-mono text-[11px]">{v.date}</span>}
+                    </div>
+                    {v.summary && <p className="text-slate-700 text-[11.5px] mt-0.5">{v.summary}</p>}
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
+        if (sectionKey === 'hackathons' && hackathons && hackathons.length > 0) {
+          return (
+            <section key="hackathons" className="mb-3 font-sans">
+              <h2 className="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-0.5 mb-1.5">
+                Competitions & Hackathons
+              </h2>
+              <div className="space-y-1.5 text-xs text-slate-800">
+                {hackathons.map((h) => (
+                  <div key={h.id}>
+                    <div className="flex justify-between font-bold text-slate-900">
+                      <span>{h.name} — {h.organization}</span>
+                      <span className="text-slate-600">{h.achievement}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
         return null;
       })}
     </div>

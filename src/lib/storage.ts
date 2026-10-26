@@ -1,1 +1,1 @@
-export * from '../data/repositories/storageService';
+export * from '../modules/database';

@@ -1,1 +1,1 @@
-export * from '../../editor/modals/BulletImproverModal';
+export * from '@/modules/editor/components/BulletImproverModal';

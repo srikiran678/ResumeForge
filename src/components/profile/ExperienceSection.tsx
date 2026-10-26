@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Briefcase, X } from 'lucide-react';
+import { Plus, Trash2, Briefcase } from 'lucide-react';
 import { ExperienceItem } from '../../types';
 
 interface ExperienceSectionProps {

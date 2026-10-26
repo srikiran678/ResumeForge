@@ -1,1 +1,1 @@
-export * from '../workspace/ats/qualityEngine';
+export * from '../modules/ats';

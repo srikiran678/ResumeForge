@@ -8,7 +8,7 @@ import {
   PortfolioProfile,
   ResumeVersion
 } from '../types';
-import { StorageService } from '../lib/storage';
+import { StorageService } from '@/modules/database';
 import { useAuth } from './AuthContext';
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error';

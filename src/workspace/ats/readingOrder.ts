@@ -2,13 +2,17 @@ import { ResumeData } from '../../data/types';
 
 export const SECTION_TITLES: Record<string, string> = {
   summary: 'SUMMARY / OBJECTIVE',
-  work: 'WORK EXPERIENCE',
+  objective: 'CAREER OBJECTIVE',
+  work: 'WORK EXPERIENCE / INTERNSHIP',
   experience: 'WORK EXPERIENCE',
-  education: 'EDUCATION',
-  projects: 'PROJECTS',
+  education: 'EDUCATIONAL QUALIFICATIONS',
+  projects: 'ACADEMIC PROJECTS',
   skills: 'TECHNICAL SKILLS',
   certificates: 'CERTIFICATIONS',
   certifications: 'CERTIFICATIONS',
+  strengths: 'STRENGTHS',
+  extracurricular: 'EXTRA-CURRICULAR ACTIVITIES',
+  declaration: 'DECLARATION',
   achievements: 'ACHIEVEMENTS & HONORS',
   hackathons: 'HACKATHONS & COMPETITIONS',
   volunteering: 'VOLUNTEERING & LEADERSHIP',
@@ -32,10 +36,16 @@ export function hasSectionContent(resume: ResumeData, key: string): boolean {
   switch (key) {
     case 'summary':
       return Boolean(resume.basics?.summary && resume.basics.summary.trim().length > 0);
+    case 'objective':
+      return Boolean(
+        (resume.careerObjective && resume.careerObjective.trim().length > 0) ||
+        (resume.basics?.summary && resume.basics.summary.trim().length > 0)
+      );
     case 'education':
       return Array.isArray(resume.education) && resume.education.length > 0;
     case 'work':
     case 'experience':
+    case 'internships':
       return Array.isArray(resume.work) && resume.work.length > 0;
     case 'projects':
       return Array.isArray(resume.projects) && resume.projects.length > 0;
@@ -46,6 +56,16 @@ export function hasSectionContent(resume: ResumeData, key: string): boolean {
       const certs = resume.certificates || (resume as any).certifications;
       return Array.isArray(certs) && certs.length > 0;
     }
+    case 'strengths':
+      return Array.isArray(resume.strengths) && resume.strengths.length > 0;
+    case 'extracurricular':
+      return (
+        (Array.isArray(resume.extracurricular) && resume.extracurricular.length > 0) ||
+        (Array.isArray(resume.hackathons) && resume.hackathons.length > 0) ||
+        (Array.isArray(resume.volunteering) && resume.volunteering.length > 0)
+      );
+    case 'declaration':
+      return Boolean(resume.declaration?.text || resume.basics?.name);
     case 'achievements':
       return Array.isArray(resume.achievements) && resume.achievements.length > 0;
     case 'hackathons':

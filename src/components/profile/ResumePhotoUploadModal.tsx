@@ -2,15 +2,9 @@ import React, { useState, useRef } from 'react';
 import { 
   Camera, 
   Upload, 
-  FileText, 
-  Image as ImageIcon, 
   X, 
   Check, 
-  AlertCircle, 
-  Sparkles, 
-  Eye, 
   RefreshCw, 
-  ArrowRight,
   ShieldCheck
 } from 'lucide-react';
 import { ResumeParser, ExtractedResumeDraft } from '../../lib/resumeParser';
@@ -33,7 +27,6 @@ export const ResumePhotoUploadModal: React.FC<ResumePhotoUploadModalProps> = ({
 }) => {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>('');
-  const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [extractedDraft, setExtractedDraft] = useState<ExtractedResumeDraft | null>(null);
   const [step, setStep] = useState<'upload' | 'scanning' | 'verify'>('upload');
@@ -77,7 +70,6 @@ export const ResumePhotoUploadModal: React.FC<ResumePhotoUploadModalProps> = ({
 
   const simulateOCRScan = (fileDataOrName: string, isPhoto: boolean) => {
     setStep('scanning');
-    setIsScanning(true);
     setScanProgress(15);
 
     // Progressive visual progress simulation
@@ -94,7 +86,6 @@ export const ResumePhotoUploadModal: React.FC<ResumePhotoUploadModalProps> = ({
     setTimeout(() => {
       clearInterval(interval);
       setScanProgress(100);
-      setIsScanning(false);
 
       // Extract details
       const fallbackText = isPhoto 

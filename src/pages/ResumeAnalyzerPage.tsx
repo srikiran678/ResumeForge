@@ -11,9 +11,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
-import { ATSAnalyzer } from '../lib/atsAnalyzer';
-import { QualityAnalyzer } from '../lib/qualityAnalyzer';
-import { TextExtractionViewer } from '../components/resume/TextExtractionViewer';
+import { ATSAnalyzer, QualityAnalyzer, TextExtractionViewer } from '@/modules/ats';
 
 export const ResumeAnalyzerPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

@@ -2,28 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   Download, 
-  Sparkles, 
   History, 
   Eye, 
   Check, 
   Printer, 
   FileCheck, 
-  ArrowLeft, 
-  Plus, 
-  Trash2, 
-  ChevronUp,
-  ChevronDown
+  ArrowLeft,
+  ChevronDown 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
-import { ResumeDocument, downloadResumePDF } from '../templates';
-import { SectionManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal } from '../editor';
-import { ATSAnalyzer, ATSInspectorOverlay, RecruiterScanSimulator, AIService } from '../workspace';
-import { StorageService, ResumeData, TemplateId, AISuggestion } from '../data';
+import { ResumeDocument, downloadResumePDF, getAllTemplates } from '@/modules/templates';
+import { SectionManager, ResumeFormManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal } from '@/modules/editor';
+import { ATSAnalyzer, ATSInspectorOverlay, RecruiterScanSimulator } from '@/modules/ats';
+import { AIService } from '../workspace';
+import { StorageService } from '@/modules/database';
+import { ResumeData, TemplateId, AISuggestion } from '@/data/types';
 import confetti from 'canvas-confetti';
 import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 import { PersonaTestingModal } from '../components/testing/PersonaTestingModal';
 import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
-import { Users, Target, Zap, ZoomIn, ZoomOut, Scan, Layout, FileText } from 'lucide-react';
+import { JobCustomizationPanel } from '../components/resume/JobCustomizationPanel';
+import { Users, Zap, ZoomIn, ZoomOut, Scan, Layout, FileText } from 'lucide-react';
 
 export const ResumeEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -280,7 +279,7 @@ export const ResumeEditorPage: React.FC = () => {
             <span className="hidden sm:inline text-forge-500 dark:text-slate-400 font-normal">Template:</span>
             <span className="capitalize font-bold">{currentResume.meta.template}</span>
             <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
-              10
+              {getAllTemplates().length}
             </span>
           </button>
 
@@ -455,462 +454,28 @@ export const ResumeEditorPage: React.FC = () => {
       <div className="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Editor Accordion (5 Cols on LG, hidden on mobile when preview active) */}
         <div className={`${mobileViewTab === 'preview' ? 'hidden lg:block' : 'block'} lg:col-span-5 space-y-4 no-print`}>
+          {/* Target Company & Role ATS Customization Panel */}
+          <JobCustomizationPanel resume={currentResume} onUpdateResume={(updated) => updateCurrentResume(() => updated)} />
+
           {/* Section Management Card */}
           <SectionManager resume={currentResume} onUpdate={updateCurrentResume} />
 
-          {/* Accordion 1: Basics & Contact Info */}
-          <div className="bg-white dark:bg-[#121316] border border-forge-200 dark:border-white/[0.07] rounded-xl overflow-hidden shadow-xs">
-            <button
-              onClick={() =>
-                setActiveAccordion(activeAccordion === 'basics' ? '' : 'basics')
-              }
-              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 dark:text-white bg-forge-50/50 dark:bg-[#1a1b20]/60 hover:bg-forge-50 dark:hover:bg-[#1a1b20] transition-colors"
-            >
-              <span>Personal Information & Basics</span>
-              {activeAccordion === 'basics' ? (
-                <ChevronUp className="w-4 h-4 text-forge-400 dark:text-slate-500" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-forge-400 dark:text-slate-500" />
-              )}
-            </button>
-
-            {activeAccordion === 'basics' && (
-              <div className="p-4 space-y-3 border-t border-forge-100 dark:border-white/[0.07] text-xs">
-                <div>
-                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    value={currentResume.basics.name}
-                    onChange={(e) =>
-                      updateCurrentResume((prev) => ({
-                        ...prev,
-                        basics: { ...prev.basics, name: e.target.value },
-                      }))
-                    }
-                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Target Headline</label>
-                  <input
-                    type="text"
-                    value={currentResume.basics.label}
-                    onChange={(e) =>
-                      updateCurrentResume((prev) => ({
-                        ...prev,
-                        basics: { ...prev.basics, label: e.target.value },
-                      }))
-                    }
-                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Email</label>
-                    <input
-                      type="email"
-                      value={currentResume.basics.email}
-                      onChange={(e) =>
-                        updateCurrentResume((prev) => ({
-                          ...prev,
-                          basics: { ...prev.basics, email: e.target.value },
-                        }))
-                      }
-                      className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Phone</label>
-                    <input
-                      type="text"
-                      value={currentResume.basics.phone}
-                      onChange={(e) =>
-                        updateCurrentResume((prev) => ({
-                          ...prev,
-                          basics: { ...prev.basics, phone: e.target.value },
-                        }))
-                      }
-                      className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Location (City, State)</label>
-                  <input
-                    type="text"
-                    value={currentResume.basics.location}
-                    onChange={(e) =>
-                      updateCurrentResume((prev) => ({
-                        ...prev,
-                        basics: { ...prev.basics, location: e.target.value },
-                      }))
-                    }
-                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-forge-700 dark:text-slate-300 mb-1">Summary</label>
-                  <textarea
-                    rows={3}
-                    value={currentResume.basics.summary}
-                    onChange={(e) =>
-                      updateCurrentResume((prev) => ({
-                        ...prev,
-                        basics: { ...prev.basics, summary: e.target.value },
-                      }))
-                    }
-                    className="w-full p-2 border border-forge-300 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Accordion 2: Projects & Bullets */}
-          <div className="bg-white border border-forge-200 rounded-xl overflow-hidden shadow-sm">
-            <button
-              onClick={() =>
-                setActiveAccordion(activeAccordion === 'projects' ? '' : 'projects')
-              }
-              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 bg-forge-50/50 hover:bg-forge-50"
-            >
-              <span>Projects ({currentResume.projects.length})</span>
-              {activeAccordion === 'projects' ? (
-                <ChevronUp className="w-4 h-4 text-forge-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-forge-400" />
-              )}
-            </button>
-
-            {activeAccordion === 'projects' && (
-              <div className="p-4 space-y-4 border-t border-forge-100 text-xs">
-                {currentResume.projects.map((proj, pIdx) => (
-                  <div key={proj.id} className="p-3 bg-forge-50 rounded-lg border border-forge-200 space-y-2">
-                    <div className="flex justify-between font-bold text-forge-900">
-                      <span>{proj.name || 'Untitled Project'}</span>
-                      <button
-                        onClick={() =>
-                          updateCurrentResume((prev) => ({
-                            ...prev,
-                            projects: prev.projects.filter((_, idx) => idx !== pIdx),
-                          }))
-                        }
-                        className="text-forge-400 hover:text-rose-600"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    <input
-                      type="text"
-                      value={proj.name}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        updateCurrentResume((prev) => {
-                          const updated = [...prev.projects];
-                          updated[pIdx].name = val;
-                          return { ...prev, projects: updated };
-                        });
-                      }}
-                      className="w-full p-2 border border-forge-300 rounded bg-white text-xs"
-                      placeholder="Project Name"
-                    />
-
-                    {/* Bullets with Improve Button */}
-                    <div className="space-y-1.5 pt-1">
-                      <label className="block text-[11px] font-semibold text-forge-600">
-                        Highlights & Action Bullets:
-                      </label>
-                      {proj.highlights.map((h, hIdx) => {
-                        const tele = getBulletTelemetry(h);
-                        return (
-                          <div key={hIdx} className="space-y-1 bg-white p-2.5 rounded-lg border border-forge-200">
-                            <div className="flex items-center justify-between text-[10px]">
-                              <span className="font-mono text-slate-400">Highlight #{hIdx + 1}</span>
-                              <span
-                                className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
-                                  tele.status === 'strong'
-                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                    : tele.status === 'metric'
-                                    ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                    : 'bg-slate-100 text-slate-500 border-slate-200'
-                                }`}
-                              >
-                                {tele.label}
-                              </span>
-                            </div>
-                            <textarea
-                              rows={2}
-                              value={h}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                updateCurrentResume((prev) => {
-                                  const updated = [...prev.projects];
-                                  updated[pIdx].highlights[hIdx] = val;
-                                  return { ...prev, projects: updated };
-                                });
-                              }}
-                              className="w-full text-xs p-1.5 border border-forge-200 rounded focus:outline-none"
-                            />
-                          <div className="flex justify-between items-center text-[10px]">
-                            <div className="flex items-center space-x-2">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleTriggerBulletImprover(
-                                    h,
-                                    'Projects',
-                                    proj.name,
-                                    (newText) => {
-                                      updateCurrentResume((prev) => {
-                                        const updated = [...prev.projects];
-                                        updated[pIdx].highlights[hIdx] = newText;
-                                        return { ...prev, projects: updated };
-                                      });
-                                    }
-                                  )
-                                }
-                                className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-slate-700 bg-slate-100 hover:bg-slate-200 font-medium"
-                              >
-                                <Sparkles className="w-3 h-3 text-amber-500" />
-                                <span>Improve</span>
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setActiveXyzTarget({
-                                    initialBullet: h,
-                                    onApply: (newBullet) => {
-                                      updateCurrentResume((prev) => {
-                                        const updated = [...prev.projects];
-                                        updated[pIdx].highlights[hIdx] = newBullet;
-                                        return { ...prev, projects: updated };
-                                      });
-                                    },
-                                  });
-                                  setXyzModalOpen(true);
-                                }}
-                                className="inline-flex items-center space-x-1 text-slate-500 hover:text-slate-800"
-                              >
-                                <Target className="w-3 h-3 text-slate-400" />
-                                <span>XYZ metric</span>
-                              </button>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                updateCurrentResume((prev) => {
-                                  const updated = [...prev.projects];
-                                  updated[pIdx].highlights = updated[pIdx].highlights.filter(
-                                    (_, idx) => idx !== hIdx
-                                  );
-                                  return { ...prev, projects: updated };
-                                });
-                              }}
-                              className="text-slate-400 hover:text-rose-600"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                        );
-                      })}
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          updateCurrentResume((prev) => {
-                            const updated = [...prev.projects];
-                            updated[pIdx].highlights.push('Engineered application features.');
-                            return { ...prev, projects: updated };
-                          });
-                        }}
-                        className="text-[11px] font-semibold text-forge-700 hover:text-forge-900 pt-1"
-                      >
-                        + Add bullet
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Accordion 3: Experience & Bullets */}
-          <div className="bg-white dark:bg-[#121316] border border-forge-200 dark:border-white/[0.07] rounded-xl overflow-hidden shadow-xs">
-            <button
-              onClick={() =>
-                setActiveAccordion(activeAccordion === 'work' ? '' : 'work')
-              }
-              className="w-full p-4 flex justify-between items-center text-xs font-bold text-forge-900 dark:text-white bg-forge-50/50 dark:bg-[#1a1b20]/60 hover:bg-forge-50 dark:hover:bg-[#1a1b20] transition-colors"
-            >
-              <span>Experience ({currentResume.work.length})</span>
-              {activeAccordion === 'work' ? (
-                <ChevronUp className="w-4 h-4 text-forge-400 dark:text-slate-500" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-forge-400 dark:text-slate-500" />
-              )}
-            </button>
-
-            {activeAccordion === 'work' && (
-              <div className="p-4 space-y-4 border-t border-forge-100 dark:border-white/[0.07] text-xs">
-                {currentResume.work.map((exp, eIdx) => (
-                  <div key={exp.id} className="p-3 bg-forge-50 dark:bg-[#08090a] rounded-xl border border-forge-200 dark:border-white/[0.07] space-y-2">
-                    <div className="flex justify-between font-bold text-forge-900 dark:text-white">
-                      <span>{exp.position} — {exp.company}</span>
-                      <button
-                        onClick={() =>
-                          updateCurrentResume((prev) => ({
-                            ...prev,
-                            work: prev.work.filter((_, idx) => idx !== eIdx),
-                          }))
-                        }
-                        className="text-forge-400 hover:text-rose-600 dark:hover:text-rose-400"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    {/* Bullets with Improve Button */}
-                    <div className="space-y-1.5 pt-1">
-                      <label className="block text-[11px] font-semibold text-forge-600 dark:text-slate-400">
-                        Responsibility Bullets:
-                      </label>
-                      {exp.responsibilities.map((b, bIdx) => {
-                        const tele = getBulletTelemetry(b);
-                        return (
-                          <div key={bIdx} className="space-y-1 bg-white dark:bg-[#121316] p-2.5 rounded-lg border border-forge-200 dark:border-white/[0.07]">
-                            <div className="flex items-center justify-between text-[10px]">
-                              <span className="font-mono text-slate-400 dark:text-slate-500">Bullet #{bIdx + 1}</span>
-                              <span
-                                className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
-                                  tele.status === 'strong'
-                                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
-                                    : tele.status === 'metric'
-                                    ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
-                                    : 'bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/[0.08]'
-                                }`}
-                              >
-                                {tele.label}
-                              </span>
-                            </div>
-                            <textarea
-                              rows={2}
-                              value={b}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                updateCurrentResume((prev) => {
-                                  const updated = [...prev.work];
-                                  updated[eIdx].responsibilities[bIdx] = val;
-                                  return { ...prev, work: updated };
-                                });
-                              }}
-                              className="w-full text-xs p-1.5 border border-forge-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-[#08090a] text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            />
-                          <div className="flex justify-between items-center text-[10px]">
-                            <div className="flex items-center space-x-2">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleTriggerBulletImprover(
-                                    b,
-                                    'Experience',
-                                    `${exp.company} (${exp.position})`,
-                                    (newText) => {
-                                      updateCurrentResume((prev) => {
-                                        const updated = [...prev.work];
-                                        updated[eIdx].responsibilities[bIdx] = newText;
-                                        return { ...prev, work: updated };
-                                      });
-                                    }
-                                  )
-                                }
-                                className="inline-flex items-center space-x-1 px-2 py-0.5 rounded text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] font-medium"
-                              >
-                                <Sparkles className="w-3 h-3 text-amber-500" />
-                                <span>Improve</span>
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setActiveXyzTarget({
-                                    initialBullet: b,
-                                    onApply: (newBullet) => {
-                                      updateCurrentResume((prev) => {
-                                        const updated = [...prev.work];
-                                        updated[eIdx].responsibilities[bIdx] = newBullet;
-                                        return { ...prev, work: updated };
-                                      });
-                                    },
-                                  });
-                                  setXyzModalOpen(true);
-                                }}
-                                className="inline-flex items-center space-x-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white"
-                              >
-                                <Target className="w-3 h-3 text-slate-400" />
-                                <span>XYZ metric</span>
-                              </button>
-                            </div>
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                updateCurrentResume((prev) => {
-                                  const updated = [...prev.work];
-                                  updated[eIdx].responsibilities = updated[eIdx].responsibilities.filter(
-                                    (_, idx) => idx !== bIdx
-                                  );
-                                  return { ...prev, work: updated };
-                                });
-                              }}
-                              className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    updateCurrentResume((prev) => ({
-                      ...prev,
-                      work: [
-                        ...prev.work,
-                        {
-                          id: `work_${Date.now()}`,
-                          company: 'Company Name',
-                          position: 'Role Title',
-                          startDate: '2023',
-                          endDate: 'Present',
-                          current: true,
-                          location: 'Remote',
-                          summary: '',
-                          responsibilities: ['Engineered mission-critical software systems.'],
-                        },
-                      ],
-                    }));
-                  }}
-                  className="w-full py-2 bg-slate-100 dark:bg-white/[0.06] hover:bg-slate-200 dark:hover:bg-white/[0.1] text-forge-800 dark:text-slate-200 rounded-lg font-bold text-xs flex items-center justify-center space-x-1 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Experience</span>
-                </button>
-              </div>
-            )}
-          </div>
+          {/* Section Accordions Form Manager */}
+          <ResumeFormManager
+            currentResume={currentResume}
+            updateCurrentResume={updateCurrentResume}
+            activeAccordion={activeAccordion}
+            setActiveAccordion={setActiveAccordion}
+            getBulletTelemetry={getBulletTelemetry}
+            handleTriggerBulletImprover={handleTriggerBulletImprover}
+            handleOpenXyzFormula={(initialBullet, onApply) => {
+              setActiveXyzTarget({
+                initialBullet,
+                onApply,
+              });
+              setXyzModalOpen(true);
+            }}
+          />
         </div>
 
         {/* Right Column: Live ATS Preview (7 Cols on LG, hidden on mobile when editor active) */}

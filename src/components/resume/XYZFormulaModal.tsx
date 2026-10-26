@@ -1,1 +1,1 @@
-export * from '../../editor/modals/XYZFormulaModal';
+export * from '@/modules/editor/components/XYZFormulaModal';

@@ -24,6 +24,10 @@ export interface EducationItem {
   cgpa: string; // e.g. "8.9 / 10.0" or "3.8 / 4.0"
   coursework: string[]; // e.g. ["Data Structures", "Algorithms", "Operating Systems", "DBMS"]
   location?: string;
+  qualification?: string; // e.g. "B.Tech / Degree", "Intermediate", "SSC"
+  board?: string; // University / Board
+  year?: string; // e.g. "2020 - 2024" or "2024"
+  percentage?: string; // CGPA or Percentage e.g. "8.5 CGPA" or "85%"
 }
 
 export interface ExperienceItem {

@@ -24,6 +24,8 @@ import { AIToolsPage } from './pages/AIToolsPage';
 import { PortfolioPage } from './pages/PortfolioPage';
 import { PublicResumePage } from './pages/PublicResumePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { CompanyTemplatesPage } from './pages/CompanyTemplatesPage';
+import { AdminTemplateDashboardPage } from './pages/AdminTemplateDashboardPage';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -34,9 +36,8 @@ const AppContent: React.FC = () => {
   const isLandingRoute = location.pathname === '/' || location.pathname === '/landing';
   const isLoginRoute = location.pathname === '/login';
 
-  // Show app-level Navbar/Footer only for authenticated workspace pages
-  // (LandingPage has its own dedicated high-tech 3D header & footer)
-  const showHeader = !isPublicResumeRoute && !isLandingRoute && !isLoginRoute && !!user;
+  // Show app-level Navbar/Footer only for authenticated workspace pages or public templates page
+  const showHeader = !isPublicResumeRoute && !isLandingRoute && !isLoginRoute;
   const showFooter = !isPublicResumeRoute && !isLandingRoute && !isLoginRoute && !!user;
   const hideFloatingWidget = isPublicResumeRoute || isEditorRoute || isLandingRoute || (isLoginRoute && !user);
 
@@ -55,6 +56,10 @@ const AppContent: React.FC = () => {
             element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />}
           />
 
+          {/* Company-Wise Resume Template Library (Public & Authenticated) */}
+          <Route path="/templates" element={<CompanyTemplatesPage />} />
+          <Route path="/company-templates" element={<CompanyTemplatesPage />} />
+
           {/* Protected Workspace Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><MasterProfilePage /></ProtectedRoute>} />
@@ -67,6 +72,10 @@ const AppContent: React.FC = () => {
           <Route path="/ai" element={<ProtectedRoute><AIToolsPage /></ProtectedRoute>} />
           <Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+
+          {/* Protected Admin Resume Library Agent Routes */}
+          <Route path="/admin" element={<ProtectedRoute><AdminTemplateDashboardPage /></ProtectedRoute>} />
+          <Route path="/admin/templates" element={<ProtectedRoute><AdminTemplateDashboardPage /></ProtectedRoute>} />
 
           {/* Public Link Route */}
           <Route path="/r/:slug" element={<PublicResumePage />} />
