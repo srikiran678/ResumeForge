@@ -283,7 +283,7 @@ export const AIChatWidget: React.FC = () => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Ask for bullet rewrites, ATS checks, or interview advice..."
-                  className="flex-1 text-xs p-2.5 border border-slate-300 rounded-xl bg-slate-50 focus:bg-white focus:ring-1 focus:ring-slate-900 focus:outline-none"
+                  className="flex-1 text-xs p-2.5 border border-slate-300 rounded-xl bg-slate-50 focus:bg-white focus:ring-1 focus:ring-slate-900 focus:outline-none text-black placeholder:text-slate-400"
                 />
                 <button
                   type="submit"
@@ -333,7 +333,7 @@ export const AIChatWidget: React.FC = () => {
                 <select
                   value={apiProvider}
                   onChange={(e) => setApiProvider(e.target.value as any)}
-                  className="w-full p-2 border border-slate-300 rounded-lg bg-white"
+                  className="w-full p-2 border border-slate-300 rounded-lg bg-white text-black"
                 >
                   <option value="anthropic">Anthropic Claude (claude-3-5-sonnet)</option>
                   <option value="openai">OpenAI (gpt-4o / gpt-4o-mini)</option>
@@ -348,7 +348,7 @@ export const AIChatWidget: React.FC = () => {
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
                   placeholder="sk-ant-... or sk-proj-..."
-                  className="w-full p-2.5 border border-slate-300 rounded-lg font-mono text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-slate-900"
+                  className="w-full p-2.5 border border-slate-300 rounded-lg font-mono text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-slate-900 text-black placeholder:text-slate-400"
                 />
                 <span className="text-[10px] text-slate-400 mt-1 block">
                   Keys are stored exclusively in your local browser storage and used for direct requests.
