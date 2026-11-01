@@ -204,9 +204,17 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ resume }) => {
                   <div key={v.id}>
                     <div className="flex justify-between font-bold text-slate-900">
                       <span>{v.role} — {v.organization}</span>
-                      {v.date && <span className="text-slate-500 font-mono text-[11px]">{v.date}</span>}
+                      <span className="text-slate-500 font-mono text-[11px]">
+                        {v.startDate} – {v.endDate || 'Present'}
+                      </span>
                     </div>
-                    {v.summary && <p className="text-slate-700 text-[11.5px] mt-0.5">{v.summary}</p>}
+                    {v.contributions && v.contributions.length > 0 && (
+                      <ul className="list-disc list-outside ml-4 space-y-0.5 text-slate-700 text-[11.5px] mt-0.5">
+                        {v.contributions.map((contribution, idx) => (
+                          <li key={idx}>{contribution}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 ))}
               </div>

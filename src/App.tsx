@@ -26,6 +26,7 @@ import { PublicResumePage } from './pages/PublicResumePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { CompanyTemplatesPage } from './pages/CompanyTemplatesPage';
 import { AdminTemplateDashboardPage } from './pages/AdminTemplateDashboardPage';
+import { JobSearchPage } from './pages/JobSearchPage';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -68,6 +69,7 @@ const AppContent: React.FC = () => {
           <Route path="/analyzer/:id" element={<ProtectedRoute><ResumeAnalyzerPage /></ProtectedRoute>} />
           <Route path="/ats/:id" element={<ProtectedRoute><ResumeAnalyzerPage /></ProtectedRoute>} />
           <Route path="/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
+          <Route path="/jobs" element={<ProtectedRoute><JobSearchPage /></ProtectedRoute>} />
           <Route path="/applications/:id" element={<ProtectedRoute><ApplicationDetailPage /></ProtectedRoute>} />
           <Route path="/ai" element={<ProtectedRoute><AIToolsPage /></ProtectedRoute>} />
           <Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   FileText, 
   Briefcase, 
+  Search, 
   Sparkles, 
   Settings, 
   Menu, 
@@ -34,6 +35,7 @@ export const Navbar: React.FC = () => {
     { to: '/profile', label: 'Default Profile', icon: User },
     { to: '/resumes', label: 'My Resumes', icon: FileText },
     { to: '/applications', label: 'Applications', icon: Briefcase },
+    { to: '/jobs', label: 'Job Search', icon: Search },
     { to: '/ai', label: 'AI Tools', icon: Sparkles },
     { to: '/settings', label: 'Settings', icon: Settings },
     { to: '/portfolio', label: 'Preview', icon: Eye },
