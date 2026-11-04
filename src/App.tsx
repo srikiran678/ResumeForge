@@ -34,6 +34,8 @@ const InterviewPrepPage = React.lazy(() => import('./pages/InterviewPrepPage').t
 const JobMatchRadarPage = React.lazy(() => import('./pages/JobMatchRadarPage').then(m => ({ default: m.JobMatchRadarPage })));
 const SalaryIntelligencePage = React.lazy(() => import('./pages/SalaryIntelligencePage').then(m => ({ default: m.SalaryIntelligencePage })));
 const UpskillingRoadmapPage = React.lazy(() => import('./pages/UpskillingRoadmapPage').then(m => ({ default: m.UpskillingRoadmapPage })));
+const JobSearchExplorerPage = React.lazy(() => import('./pages/JobSearchExplorerPage').then(m => ({ default: m.JobSearchExplorerPage })));
+const ApplicationAnalyticsPage = React.lazy(() => import('./pages/ApplicationAnalyticsPage').then(m => ({ default: m.ApplicationAnalyticsPage })));
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -83,6 +85,8 @@ const AppContent: React.FC = () => {
             <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
             {/* Career Suite Flagship Routes (ai-job-search Framework Integration) */}
+            <Route path="/jobs" element={<ProtectedRoute><JobSearchExplorerPage /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><ApplicationAnalyticsPage /></ProtectedRoute>} />
             <Route path="/cover-letters" element={<ProtectedRoute><CoverLetterStudioPage /></ProtectedRoute>} />
             <Route path="/interview-prep" element={<ProtectedRoute><InterviewPrepPage /></ProtectedRoute>} />
             <Route path="/job-match" element={<ProtectedRoute><JobMatchRadarPage /></ProtectedRoute>} />

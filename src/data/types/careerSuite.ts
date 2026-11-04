@@ -214,3 +214,65 @@ export interface UpskillPlan {
   curatedResources: CuratedStudyResource[];
   createdAt: string;
 }
+
+// -------------------------------------------------------------
+// 6. Job Search Models (Derived from ai-job-search framework)
+// -------------------------------------------------------------
+export interface JobListing {
+  id: string;
+  title: string;
+  company: string;
+  companyLogo?: string;
+  tier: 'FAANG' | 'Unicorn' | 'Top Startup' | 'Enterprise' | 'Seed/Series A';
+  location: string;
+  remoteType: 'Remote' | 'Hybrid' | 'Onsite';
+  experienceLevel: 'Intern' | 'Entry Level' | 'Mid Level' | 'Senior';
+  salaryRange: string;
+  minSalary: number;
+  maxSalary: number;
+  postedDate: string;
+  applyUrl: string;
+  source: 'Direct' | 'LinkedIn' | 'Wellfound' | 'Y Combinator' | 'Indeed';
+  description: string;
+  requiredSkills: string[];
+  preferredSkills: string[];
+  responsibilities: string[];
+  benefits: string[];
+  matchScore?: number;
+  matchedSkills?: string[];
+  missingSkills?: string[];
+}
+
+export interface JobFilterCriteria {
+  keyword: string;
+  remoteType: 'ALL' | 'Remote' | 'Hybrid' | 'Onsite';
+  experienceLevel: 'ALL' | 'Intern' | 'Entry Level' | 'Mid Level' | 'Senior';
+  tier: 'ALL' | 'FAANG' | 'Unicorn' | 'Top Startup' | 'Enterprise';
+  minSalary: number;
+  sortBy: 'match' | 'recent' | 'salary';
+}
+
+// -------------------------------------------------------------
+// 7. Application Analytics & Funnel Models
+// -------------------------------------------------------------
+export interface FunnelStageMetric {
+  stage: string;
+  count: number;
+  conversionRate: number; // percentage from previous stage or total
+  color: string;
+}
+
+export interface ApplicationAnalyticsSummary {
+  totalApplications: number;
+  activeCount: number;
+  interviewRate: number;
+  offerRate: number;
+  rejectionRate: number;
+  avgResponseDays: number;
+  stageFunnel: FunnelStageMetric[];
+  statusDistribution: Record<string, number>;
+  weeklyVolume: Array<{ week: string; count: number }>;
+  topCompanies: Array<{ company: string; count: number }>;
+  recommendations: string[];
+}
+

@@ -80,6 +80,12 @@
   4. **Secrets Hygiene:** Stored user-provided key exclusively in `.env.local` (ignored in `.gitignore`) and in local browser storage, ensuring 0 secrets committed to public Git repository.
 - **Rationale:** Allows students and developers to bring their own Claude models for real-time career guidance without compromising security, paywalling core free features, or leaking tokens.
 
+### ADR-8: Job Search Explorer & Application Funnel Analytics Expansion
+- **Decision:** Expanded the Career Suite with two major additions extracted from the `ai-job-search` repository:
+  1. **Job Search Explorer (`/jobs`)**: Curated tech roles with real-time ATS match scoring (0–100%) against candidate skills and headline, instant bookmarked jobs in `localStorage`, and 1-click conversion into tracked applications in `/applications`.
+  2. **Application Funnel Analytics (`/analytics`)**: End-to-end recruitment funnel tracking, conversion rate benchmarks (Applied -> Interview -> Offer), response lag telemetry, and two-way RFC-4180 CSV export/import with validation.
+- **Rationale:** Connects resume preparation with job discovery and pipeline intelligence, equipping candidates with comprehensive feedback to maximize interview callbacks.
+
 ---
 
 ## 4. Existing Database & Authentication Setup

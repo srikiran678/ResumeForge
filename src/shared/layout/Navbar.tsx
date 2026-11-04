@@ -21,7 +21,9 @@ import {
   DollarSign,
   TrendingUp,
   MessageSquare,
-  Award
+  Award,
+  Search,
+  BarChart3
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useWorkspace } from '../../context/WorkspaceContext';
@@ -61,6 +63,18 @@ export const Navbar: React.FC = () => {
   ];
 
   const careerSuiteLinks = [
+    { 
+      to: '/jobs', 
+      label: 'Job Search Explorer', 
+      desc: 'Curated roles with instant ATS fit & 1-click track', 
+      icon: Search 
+    },
+    { 
+      to: '/analytics', 
+      label: 'Pipeline & Funnel Analytics', 
+      desc: 'Conversion rates, response times & CSV sync', 
+      icon: BarChart3 
+    },
     { 
       to: '/cover-letters', 
       label: 'Cover Letter Studio', 

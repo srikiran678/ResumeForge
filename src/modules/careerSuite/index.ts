@@ -6,3 +6,5 @@ export * from './interviewPrepEngine';
 export * from './jobFitEngine';
 export * from './salaryIntelligenceEngine';
 export * from './upskillEngine';
+export * from './jobSearchEngine';
+export * from './analyticsEngine';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Search, BarChart3 } from 'lucide-react';
 import { 
   Plus, 
   Calendar,
@@ -99,13 +100,29 @@ export const ApplicationsPage: React.FC = () => {
           </p>
         </div>
 
-        <button
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/jobs"
+            className="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-[#1a1b22] dark:hover:bg-[#232530] text-slate-800 dark:text-slate-200 rounded-xl transition-all"
+          >
+            <Search className="size-3.5 text-indigo-500" />
+            <span>Job Explorer</span>
+          </Link>
+          <Link
+            to="/analytics"
+            className="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-[#1a1b22] dark:hover:bg-[#232530] text-slate-800 dark:text-slate-200 rounded-xl transition-all"
+          >
+            <BarChart3 className="size-3.5 text-indigo-500" />
+            <span>Funnel Analytics</span>
+          </Link>
+          <button
           onClick={() => setShowNewModal(true)}
           className="flex items-center space-x-1.5 px-4 py-2.5 text-xs font-bold bg-slate-950 hover:bg-slate-850 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 rounded-xl shadow-xs transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>New Application</span>
         </button>
+        </div>
       </div>
 
       {/* Analytics 4 Metric Cards */}
