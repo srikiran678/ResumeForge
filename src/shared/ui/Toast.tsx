@@ -8,11 +8,15 @@ interface ToastItem {
   message: string;
 }
 
-interface ToastContextType {
+export interface ToastContextType {
   toast: (message: string, type?: 'success' | 'error' | 'info') => void;
+  showToast: (message: string, type?: 'success' | 'error' | 'info') => void;
 }
 
-const ToastContext = createContext<ToastContextType>({ toast: () => {} });
+const ToastContext = createContext<ToastContextType>({ 
+  toast: () => {}, 
+  showToast: () => {} 
+});
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -26,8 +30,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, 3200);
   };
 
+  const showToast = toast;
+
   return (
-    <ToastContext.Provider value={{ toast }}>
+    <ToastContext.Provider value={{ toast, showToast }}>
       {children}
       {/* Toast Render Container */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none no-print">

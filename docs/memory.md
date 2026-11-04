@@ -63,6 +63,15 @@
 - **Decision:** Implemented `React.lazy()` route-level code splitting across all 15 page routes in [`App.tsx`](file:///C:/project/src/App.tsx) wrapped in accessible `Suspense` with [`PageLoadingSkeleton`](file:///C:/project/src/components/common/PageLoadingSkeleton.tsx). Configured Vite/Rollup `manualChunks` in [`vite.config.ts`](file:///C:/project/vite.config.ts) to isolate heavy dependencies (`vendor-pdf` for `@react-pdf/renderer`, `vendor-motion`, `vendor-backend`, `vendor-react`).
 - **Rationale:** Reduces the initial application entry bundle from **2,327 kB down to 72.8 kB (96.8% reduction)**, dramatically improving First Contentful Paint (FCP) and Time-To-Interactive (TTI) on mobile and low-bandwidth connections. Isolated heavy PDF rendering engines so they only load when users actually view/export resumes.
 
+### ADR-6: AI-Job-Search Framework Integration & Career Suite Architecture
+- **Decision:** Translated the advanced methodologies and algorithms from the [`ai-job-search`](https://github.com/ai-job-search-dev/ai-job-search.git) command-line framework into a unified, responsive **Career Suite** web module (`@/modules/careerSuite`):
+  1. **Cover Letter Studio (`/cover-letters`)**: 1-page ATS document format, automatic extraction of 3 concrete achievement bullets mapped to target JD requirements, company connection section ("Why this company"), and dual export (ATS vector/print PDF + Markdown).
+  2. **Interview Prep & STAR Simulator (`/interview-prep`)**: Dynamic STAR (Situation, Task, Action, Result) answers synthesized strictly from verified candidate projects, tough questions coach with framing strategies, and technical probing concepts.
+  3. **Job Match Radar & Pre-scoring Gates (`/job-match`)**: Pre-evaluation Eligibility (citizenship, clearance, work permit) and Language Gates + 5-dimensional scoring model (Technical Skills, Experience, Behavioral Fit, Location Logistics, Career Alignment).
+  4. **Salary Intelligence & Benchmark Calculator (`/salary-intel`)**: Percentile compensation distributions across roles, seniority, locations, and company tiers, total compensation calculator, and stage-by-stage negotiation playbooks.
+  5. **Skill Gap Analyzer & Upskilling Roadmap (`/upskilling`)**: Missing high-demand skill detection, 4-week sprint roadmap with actionable proof-of-work project blueprints and curated open-source resources.
+- **Rationale:** Positions ResumeForge far beyond standard resume editors into an end-to-end career acceleration platform while strictly adhering to local-first zero-hallucination guardrails and free-forever access. All new pages code-split dynamically, maintaining a lightning-fast sub-80kB initial JS bundle.
+
 ---
 
 ## 4. Existing Database & Authentication Setup
@@ -99,6 +108,11 @@
 7. **Job Application Tracker:** Kanban & table views; immutable submitted resume snapshots.
 8. **Public Sharing & Portfolio:** Shareable `/r/:slug` links with privacy controls; student portfolio website (`/portfolio`) with QR code.
 9. **Full Workspace Backup:** Complete JSON export and import (`exportAllData` / `importAllData`).
+10. **ATS Cover Letter Studio (`/cover-letters`):** Dynamic 1-page ATS cover letters featuring 3 verified achievement bullets, JD keyword alignment, live sheet preview, and PDF/Markdown export.
+11. **Interview Prep & STAR Simulator (`/interview-prep`):** Tailored STAR answers mapped from candidate experiences, tough questions coach with deflection strategies, technical probes, and reverse questions.
+12. **Job Opportunity Radar & Fit Scorer (`/job-match`):** Qualification gates (Eligibility + Language) and 5-dimensional weighted fit evaluation with actionable gap reports.
+13. **Salary Intelligence & Benchmark Calculator (`/salary-intel`):** Market percentiles (P25, Median, P75, P90), total compensation calculator, and stage-by-stage negotiation scripts.
+14. **Skill Gap & Upskilling Roadmap (`/upskilling`):** Market demand gap detection, 4-week sprint execution milestones, proof-of-work project blueprints, and curated learning guides.
 
 ---
 

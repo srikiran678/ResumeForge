@@ -13,7 +13,11 @@ import {
   Camera,
   Layout,
   User,
-  Building2
+  Building2,
+  DollarSign,
+  Target,
+  TrendingUp,
+  MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -275,6 +279,111 @@ export const DashboardPage: React.FC = () => {
           <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 tracking-tight tabular-nums font-display">{offerCount}</div>
           <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">Verified outcomes</div>
         </Link>
+      </div>
+
+      {/* AI Career Suite (ai-job-search Powered) */}
+      <div className="relative overflow-hidden bg-white/90 dark:bg-[#121316] border border-slate-200/80 dark:border-white/[0.08] rounded-3xl p-6 shadow-xs text-left space-y-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <div className="flex items-center gap-1.5 text-xs font-mono font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Career Acceleration Suite</span>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+              Advanced AI workflows adapted from the ai-job-search framework
+            </p>
+          </div>
+          <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
+            100% Free • Local-First
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <Link
+            to="/cover-letters"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <FileText className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Cover Letter Studio</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">1-page ATS tailored letters</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 pt-1">
+              <span>Open Studio</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/interview-prep"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <MessageSquare className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Interview Prep</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">STAR method & tough Qs</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-purple-600 dark:text-purple-400 pt-1">
+              <span>Start Simulator</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/job-match"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Target className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Job Match Radar</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">5-D fit scoring & gates</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 pt-1">
+              <span>Evaluate Fit</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/salary-intel"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <DollarSign className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Salary Intelligence</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Benchmarks & negotiation</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-amber-600 dark:text-amber-400 pt-1">
+              <span>Calculate TC</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/upskilling"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Skill Gap & Upskill</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Proof-of-work roadmaps</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-sky-600 dark:text-sky-400 pt-1">
+              <span>View Sprints</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+        </div>
       </div>
 
       {/* Primary Quick Actions Bar */}

@@ -28,6 +28,13 @@ const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then(m => (
 const CompanyTemplatesPage = React.lazy(() => import('./pages/CompanyTemplatesPage').then(m => ({ default: m.CompanyTemplatesPage })));
 const AdminTemplateDashboardPage = React.lazy(() => import('./pages/AdminTemplateDashboardPage').then(m => ({ default: m.AdminTemplateDashboardPage })));
 
+// Career Suite Flagship Routes (Derived from ai-job-search Framework)
+const CoverLetterStudioPage = React.lazy(() => import('./pages/CoverLetterStudioPage').then(m => ({ default: m.CoverLetterStudioPage })));
+const InterviewPrepPage = React.lazy(() => import('./pages/InterviewPrepPage').then(m => ({ default: m.InterviewPrepPage })));
+const JobMatchRadarPage = React.lazy(() => import('./pages/JobMatchRadarPage').then(m => ({ default: m.JobMatchRadarPage })));
+const SalaryIntelligencePage = React.lazy(() => import('./pages/SalaryIntelligencePage').then(m => ({ default: m.SalaryIntelligencePage })));
+const UpskillingRoadmapPage = React.lazy(() => import('./pages/UpskillingRoadmapPage').then(m => ({ default: m.UpskillingRoadmapPage })));
+
 const AppContent: React.FC = () => {
   const location = useLocation();
   const { user } = useAuth();
@@ -74,6 +81,13 @@ const AppContent: React.FC = () => {
             <Route path="/ai" element={<ProtectedRoute><AIToolsPage /></ProtectedRoute>} />
             <Route path="/portfolio" element={<ProtectedRoute><PortfolioPage /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+
+            {/* Career Suite Flagship Routes (ai-job-search Framework Integration) */}
+            <Route path="/cover-letters" element={<ProtectedRoute><CoverLetterStudioPage /></ProtectedRoute>} />
+            <Route path="/interview-prep" element={<ProtectedRoute><InterviewPrepPage /></ProtectedRoute>} />
+            <Route path="/job-match" element={<ProtectedRoute><JobMatchRadarPage /></ProtectedRoute>} />
+            <Route path="/salary-intel" element={<ProtectedRoute><SalaryIntelligencePage /></ProtectedRoute>} />
+            <Route path="/upskilling" element={<ProtectedRoute><UpskillingRoadmapPage /></ProtectedRoute>} />
 
             {/* Protected Admin Resume Library Agent Routes */}
             <Route path="/admin" element={<ProtectedRoute><AdminTemplateDashboardPage /></ProtectedRoute>} />
