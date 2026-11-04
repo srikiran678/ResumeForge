@@ -263,9 +263,22 @@ export const JobSearchExplorerPage: React.FC = () => {
             <div className="p-12 text-center rounded-2xl bg-white dark:bg-[#111218] border border-slate-200 dark:border-white/[0.08]">
               <Briefcase className="size-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
               <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">No matching roles found</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
                 Try widening your search terms or resetting filters to explore all curated positions.
               </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setKeyword('');
+                  setRemoteType('ALL');
+                  setExperienceLevel('ALL');
+                  setTier('ALL');
+                  setSortBy('match');
+                }}
+                className="px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400 transition-colors cursor-pointer"
+              >
+                Reset All Filters
+              </button>
             </div>
           ) : (
             filteredJobs.map(job => {
@@ -276,8 +289,16 @@ export const JobSearchExplorerPage: React.FC = () => {
               return (
                 <div
                   key={job.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedJobId(job.id)}
-                  className={`p-4 md:p-5 rounded-2xl transition-all cursor-pointer border ${
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedJobId(job.id);
+                    }
+                  }}
+                  className={`p-4 md:p-5 rounded-2xl transition-all cursor-pointer border focus:outline-none focus:ring-2 focus:ring-indigo-500/50 ${
                     isSelected
                       ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-300 dark:border-indigo-500/40 ring-1 ring-indigo-500/20 shadow-md'
                       : 'bg-white dark:bg-[#111218] border-slate-200/80 dark:border-white/[0.08] hover:border-slate-300 dark:hover:border-white/20 hover:shadow-xs'

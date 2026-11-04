@@ -523,8 +523,11 @@ export const LandingPage: React.FC = () => {
                         P&amp;L Ownership ($35M)
                       </span>
                       <span
+                        role="button"
+                        tabIndex={0}
                         onClick={() => setTemplateGalleryOpen(true)}
-                        className="skill-chip border border-primary/30 px-2.5 py-1 rounded bg-primary-container/20 text-xs text-primary font-medium cursor-pointer hover:bg-primary-container/30 hover:shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTemplateGalleryOpen(true); } }}
+                        className="skill-chip border border-primary/30 px-2.5 py-1 rounded bg-primary-container/20 text-xs text-primary font-medium cursor-pointer hover:bg-primary-container/30 hover:shadow-[0_0_12px_rgba(6,182,212,0.4)] focus:outline-none focus:ring-2 focus:ring-primary/50"
                       >
                         +14 Verified Recruiter Keywords
                       </span>
@@ -534,8 +537,11 @@ export const LandingPage: React.FC = () => {
 
                 {/* FLOATING LAYER 1: Top-Right Glass Badge (ATS Score 98) */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   onClick={scrollToScanner}
-                  className="absolute -top-7 -right-6 sm:-right-12 z-20 p-4 rounded-2xl bg-surface-container-high/90 backdrop-blur-xl border border-tertiary/25 animate-float-subtle hover:scale-110 transition-transform cursor-pointer"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scrollToScanner(); } }}
+                  className="absolute -top-7 -right-6 sm:-right-12 z-20 p-4 rounded-2xl bg-surface-container-high/90 backdrop-blur-xl border border-tertiary/25 animate-float-subtle hover:scale-110 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-tertiary/50"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-tertiary/15 flex items-center justify-center text-tertiary shadow-inner">
@@ -556,8 +562,11 @@ export const LandingPage: React.FC = () => {
 
                 {/* FLOATING LAYER 2: Bottom-Left Glass Badge (Keyword Density) */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setTemplateGalleryOpen(true)}
-                  className="absolute -bottom-8 -left-6 sm:-left-10 z-20 p-4 rounded-2xl bg-surface-container-high/90 backdrop-blur-xl border border-primary/25 animate-float-slow hover:scale-110 transition-transform cursor-pointer"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTemplateGalleryOpen(true); } }}
+                  className="absolute -bottom-8 -left-6 sm:-left-10 z-20 p-4 rounded-2xl bg-surface-container-high/90 backdrop-blur-xl border border-primary/25 animate-float-slow hover:scale-110 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-11 h-11 rounded-xl bg-primary/15 flex items-center justify-center text-primary">
@@ -579,8 +588,11 @@ export const LandingPage: React.FC = () => {
 
                 {/* FLOATING LAYER 3: Middle Floating Kinetic Pill */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setPhotoUploadOpen(true)}
-                  className="hidden sm:flex absolute top-1/2 -right-16 z-30 px-4 py-2.5 rounded-xl bg-gradient-to-r from-surface-container-highest to-surface-container-high backdrop-blur-lg border border-primary/30 animate-float-pill items-center gap-2.5 hover:scale-105 hover:border-tertiary/60 transition-transform cursor-pointer"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPhotoUploadOpen(true); } }}
+                  className="hidden sm:flex absolute top-1/2 -right-16 z-30 px-4 py-2.5 rounded-xl bg-gradient-to-r from-surface-container-highest to-surface-container-high backdrop-blur-lg border border-primary/30 animate-float-pill items-center gap-2.5 hover:scale-105 hover:border-tertiary/60 transition-transform cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <span
                     className="material-symbols-outlined text-primary text-lg animate-spin"
@@ -903,8 +915,11 @@ export const LandingPage: React.FC = () => {
                 </div>
               </div>
               <div
+                role="button"
+                tabIndex={0}
                 onClick={() => navigate('/login?mode=signup')}
-                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-primary font-label-md group-hover:underline cursor-pointer"
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/login?mode=signup'); } }}
+                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-primary font-label-md group-hover:underline cursor-pointer focus:outline-none focus:underline"
               >
                 <span>Explore rewriting syntax</span>
                 <span className="material-symbols-outlined text-sm">east</span>
@@ -954,8 +969,11 @@ export const LandingPage: React.FC = () => {
                 </div>
               </div>
               <div
+                role="button"
+                tabIndex={0}
                 onClick={() => setTemplateGalleryOpen(true)}
-                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-secondary-fixed font-label-md group-hover:underline cursor-pointer"
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setTemplateGalleryOpen(true); } }}
+                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-secondary-fixed font-label-md group-hover:underline cursor-pointer focus:outline-none focus:underline"
               >
                 <span>See typography specifications</span>
                 <span className="material-symbols-outlined text-sm">east</span>
@@ -995,8 +1013,11 @@ export const LandingPage: React.FC = () => {
                 </div>
               </div>
               <div
+                role="button"
+                tabIndex={0}
                 onClick={() => navigate('/login?mode=signup')}
-                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-tertiary font-label-md group-hover:underline cursor-pointer"
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate('/login?mode=signup'); } }}
+                className="mt-8 pt-4 flex items-center gap-1.5 text-xs text-tertiary font-label-md group-hover:underline cursor-pointer focus:outline-none focus:underline"
               >
                 <span>Review eye-tracking model</span>
                 <span className="material-symbols-outlined text-sm">east</span>
