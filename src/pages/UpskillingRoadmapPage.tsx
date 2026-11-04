@@ -284,8 +284,17 @@ export const UpskillingRoadmapPage: React.FC = () => {
                         return (
                           <li 
                             key={i} 
+                            role="checkbox"
+                            tabIndex={0}
+                            aria-checked={isDone}
                             onClick={() => handleToggleStep(stepKey)}
-                            className="flex items-start gap-2 cursor-pointer group select-none hover:text-slate-950 dark:hover:text-white transition-colors"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleToggleStep(stepKey);
+                              }
+                            }}
+                            className="flex items-start gap-2 cursor-pointer group select-none hover:text-slate-950 dark:hover:text-white transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded p-0.5"
                           >
                             <div className={`size-4 rounded-md flex items-center justify-center shrink-0 mt-0.5 border transition-colors ${
                               isDone 

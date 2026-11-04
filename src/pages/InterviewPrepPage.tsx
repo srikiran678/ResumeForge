@@ -294,8 +294,17 @@ export const InterviewPrepPage: React.FC = () => {
                     className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-2xs overflow-hidden transition-all"
                   >
                     <div 
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isExpanded}
                       onClick={() => toggleStory(story.id)}
-                      className="p-5 flex items-start justify-between cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-800/40"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          toggleStory(story.id);
+                        }
+                      }}
+                      className="p-5 flex items-start justify-between cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-800/40 focus:outline-none focus:bg-slate-50/80 dark:focus:bg-slate-800/60"
                     >
                       <div className="space-y-1 pr-4">
                         <div className="flex items-center gap-2">
