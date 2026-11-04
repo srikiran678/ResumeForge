@@ -3,12 +3,10 @@ import {
   Sparkles, 
   Send, 
   X, 
-  Key, 
-  Check, 
   Bot, 
   User, 
-  Minimize2,
-  Maximize2
+  Minimize2, 
+  Maximize2 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkspace } from '../../context/WorkspaceContext';
@@ -39,16 +37,15 @@ export const AIChatWidget: React.FC = () => {
     {
       id: 'welcome',
       sender: 'ai',
-      text: `Hello ${masterProfile.personalInfo.fullName.split(' ')[0] || 'there'}! 👋 I am your **ResumeForge Honest Career Copilot**.\n\nI can help you:\n• Improve your project & experience bullet points with strong action verbs.\n• Explain ATS parsing rules and check formatting issues.\n• Prepare for technical interviews and resume reviews.\n\n*(You can plug in your own Claude / OpenAI / Gemini API key anytime via the 🔑 key button above, or chat with my built-in career model right now!)*`,
+      text: `Hello ${masterProfile.personalInfo.fullName.split(' ')[0] || 'there'}! 👋 I am your **ResumeForge Career Assistant**.\n\nI can help you:\n• Improve your project & experience bullet points with strong action verbs.\n• Explain ATS parsing rules and check formatting issues.\n• Prepare for technical interviews and resume reviews.\n\nAsk me anything or select a topic below!`,
       timestamp: getTimestamp(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   
-  // Custom API Key storage (reads localStorage or falls back to VITE_ANTHROPIC_API_KEY)
-  const [apiKey, setApiKey] = useState(() => {
+  // Secret API Key resolution (internal environment or secure storage)
+  const [apiKey] = useState(() => {
     try {
       const local = localStorage.getItem('resumeforge_custom_api_key');
       if (local && local.trim().length > 0) return local.trim();
@@ -56,14 +53,7 @@ export const AIChatWidget: React.FC = () => {
     const envKey = (import.meta as any).env?.VITE_ANTHROPIC_API_KEY;
     return typeof envKey === 'string' ? envKey.trim() : '';
   });
-  const [apiProvider, setApiProvider] = useState<'anthropic' | 'openai' | 'gemini'>(() => {
-    try {
-      const local = localStorage.getItem('resumeforge_custom_api_provider');
-      if (local === 'anthropic' || local === 'openai' || local === 'gemini') return local;
-    } catch {}
-    return 'anthropic';
-  });
-  const [savedKeyNotice, setSavedKeyNotice] = useState(false);
+  const [apiProvider] = useState<'anthropic' | 'openai' | 'gemini'>('anthropic');
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -72,19 +62,6 @@ export const AIChatWidget: React.FC = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen]);
-
-  const handleSaveApiKey = (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      localStorage.setItem('resumeforge_custom_api_key', apiKey.trim());
-      localStorage.setItem('resumeforge_custom_api_provider', apiProvider);
-    } catch {}
-    setSavedKeyNotice(true);
-    setTimeout(() => {
-      setSavedKeyNotice(false);
-      setApiKeyModalOpen(false);
-    }, 1500);
-  };
 
   const generateBuiltInResponse = useCallback((query: string) => {
     const q = query.toLowerCase();
@@ -139,24 +116,8 @@ export const AIChatWidget: React.FC = () => {
           evidenceTraced: true,
         };
         setMessages((prev) => [...prev, aiMsg]);
-      } catch (err: any) {
-        const isQuotaOrCredit = err?.message && (
-          err.message.toLowerCase().includes('credit balance is too low') ||
-          err.message.toLowerCase().includes('insufficient_quota') ||
-          err.message.toLowerCase().includes('billing')
-        );
-
-        const errorNotice = isQuotaOrCredit
-          ? `⚠️ **Claude API Account Notice:** ${err.message}\n\n*(To enable direct Claude calls, add credits at console.anthropic.com. In the meantime, ResumeForge Honest Career Intelligence Engine is active below without interruption.)*`
-          : `⚠️ **API Connection Error:** ${err.message}. Falling back to internal career intelligence.`;
-
-        const errorMsg: Message = {
-          id: createMsgId('ai'),
-          sender: 'ai',
-          text: errorNotice,
-          timestamp: getTimestamp(),
-        };
-        setMessages((prev) => [...prev, errorMsg]);
+      } catch {
+        // Silently fall back to built-in career assistant without exposing model names or secrets
         generateBuiltInResponse(text);
       } finally {
         setIsTyping(false);
@@ -176,10 +137,10 @@ export const AIChatWidget: React.FC = () => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center space-x-2 px-3.5 py-2.5 bg-slate-900 text-white rounded-full shadow-lg hover:bg-slate-800 transition-colors border border-slate-700 text-xs font-semibold"
-          title="AI Career Copilot"
+          title="Career Assistant"
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>AI Assistant</span>
+          <span>Assistant</span>
         </button>
       </div>
 
@@ -203,9 +164,9 @@ export const AIChatWidget: React.FC = () => {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h3 className="text-xs font-bold text-white">Career Copilot Live</h3>
+                    <h3 className="text-xs font-bold text-white">Assistant</h3>
                     <span className="text-[10px] px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-semibold border border-emerald-500/30">
-                      {apiKey ? (apiProvider === 'anthropic' ? 'Claude 3.5 Sonnet' : 'Custom LLM Active') : 'Honest Engine'}
+                      Online
                     </span>
                   </div>
                   <p className="text-[10px] text-slate-400">Zero Hallucinations • ATS Verified</p>
@@ -213,13 +174,6 @@ export const AIChatWidget: React.FC = () => {
               </div>
 
               <div className="flex items-center space-x-1.5">
-                <button
-                  onClick={() => setApiKeyModalOpen(true)}
-                  title="Configure Custom Model API Key"
-                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
-                >
-                  <Key className="w-3.5 h-3.5 text-amber-400" />
-                </button>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   title={isExpanded ? 'Collapse' : 'Expand'}
@@ -261,7 +215,7 @@ export const AIChatWidget: React.FC = () => {
                     {m.sender === 'ai' ? (
                       <>
                         <Sparkles className="w-3 h-3 text-amber-500" />
-                        <span>Copilot</span>
+                        <span>Assistant</span>
                       </>
                     ) : (
                       <>
@@ -324,104 +278,11 @@ export const AIChatWidget: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* API Key Modal */}
-      {apiKeyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in no-print">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-left border border-slate-200">
-            <div className="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
-                  <Key className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">Custom Model API Key</h3>
-                  <p className="text-[11px] text-slate-500">Connect your Claude, OpenAI, or Gemini key</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setApiKeyModalOpen(false)}
-                className="p-1 rounded text-slate-400 hover:text-slate-700"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {savedKeyNotice && (
-              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800 flex items-center space-x-2 mb-3">
-                <Check className="w-4 h-4 text-emerald-600" />
-                <span>API Key saved securely in your browser!</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSaveApiKey} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Provider</label>
-                <select
-                  value={apiProvider}
-                  onChange={(e) => setApiProvider(e.target.value as any)}
-                  className="w-full p-2 border border-slate-300 rounded-lg bg-white text-black"
-                >
-                  <option value="anthropic">Anthropic Claude (claude-3-5-sonnet)</option>
-                  <option value="openai">OpenAI (gpt-4o / gpt-4o-mini)</option>
-                  <option value="gemini">Google Gemini (gemini-1.5-pro / flash)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Your API Key</label>
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk-ant-... or sk-proj-..."
-                  className="w-full p-2.5 border border-slate-300 rounded-lg font-mono text-xs bg-slate-50 focus:bg-white focus:ring-1 focus:ring-slate-900 text-black placeholder:text-slate-400"
-                />
-                <span className="text-[10px] text-slate-400 mt-1 block">
-                  Keys are stored exclusively in your local browser storage and used for direct requests.
-                </span>
-              </div>
-
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100">
-                {apiKey && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setApiKey('');
-                      try {
-                        localStorage.removeItem('resumeforge_custom_api_key');
-                        localStorage.removeItem('resumeforge_custom_api_provider');
-                      } catch {}
-                    }}
-                    className="text-xs text-rose-600 hover:underline"
-                  >
-                    Clear Key
-                  </button>
-                )}
-                <div className="flex space-x-2 ml-auto">
-                  <button
-                    type="button"
-                    onClick={() => setApiKeyModalOpen(false)}
-                    className="px-3 py-1.5 text-slate-600 hover:text-slate-900"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-1.5 bg-slate-950 text-white font-bold rounded-lg hover:bg-slate-800"
-                  >
-                    Save Key
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 };
 
-// Direct Live LLM caller if user supplied their API key
+// Internal assistant caller
 async function callLiveLLM(
   prompt: string,
   key: string,
@@ -447,13 +308,13 @@ Skills: ${masterProfile.skills.languages.join(', ')}`;
         model: (import.meta as any).env?.VITE_AI_MODEL || 'claude-3-5-sonnet-20241022',
         max_tokens: 1024,
         temperature: 0.3,
-        system: `You are ResumeForge Honest AI Career Copilot. Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins. Provide concise, highly actionable ATS resume and career guidance tailored to this candidate:\n${profileContext}`,
+        system: `You are ResumeForge Career Assistant. Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins. Provide concise, highly actionable ATS resume and career guidance tailored to this candidate:\n${profileContext}`,
         messages: [{ role: 'user', content: prompt }],
       }),
     });
 
     if (!res.ok) {
-      let errMsg = `Anthropic API error (${res.status} ${res.statusText})`;
+      let errMsg = `Assistant error (${res.status} ${res.statusText})`;
       try {
         const errJson = await res.json();
         if (errJson?.error?.message) {
@@ -479,17 +340,16 @@ Skills: ${masterProfile.skills.languages.join(', ')}`;
         messages: [
           {
             role: 'system',
-            content: `You are ResumeForge Honest AI Copilot. Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins.\n${profileContext}`,
+            content: `You are ResumeForge Career Assistant. Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins.\n${profileContext}`,
           },
           { role: 'user', content: prompt },
         ],
       }),
     });
-    if (!res.ok) throw new Error(`OpenAI error: ${res.statusText}`);
+    if (!res.ok) throw new Error(`Assistant error: ${res.statusText}`);
     const data = await res.json();
     return data.choices[0]?.message?.content || 'No response generated.';
   }
 
-  // Gemini / fallback format
-  return `[Custom Model Response]\n\nBased on your profile, here is the suggested guidance:\n\n${prompt}\n\nMake sure to verify that all referenced tools match your Master Profile.`;
+  return `Based on your profile, here is the suggested guidance:\n\n${prompt}\n\nMake sure to verify that all referenced tools match your Master Profile.`;
 }

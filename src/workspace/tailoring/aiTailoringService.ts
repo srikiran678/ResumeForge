@@ -74,7 +74,7 @@ Output strictly valid JSON with this shape:
 }`;
         const claudeRes = await callClaude({
           prompt: claudePrompt,
-          systemPrompt: `You are ResumeForge Honest AI Career Copilot. Never invent companies, metrics, dates, or skills. Truth wins. Output strictly JSON without markdown fences.`,
+          systemPrompt: `You are ResumeForge Career Assistant. Never invent companies, metrics, dates, or skills. Truth wins. Output strictly JSON without markdown fences.`,
           maxTokens: 1000,
         });
         const clean = claudeRes.text.trim().replace(/^```json\s*/, '').replace(/\s*```$/, '');
@@ -171,7 +171,7 @@ Output strictly valid JSON matching:
 }`;
         const claudeRes = await callClaude({
           prompt: claudePrompt,
-          systemPrompt: `You are ResumeForge Honest AI Career Copilot. Golden Rule: Truth wins. Output strictly JSON without markdown fences.`,
+          systemPrompt: `You are ResumeForge Career Assistant. Golden Rule: Truth wins. Output strictly JSON without markdown fences.`,
           maxTokens: 1500,
         });
         const clean = claudeRes.text.trim().replace(/^```json\s*/, '').replace(/\s*```$/, '');

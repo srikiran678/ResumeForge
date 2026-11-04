@@ -68,7 +68,7 @@ export async function callClaude(options: ClaudeMessageOptions): Promise<ClaudeR
 
   const model = options.model || (import.meta as any).env?.VITE_AI_MODEL || CLAUDE_DEFAULT_MODEL;
   const maxTokens = options.maxTokens || 1500;
-  const system = options.systemPrompt || `You are ResumeForge Honest AI Career Copilot.
+  const system = options.systemPrompt || `You are ResumeForge Career Assistant.
 Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins.
 Keep your responses crisp, direct, highly professional, and ATS-optimized.`;
 
