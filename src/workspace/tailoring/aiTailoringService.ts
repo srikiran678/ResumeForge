@@ -1,6 +1,7 @@
 import { AISuggestion, JobDescriptionAnalysis, MasterProfile, ResumeData } from '../../data/types';
 import { StorageService } from '../../data/repositories/storageService';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import { callClaude, isClaudeConfigured } from '../../lib/anthropic';
 
 export const AIService = {
   // Check remaining quota
@@ -47,6 +48,46 @@ export const AIService = {
         }
       } catch (err) {
         console.warn('Supabase edge function error, falling back to local honest deterministic engine:', err);
+      }
+    }
+
+    // Direct Claude AI call if user provided Claude API key
+    if (isClaudeConfigured()) {
+      try {
+        const claudePrompt = `Rewrite and improve this resume bullet for an ATS-optimized technical resume:
+Context: Section=${context.section}, Role/Title=${context.title}
+Current Bullet: "${bullet}"
+Candidate Verified Skills: ${JSON.stringify(masterProfile.skills)}
+
+Output strictly valid JSON with this shape:
+{
+  "suggestions": [
+    {
+      "id": "claude_1",
+      "text": "High-impact rewritten bullet with strong action verb and technical task",
+      "actionVerb": "Engineered",
+      "evidenceStatus": "Supported",
+      "highlightedKeywords": ["keyword1"],
+      "explanation": "Why this revision elevates ATS impact without hallucination"
+    }
+  ]
+}`;
+        const claudeRes = await callClaude({
+          prompt: claudePrompt,
+          systemPrompt: `You are ResumeForge Honest AI Career Copilot. Never invent companies, metrics, dates, or skills. Truth wins. Output strictly JSON without markdown fences.`,
+          maxTokens: 1000,
+        });
+        const clean = claudeRes.text.trim().replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        const parsed = JSON.parse(clean);
+        if (Array.isArray(parsed.suggestions) && parsed.suggestions.length > 0) {
+          const { remaining } = StorageService.recordAICall('Bullet Improver (Claude Live)');
+          return {
+            suggestions: parsed.suggestions,
+            remainingCalls: remaining,
+          };
+        }
+      } catch (err) {
+        console.warn('Claude direct API call error, falling back to local honest deterministic engine:', err);
       }
     }
 
@@ -104,6 +145,46 @@ export const AIService = {
         }
       } catch (err) {
         console.warn('Supabase edge function error, running local deterministic match engine:', err);
+      }
+    }
+
+    // Direct Claude AI call if user provided Claude API key
+    if (isClaudeConfigured()) {
+      try {
+        const claudePrompt = `Analyze this job description against the candidate's resume and master profile:
+Job Description:
+${jobDescription.slice(0, 5000)}
+
+Candidate Profile:
+Name: ${masterProfile.personalInfo.fullName}
+Skills: ${JSON.stringify(masterProfile.skills)}
+Projects: ${masterProfile.projects.map((p) => p.name).join(', ')}
+
+Output strictly valid JSON matching:
+{
+  "matchScore": 85,
+  "matchedKeywords": ["React", "TypeScript"],
+  "missingKeywords": ["GraphQL"],
+  "recommendations": ["Highlight TypeScript experience in project bullets"],
+  "jobTitle": "Role Title",
+  "company": "Company Name"
+}`;
+        const claudeRes = await callClaude({
+          prompt: claudePrompt,
+          systemPrompt: `You are ResumeForge Honest AI Career Copilot. Golden Rule: Truth wins. Output strictly JSON without markdown fences.`,
+          maxTokens: 1500,
+        });
+        const clean = claudeRes.text.trim().replace(/^```json\s*/, '').replace(/\s*```$/, '');
+        const parsed = JSON.parse(clean);
+        if (typeof parsed.matchScore === 'number') {
+          const { remaining } = StorageService.recordAICall('Job Description Match (Claude Live)');
+          return {
+            analysis: parsed,
+            remainingCalls: remaining,
+          };
+        }
+      } catch (err) {
+        console.warn('Claude direct API call error, running local deterministic match engine:', err);
       }
     }
 

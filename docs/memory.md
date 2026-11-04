@@ -72,6 +72,14 @@
   5. **Skill Gap Analyzer & Upskilling Roadmap (`/upskilling`)**: Missing high-demand skill detection, 4-week sprint roadmap with actionable proof-of-work project blueprints and curated open-source resources.
 - **Rationale:** Positions ResumeForge far beyond standard resume editors into an end-to-end career acceleration platform while strictly adhering to local-first zero-hallucination guardrails and free-forever access. All new pages code-split dynamically, maintaining a lightning-fast sub-80kB initial JS bundle.
 
+### ADR-7: Direct Anthropic Claude 3.5 Sonnet Integration with BYOK & Intelligent Account Diagnostic Fallback
+- **Decision:** Integrated native Anthropic Claude 3.5 Sonnet client capabilities into `AIChatWidget` and `aiTailoringService` (`improveBullet` and `analyzeJobDescription`):
+  1. **Direct Browser Execution:** Configured client requests with `'anthropic-dangerous-direct-browser-access': 'true'`, `'x-api-key'`, and `'anthropic-version': '2023-06-01'`.
+  2. **Multi-Source Key Resolution:** Key resolves seamlessly from browser `localStorage` (`resumeforge_custom_api_key`) or gitignored `.env.local` (`VITE_ANTHROPIC_API_KEY`).
+  3. **Diagnostic Account Fallback:** When the Anthropic API signals a depleted balance ("credit balance is too low"), the UI displays an informative diagnostic badge and automatically falls back to ResumeForge's deterministic Honest Career Engine, preventing any application freezes or user disruption.
+  4. **Secrets Hygiene:** Stored user-provided key exclusively in `.env.local` (ignored in `.gitignore`) and in local browser storage, ensuring 0 secrets committed to public Git repository.
+- **Rationale:** Allows students and developers to bring their own Claude models for real-time career guidance without compromising security, paywalling core free features, or leaking tokens.
+
 ---
 
 ## 4. Existing Database & Authentication Setup

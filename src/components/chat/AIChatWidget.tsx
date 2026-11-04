@@ -47,9 +47,22 @@ export const AIChatWidget: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   
-  // Custom API Key storage
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('resumeforge_custom_api_key') || '');
-  const [apiProvider, setApiProvider] = useState<'anthropic' | 'openai' | 'gemini'>('anthropic');
+  // Custom API Key storage (reads localStorage or falls back to VITE_ANTHROPIC_API_KEY)
+  const [apiKey, setApiKey] = useState(() => {
+    try {
+      const local = localStorage.getItem('resumeforge_custom_api_key');
+      if (local && local.trim().length > 0) return local.trim();
+    } catch {}
+    const envKey = (import.meta as any).env?.VITE_ANTHROPIC_API_KEY;
+    return typeof envKey === 'string' ? envKey.trim() : '';
+  });
+  const [apiProvider, setApiProvider] = useState<'anthropic' | 'openai' | 'gemini'>(() => {
+    try {
+      const local = localStorage.getItem('resumeforge_custom_api_provider');
+      if (local === 'anthropic' || local === 'openai' || local === 'gemini') return local;
+    } catch {}
+    return 'anthropic';
+  });
   const [savedKeyNotice, setSavedKeyNotice] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -62,7 +75,10 @@ export const AIChatWidget: React.FC = () => {
 
   const handleSaveApiKey = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem('resumeforge_custom_api_key', apiKey.trim());
+    try {
+      localStorage.setItem('resumeforge_custom_api_key', apiKey.trim());
+      localStorage.setItem('resumeforge_custom_api_provider', apiProvider);
+    } catch {}
     setSavedKeyNotice(true);
     setTimeout(() => {
       setSavedKeyNotice(false);
@@ -124,10 +140,20 @@ export const AIChatWidget: React.FC = () => {
         };
         setMessages((prev) => [...prev, aiMsg]);
       } catch (err: any) {
+        const isQuotaOrCredit = err?.message && (
+          err.message.toLowerCase().includes('credit balance is too low') ||
+          err.message.toLowerCase().includes('insufficient_quota') ||
+          err.message.toLowerCase().includes('billing')
+        );
+
+        const errorNotice = isQuotaOrCredit
+          ? `⚠️ **Claude API Account Notice:** ${err.message}\n\n*(To enable direct Claude calls, add credits at console.anthropic.com. In the meantime, ResumeForge Honest Career Intelligence Engine is active below without interruption.)*`
+          : `⚠️ **API Connection Error:** ${err.message}. Falling back to internal career intelligence.`;
+
         const errorMsg: Message = {
           id: createMsgId('ai'),
           sender: 'ai',
-          text: `⚠️ **API Connection Error:** ${err.message}. Falling back to internal career intelligence.`,
+          text: errorNotice,
           timestamp: getTimestamp(),
         };
         setMessages((prev) => [...prev, errorMsg]);
@@ -179,7 +205,7 @@ export const AIChatWidget: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <h3 className="text-xs font-bold text-white">Career Copilot Live</h3>
                     <span className="text-[10px] px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-semibold border border-emerald-500/30">
-                      {apiKey ? 'Custom LLM Connected' : 'Honest Engine'}
+                      {apiKey ? (apiProvider === 'anthropic' ? 'Claude 3.5 Sonnet' : 'Custom LLM Active') : 'Honest Engine'}
                     </span>
                   </div>
                   <p className="text-[10px] text-slate-400">Zero Hallucinations • ATS Verified</p>
@@ -361,7 +387,10 @@ export const AIChatWidget: React.FC = () => {
                     type="button"
                     onClick={() => {
                       setApiKey('');
-                      localStorage.removeItem('resumeforge_custom_api_key');
+                      try {
+                        localStorage.removeItem('resumeforge_custom_api_key');
+                        localStorage.removeItem('resumeforge_custom_api_provider');
+                      } catch {}
                     }}
                     className="text-xs text-rose-600 hover:underline"
                   >
@@ -405,12 +434,45 @@ Degree: ${masterProfile.education[0]?.degree} in ${masterProfile.education[0]?.f
 Projects: ${masterProfile.projects.map((p: any) => `${p.name} (${p.technologies.join(', ')})`).join('; ')}
 Skills: ${masterProfile.skills.languages.join(', ')}`;
 
+  if (provider === 'anthropic') {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key.trim(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: (import.meta as any).env?.VITE_AI_MODEL || 'claude-3-5-sonnet-20241022',
+        max_tokens: 1024,
+        temperature: 0.3,
+        system: `You are ResumeForge Honest AI Career Copilot. Golden Rule: Never invent employers, degrees, metrics, dates, or skills. Truth wins. Provide concise, highly actionable ATS resume and career guidance tailored to this candidate:\n${profileContext}`,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!res.ok) {
+      let errMsg = `Anthropic API error (${res.status} ${res.statusText})`;
+      try {
+        const errJson = await res.json();
+        if (errJson?.error?.message) {
+          errMsg = errJson.error.message;
+        }
+      } catch {}
+      throw new Error(errMsg);
+    }
+
+    const data = await res.json();
+    return data.content?.[0]?.text || 'No response generated.';
+  }
+
   if (provider === 'openai') {
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key}`,
+        Authorization: `Bearer ${key.trim()}`,
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
@@ -428,6 +490,6 @@ Skills: ${masterProfile.skills.languages.join(', ')}`;
     return data.choices[0]?.message?.content || 'No response generated.';
   }
 
-  // Anthropic / fallback format
+  // Gemini / fallback format
   return `[Custom Model Response]\n\nBased on your profile, here is the suggested guidance:\n\n${prompt}\n\nMake sure to verify that all referenced tools match your Master Profile.`;
 }
