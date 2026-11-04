@@ -200,15 +200,19 @@ export const ExecutiveTemplate: React.FC<TemplateProps> = ({ resume }) => {
                 Leadership & Community
               </h2>
               <div className="space-y-1.5 text-xs text-slate-800">
-                {volunteering.map((v) => (
-                  <div key={v.id}>
-                    <div className="flex justify-between font-bold text-slate-900">
-                      <span>{v.role} — {v.organization}</span>
-                      {v.date && <span className="text-slate-500 font-mono text-[11px]">{v.date}</span>}
+                {volunteering.map((v) => {
+                  const dateStr = v.startDate && v.endDate ? `${v.startDate} – ${v.endDate}` : v.startDate || (v as any).date || '';
+                  const summaryStr = (v as any).summary || (v.contributions && v.contributions.length > 0 ? v.contributions.join(' • ') : '');
+                  return (
+                    <div key={v.id}>
+                      <div className="flex justify-between font-bold text-slate-900">
+                        <span>{v.role} — {v.organization}</span>
+                        {dateStr && <span className="text-slate-500 font-mono text-[11px]">{dateStr}</span>}
+                      </div>
+                      {summaryStr && <p className="text-slate-700 text-[11.5px] mt-0.5">{summaryStr}</p>}
                     </div>
-                    {v.summary && <p className="text-slate-700 text-[11.5px] mt-0.5">{v.summary}</p>}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           );

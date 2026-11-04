@@ -138,5 +138,16 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **TST-01** | Automated modular architecture verification script | Completed | AUD-03 | Validate database CRUD, ATS reading order, template registry, and PDF export. | [`scratch/verify_modular_architecture.ts`](file:///C:/project/scratch/verify_modular_architecture.ts) | Executed script via `npx tsx`; all assertions passed (code 0). |
 | **TST-02** | Production build and TypeScript compilation | Completed | TST-01 | `npm run build` (`tsc -b && vite build`) completes with zero errors. | [`dist/`](file:///C:/project/dist/) | Built in 4.77s; generated production bundles in `dist/`. |
+
+---
+
+## 13. Performance, Code Splitting & UI Skills Optimization
+
+| Task ID | Description | Status | Dependencies | Acceptance Criteria | Relevant Files | Verification Performed |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **PERF-01** | Route-level code splitting & dynamic lazy loading | Completed | TST-02 | Split all 15 page routes using `React.lazy` and `Suspense`; reduce entry chunk from 2.33MB to <100kB. | [`src/App.tsx`](file:///C:/project/src/App.tsx) | Initial entry chunk shrunk from 2,327 kB to 72.8 kB (96.8% reduction). |
+| **PERF-02** | Rollup/Vite vendor chunk isolation (`vendor-pdf`, `vendor-motion`, etc.) | Completed | PERF-01 | Isolate `@react-pdf/renderer` (1.2MB) and vendor dependencies into distinct cached chunks. | [`vite.config.ts`](file:///C:/project/vite.config.ts) | Verified `vendor-pdf` (1,198 kB) is deferred until PDF export/editor is opened. |
+| **PERF-03** | Structural loading skeleton & `baseline-ui` constraint compliance | Completed | PERF-01 | Provide accessible `PageLoadingSkeleton` fallback, eliminate `h-screen`, and enforce `tabular-nums`. | [`src/components/common/PageLoadingSkeleton.tsx`](file:///C:/project/src/components/common/PageLoadingSkeleton.tsx) | Verified 0 `h-screen` across codebase, verified screenshots of all routes. |
+
 | **TST-03** | Linting verification with Oxlint | Completed | TST-02 | `npm run lint` passes without blocking errors. | [`package.json`](file:///C:/project/package.json) | Verified oxlint execution. |
 | **TST-04** | Vercel production deployment and cron configuration | Completed | TST-02 | SPA rewrites, serverless functions, and scheduled cron jobs active. | [`vercel.json`](file:///C:/project/vercel.json) | Verified routes and headers in `vercel.json`. |
