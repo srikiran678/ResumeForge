@@ -68,6 +68,14 @@
   1. **Cover Letter Studio (`/cover-letters`)**: 1-page ATS document format, automatic extraction of 3 concrete achievement bullets mapped to target JD requirements, company connection section ("Why this company"), and dual export (ATS vector/print PDF + Markdown).
   2. **Interview Prep & STAR Simulator (`/interview-prep`)**: Dynamic STAR (Situation, Task, Action, Result) answers synthesized strictly from verified candidate projects, tough questions coach with framing strategies, and technical probing concepts.
   3. **Job Match Radar & Pre-scoring Gates (`/job-match`)**: Pre-evaluation Eligibility (citizenship, clearance, work permit) and Language Gates + 5-dimensional scoring model (Technical Skills, Experience, Behavioral Fit, Location Logistics, Career Alignment).
+
+### ADR-7: Accessible Modal Pattern & Elimination of Native Blocking Dialogs
+- **Decision:** Replaced all browser-native blocking dialogs (`window.alert()`, `window.confirm()`, and `window.prompt()`) with the accessible obsidian `ConfirmModal` component (`src/components/common/ConfirmModal.tsx`).
+- **Rationale:** Native blocking popups disrupt keyboard navigation, break accessible screen reader trees, cannot be styled in dark mode, and can be suppressed by modern browsers causing dead-end flows.
+
+### ADR-8: Multi-Agent QA Audit & Enterprise UX Hardening
+- **Decision:** Executed an end-to-end multi-agent audit spanning all 20 routes of ResumeForge, cataloging and resolving 38 functional, edge-case, and accessibility findings (`TEST_REPORT.md`). Added complete archive/restore lifecycle transitions, real-profile fallbacks for portfolios, defensive form input sanitization, and full WCAG keyboard navigation (`role="button"`, `tabIndex={0}`, `onKeyDown` listeners).
+- **Rationale:** Ensures that all interactive buttons, filters, forms, and workflows operate reliably without broken state, silent errors, or untracked task progress.
   4. **Salary Intelligence & Benchmark Calculator (`/salary-intel`)**: Percentile compensation distributions across roles, seniority, locations, and company tiers, total compensation calculator, and stage-by-stage negotiation playbooks.
   5. **Skill Gap Analyzer & Upskilling Roadmap (`/upskilling`)**: Missing high-demand skill detection, 4-week sprint roadmap with actionable proof-of-work project blueprints and curated open-source resources.
 - **Rationale:** Positions ResumeForge far beyond standard resume editors into an end-to-end career acceleration platform while strictly adhering to local-first zero-hallucination guardrails and free-forever access. All new pages code-split dynamically, maintaining a lightning-fast sub-80kB initial JS bundle.
@@ -185,6 +193,14 @@
 ## 8. Recent Changes Log & Next Recommended Actions
 
 ### Recent Changes
+- **November 2026:**
+  - Integrated full AI-Job-Search framework capabilities across 7 flagship tools (`/cover-letters`, `/interview-prep`, `/job-match`, `/salary-intel`, `/upskilling`, `/jobs`, `/analytics`).
+  - Authored comprehensive QA audit report ([`TEST_REPORT.md`](file:///C:/project/TEST_REPORT.md)) auditing 20/20 routes and categorizing 38 findings.
+  - Implemented `ConfirmModal` eliminating native `alert()`, `confirm()`, and `prompt()`.
+  - Added full resume archive and restore lifecycle with `toggleArchive` in `WorkspaceContext.tsx`.
+  - Enforced input guards, real-time autosync, and error toast feedback across all Career Suite tools.
+  - Added full WCAG keyboard navigation (`role="button"`, `tabIndex={0}`, `onKeyDown`) across all landing widgets, job cards, fast-track cards, and accordions.
+  - Resolved 100% of high and medium severity audit findings with zero TypeScript and linter errors.
 - **October 2026:**
   - Completed OpenSpec change `modular-workspace-architecture`: decoupled `src/` into 4 domain modules (`@/modules/{database, ats, templates, editor}`) with barrel public APIs.
   - Refactored `ResumeEditorPage.tsx` from ~1,900 lines down to a clean, declarative orchestrator.
