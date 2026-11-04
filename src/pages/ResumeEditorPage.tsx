@@ -11,6 +11,7 @@ import {
   ChevronDown 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { useToast } from '../components/common/Toast';
 import { ResumeDocument, downloadResumePDF, getAllTemplates } from '@/modules/templates';
 import { SectionManager, ResumeFormManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal } from '@/modules/editor';
 import { ATSAnalyzer, ATSInspectorOverlay, RecruiterScanSimulator } from '@/modules/ats';
@@ -36,6 +37,7 @@ export const ResumeEditorPage: React.FC = () => {
     createVersionSnapshot,
     restoreVersion
   } = useWorkspace();
+  const { showToast } = useToast();
 
   // Active section accordion in editor
   const [activeAccordion, setActiveAccordion] = useState<string>('basics');
@@ -180,7 +182,7 @@ export const ResumeEditorPage: React.FC = () => {
       );
       setAiSuggestions(result.suggestions);
     } catch (err: any) {
-      alert(`AI Notice: ${err.message}`);
+      showToast(`AI Notice: ${err.message}`, 'error');
       setBulletModalOpen(false);
     } finally {
       setAiLoading(false);
@@ -196,6 +198,7 @@ export const ResumeEditorPage: React.FC = () => {
     document.body.appendChild(a);
     a.click();
     a.remove();
+    showToast('Exported resume JSON successfully', 'success');
   };
 
   // Vector PDF Download (Section 3)
@@ -203,6 +206,7 @@ export const ResumeEditorPage: React.FC = () => {
     setIsExporting(true);
     try {
       await downloadResumePDF(currentResume);
+      showToast('Vector PDF exported successfully!', 'success');
       confetti({
         particleCount: 80,
         spread: 70,

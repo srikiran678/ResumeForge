@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, FileText, Check, Sparkles, Layout, BookOpen, Terminal, AlignLeft } from 'lucide-react';
+import { X, FileText, Check, Sparkles, Layout } from 'lucide-react';
 import { TemplateId } from '@/types';
+import { getAllTemplates } from '@/modules/templates';
 
 interface CreateResumeModalProps {
   isOpen: boolean;
@@ -21,44 +22,7 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
 
   if (!isOpen) return null;
 
-  const templates: { id: TemplateId; name: string; desc: string; icon: React.FC<any> }[] = [
-    {
-      id: 'classic-resume',
-      name: 'Classic Resume',
-      desc: 'Traditional formal format with 5-column education table, technical skill groups, and declaration.',
-      icon: AlignLeft,
-    },
-    {
-      id: 'classic',
-      name: 'Classic Standard',
-      desc: 'Minimal single-column format favored by large enterprise ATS algorithms.',
-      icon: AlignLeft,
-    },
-    {
-      id: 'modern',
-      name: 'Modern Tech',
-      desc: 'Clean hierarchy with bold role headings and clear skill groupings.',
-      icon: Layout,
-    },
-    {
-      id: 'compact',
-      name: 'Compact 1-Page',
-      desc: 'High density typography optimized for maximum content on a single page.',
-      icon: FileText,
-    },
-    {
-      id: 'academic',
-      name: 'Academic & Research',
-      desc: 'Structured for research papers, coursework, and formal academic depth.',
-      icon: BookOpen,
-    },
-    {
-      id: 'hackathon',
-      name: 'Hackathon & Projects',
-      desc: 'Highlights repositories, competitive hackathons, and open source badges.',
-      icon: Terminal,
-    },
-  ];
+  const allTemplates = getAllTemplates();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,19 +102,23 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
 
           {/* Template Selection */}
           <div>
-            <label className="block text-xs font-semibold text-forge-800 dark:text-slate-300 mb-2">
-              Choose ATS Template Style
-            </label>
-            <div className="space-y-2">
-              {templates.map((t) => {
-                const Icon = t.icon;
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-semibold text-forge-800 dark:text-slate-300">
+                Choose ATS Template Style ({allTemplates.length} Available)
+              </label>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+                100% Single-Column ATS
+              </span>
+            </div>
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              {allTemplates.map((t) => {
                 const isSelected = template === t.id;
                 return (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => setTemplate(t.id)}
-                    className={`w-full p-3 rounded-xl border text-left transition-all flex items-start space-x-3 ${
+                    className={`w-full p-3 rounded-xl border text-left transition-all flex items-start space-x-3 cursor-pointer ${
                       isSelected
                         ? 'border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 ring-1 ring-indigo-500/30'
                         : 'border-forge-200 dark:border-slate-800 bg-forge-50/40 dark:bg-slate-800/40 hover:bg-forge-100 dark:hover:bg-slate-800'
@@ -161,13 +129,20 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
                         ? 'bg-indigo-600 text-white' 
                         : 'bg-white dark:bg-slate-800 text-forge-600 dark:text-slate-400 border border-forge-200 dark:border-slate-700'
                     }`}>
-                      <Icon className="w-4 h-4" />
+                      <Layout className="w-4 h-4" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-forge-900 dark:text-white">
-                          {t.name}
-                        </span>
+                        <div className="flex items-center space-x-1.5">
+                          <span className="text-xs font-bold text-forge-900 dark:text-white">
+                            {t.name}
+                          </span>
+                          {t.badge && (
+                            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-slate-300">
+                              {t.badge}
+                            </span>
+                          )}
+                        </div>
                         {isSelected && (
                           <span className="flex items-center space-x-1 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/60 px-2 py-0.5 rounded-full">
                             <Check className="w-3 h-3" />
@@ -176,8 +151,11 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
                         )}
                       </div>
                       <p className="text-[11px] text-forge-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                        {t.desc}
+                        {t.description}
                       </p>
+                      <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium block mt-0.5">
+                        Best for: {t.bestFor}
+                      </span>
                     </div>
                   </button>
                 );
@@ -190,13 +168,13 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-forge-600 dark:text-slate-400 hover:bg-forge-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-forge-600 dark:text-slate-400 hover:bg-forge-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-xs font-bold bg-forge-900 dark:bg-indigo-600 hover:bg-forge-800 dark:hover:bg-indigo-500 text-white rounded-lg transition-colors shadow-xs flex items-center space-x-1.5"
+              className="px-5 py-2 text-xs font-bold bg-forge-900 dark:bg-indigo-600 hover:bg-forge-800 dark:hover:bg-indigo-500 text-white rounded-lg transition-colors shadow-xs flex items-center space-x-1.5 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Create & Open Editor</span>

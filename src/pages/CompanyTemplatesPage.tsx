@@ -15,12 +15,16 @@ import {
 import { Company, CompanyTemplate, TemplateFilterState } from '../data/types';
 import { CompanyTemplateService } from '../services/companyTemplateService';
 import { useAuth } from '../context/AuthContext';
+import { useWorkspace } from '../context/WorkspaceContext';
+import { useToast } from '../components/common/Toast';
 import { StorageService } from '../lib/storage';
 import { TemplateId, ResumeData } from '../data/types/resume';
 
 export const CompanyTemplatesPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { masterProfile, currentResume } = useWorkspace();
+  const { showToast } = useToast();
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [templates, setTemplates] = useState<CompanyTemplate[]>([]);
@@ -80,12 +84,22 @@ export const CompanyTemplatesPage: React.FC = () => {
     return Array.from(set).slice(0, 10);
   }, [templates]);
 
-  // Handle "Use Template" action
+  // Handle "Use Template" action with Master Profile hydration
   const handleUseTemplate = useCallback(async (template: CompanyTemplate) => {
     const baseTmpl = (template.template_data?.baseTemplate || 'classic') as TemplateId;
     const targetComp = template.companies?.[0]?.name || '';
     const targetRole = template.roles?.[0]?.title || 'Software Engineer';
     const newId = `res_${Date.now()}`;
+
+    const p = masterProfile;
+    const skillsData: { category: string; items: string[] }[] = [];
+    if (p?.skills?.languages?.length) skillsData.push({ category: 'Languages', items: p.skills.languages });
+    if (p?.skills?.frameworks?.length || p?.skills?.libraries?.length) {
+      skillsData.push({ category: 'Frameworks & Libraries', items: [...(p.skills.frameworks || []), ...(p.skills.libraries || [])] });
+    }
+    if (p?.skills?.databases?.length) skillsData.push({ category: 'Databases', items: p.skills.databases });
+    if (p?.skills?.cloud?.length) skillsData.push({ category: 'Cloud & DevOps', items: p.skills.cloud });
+    if (p?.skills?.tools?.length) skillsData.push({ category: 'Developer Tools', items: p.skills.tools });
 
     const newResume: ResumeData = {
       id: newId,
@@ -94,23 +108,26 @@ export const CompanyTemplatesPage: React.FC = () => {
       targetCompany: targetComp,
       targetRole: targetRole,
       basics: {
-        name: user?.fullName || 'Your Name',
-        label: targetRole,
-        email: user?.email || 'your.email@example.com',
-        phone: '',
-        location: '',
-        url: '',
-        summary: '',
-        profiles: []
+        name: p?.personalInfo?.fullName || currentResume?.basics?.name || user?.fullName || 'Your Name',
+        label: targetRole || p?.personalInfo?.label || currentResume?.basics?.label || 'Software Engineer',
+        email: p?.personalInfo?.email || currentResume?.basics?.email || user?.email || 'your.email@example.com',
+        phone: p?.personalInfo?.phone || currentResume?.basics?.phone || '',
+        location: p?.personalInfo?.location || currentResume?.basics?.location || '',
+        url: p?.personalInfo?.website || currentResume?.basics?.url || '',
+        summary: p?.personalInfo?.summary || currentResume?.basics?.summary || '',
+        profiles: p?.personalInfo ? [
+          ...(p.personalInfo.github ? [{ network: 'GitHub', username: p.personalInfo.github.split('/').pop() || '', url: p.personalInfo.github }] : []),
+          ...(p.personalInfo.linkedIn ? [{ network: 'LinkedIn', username: p.personalInfo.linkedIn.split('/').pop() || '', url: p.personalInfo.linkedIn }] : []),
+        ] : (currentResume?.basics?.profiles || []),
       },
-      education: [],
-      work: [],
-      projects: [],
-      skills: [{ category: 'Technical Skills', items: [] }],
-      certificates: [],
-      achievements: [],
-      hackathons: [],
-      volunteering: [],
+      education: (p?.education?.length ? p.education : currentResume?.education) || [],
+      work: (p?.experience?.length ? p.experience : currentResume?.work) || [],
+      projects: (p?.projects?.length ? p.projects : currentResume?.projects) || [],
+      skills: skillsData.length > 0 ? skillsData : ((currentResume?.skills?.length ? currentResume.skills : [{ category: 'Technical Skills', items: [] }])),
+      certificates: (p?.certifications?.length ? p.certifications : currentResume?.certificates) || [],
+      achievements: (p?.achievements?.length ? p.achievements : currentResume?.achievements) || [],
+      hackathons: (p?.hackathons?.length ? p.hackathons : currentResume?.hackathons) || [],
+      volunteering: (p?.volunteering?.length ? p.volunteering : currentResume?.volunteering) || [],
       meta: {
         sectionOrder: ['summary', 'education', 'work', 'projects', 'skills', 'hackathons', 'achievements', 'certificates'],
         hiddenSections: [],
@@ -122,15 +139,16 @@ export const CompanyTemplatesPage: React.FC = () => {
         template: baseTmpl,
         companyTemplateId: template.id,
         targetCompany: targetComp,
-        targetRole: targetRole
+        targetRole: targetRole,
       },
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     await StorageService.saveResume(newResume);
+    showToast('Company template applied with your profile data!', 'success');
     navigate(`/editor/${newResume.id}`);
-  }, [user, navigate]);
+  }, [user, masterProfile, currentResume, showToast, navigate]);
 
   // Handle Add Company
   const handleAddCompanySubmit = async (e: React.FormEvent) => {

@@ -18,6 +18,8 @@ import {
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme, Theme } from '../context/ThemeContext';
+import { useToast } from '../components/common/Toast';
+import { ConfirmModal } from '../components/common/ConfirmModal';
 
 export const SettingsPage: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -31,6 +33,10 @@ export const SettingsPage: React.FC = () => {
     resumes 
   } = useWorkspace();
   const { theme, actualTheme, setTheme } = useTheme();
+  const { showToast } = useToast();
+
+  const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
+  const [deleteAccountModalOpen, setDeleteAccountModalOpen] = useState(false);
 
   const [importJsonText, setImportJsonText] = useState('');
   const [importStatus, setImportStatus] = useState<{ success?: boolean; error?: string } | null>(null);
@@ -78,21 +84,17 @@ export const SettingsPage: React.FC = () => {
   };
 
   // Delete All Data / Delete Account
-  const handleDeleteAllData = () => {
-    const confirmation = prompt('Type "DELETE EVERYTHING" to permanently remove all your resumes and application history.');
-    if (confirmation === 'DELETE EVERYTHING') {
-      resetAllData();
-      alert('All local career workspace data has been permanently cleared.');
-    }
+  const executeDeleteAllData = () => {
+    resetAllData();
+    setDeleteAllModalOpen(false);
+    showToast('All local career workspace data has been permanently cleared.', 'info');
   };
 
-  const handleDeleteAccount = async () => {
-    const confirmation = prompt('Type "DELETE ACCOUNT" to permanently delete your account.');
-    if (confirmation === 'DELETE ACCOUNT') {
-      resetAllData();
-      await signOut();
-      alert('Account deleted and signed out.');
-    }
+  const executeDeleteAccount = async () => {
+    resetAllData();
+    await signOut();
+    setDeleteAccountModalOpen(false);
+    showToast('Account deleted and signed out.', 'info');
   };
 
   const themeOptions: { id: Theme; title: string; subtitle: string; icon: React.FC<any>; previewBg: string }[] = [
@@ -505,20 +507,43 @@ export const SettingsPage: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
-            onClick={handleDeleteAllData}
+            onClick={() => setDeleteAllModalOpen(true)}
             className="px-4 py-2.5 bg-rose-600 text-white font-bold rounded-xl hover:bg-rose-700 shadow-xs"
           >
             Delete All Workspace Data
           </button>
 
           <button
-            onClick={handleDeleteAccount}
+            onClick={() => setDeleteAccountModalOpen(true)}
             className="px-4 py-2.5 bg-white dark:bg-slate-900 text-rose-700 dark:text-rose-400 border border-rose-300 dark:border-rose-900/60 font-bold rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 shadow-xs"
           >
             Delete Account
           </button>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={deleteAllModalOpen}
+        title="Delete All Workspace Data"
+        message="This action cannot be undone. All your resumes, applications, tailored versions, and local career history will be permanently deleted."
+        confirmLabel="Permanently Delete All Data"
+        cancelLabel="Keep My Data"
+        isDestructive={true}
+        requiredConfirmationText="DELETE EVERYTHING"
+        onConfirm={executeDeleteAllData}
+        onCancel={() => setDeleteAllModalOpen(false)}
+      />
+
+      <ConfirmModal
+        isOpen={deleteAccountModalOpen}
+        title="Delete Account and Workspace"
+        message="This action cannot be undone. Your user session and all associated workspace data will be permanently wiped."
+        confirmLabel="Permanently Delete Account"
+        cancelLabel="Cancel"
+        isDestructive={true}
+        requiredConfirmationText="DELETE ACCOUNT"
+        onConfirm={executeDeleteAccount}
+        onCancel={() => setDeleteAccountModalOpen(false)}
+      />
     </div>
   );
 };

@@ -129,9 +129,9 @@ Output strictly valid JSON with this shape:
             payload: {
               jobDescription,
               masterProfileSummary: {
-                skills: masterProfile.skills,
-                projects: masterProfile.projects.map((p) => ({ name: p.name, tech: p.technologies })),
-                experience: masterProfile.experience.map((e) => ({ company: e.company, position: e.position })),
+                skills: masterProfile?.skills || {},
+                projects: (masterProfile?.projects || []).map((p) => ({ name: p.name, tech: p.technologies })),
+                experience: (masterProfile?.experience || []).map((e) => ({ company: e.company, position: e.position })),
               },
             },
           },
@@ -156,9 +156,9 @@ Job Description:
 ${jobDescription.slice(0, 5000)}
 
 Candidate Profile:
-Name: ${masterProfile.personalInfo.fullName}
-Skills: ${JSON.stringify(masterProfile.skills)}
-Projects: ${masterProfile.projects.map((p) => p.name).join(', ')}
+Name: ${masterProfile?.personalInfo?.fullName || currentResume?.basics?.name || 'Candidate'}
+Skills: ${JSON.stringify(masterProfile?.skills || currentResume?.skills || {})}
+Projects: ${(masterProfile?.projects || currentResume?.projects || []).map((p) => p.name).join(', ')}
 
 Output strictly valid JSON matching:
 {

@@ -86,6 +86,17 @@
   2. **Application Funnel Analytics (`/analytics`)**: End-to-end recruitment funnel tracking, conversion rate benchmarks (Applied -> Interview -> Offer), response lag telemetry, and two-way RFC-4180 CSV export/import with validation.
 - **Rationale:** Connects resume preparation with job discovery and pipeline intelligence, equipping candidates with comprehensive feedback to maximize interview callbacks.
 
+### ADR-9: Autonomous Dev Team Audit, Dialog Modernization & Enterprise Parity
+- **Decision:** Conducted an exhaustive full-stack review using autonomous engineering agents (`ceo-orchestrator`, `qa-engineer`), executing 7 high-impact enterprise hardening updates:
+  1. **Native Dialog Purge:** Eliminated blocking `alert()`, `confirm()`, and `prompt()` browser dialogs; introduced accessible `ConfirmModal.tsx` supporting typed text confirmation (e.g. "DELETE EVERYTHING").
+  2. **AI Tailoring Mutation & Persistence:** Connected "Accept Suggestion" in `AIToolsPage.tsx` to directly mutate summary, work, and project highlights in `currentResume` and persist to `localStorage`.
+  3. **11 ATS Templates Everywhere:** Expanded `CreateResumeModal.tsx` to render all 11 registered ATS templates with badges and descriptions.
+  4. **Master Profile Hydration for Company Templates:** "Use Template" in `CompanyTemplatesPage.tsx` now pre-populates newly created resumes from `masterProfile` rather than presenting blank fields.
+  5. **Command Palette Route Fix:** Repaired dead `/analyzer` route to resolve to `/analyzer/:id` and added direct navigation actions for all 7 Career Suite flagship tools.
+  6. **Form Validation Hardening:** Enforced `required` and 6-character minimum on signup password in `LoginPage.tsx`.
+  7. **Obsidian Dark Mode Visual Parity:** Upgraded `ApplicationDetailPage.tsx` to dark mode (`rgb(17, 18, 24)`), connected all 7 Career Suite tools in `DashboardPage.tsx` and `Footer.tsx`.
+- **Rationale:** Guarantees consumer-grade polish, zero headless test breakage, fluid UX, and deep synergy across the application ecosystem.
+
 ---
 
 ## 4. Existing Database & Authentication Setup

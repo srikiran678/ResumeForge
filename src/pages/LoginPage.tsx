@@ -59,6 +59,11 @@ export const LoginPage: React.FC = () => {
     clearAuthError();
 
     if (mode === 'signup') {
+      if (!password || password.length < 6) {
+        setError('Password must be at least 6 characters long.');
+        setLoading(false);
+        return;
+      }
       const res = await signUpWithEmail(email, fullName, password);
       if (res.error) {
         setError(res.error);
@@ -313,6 +318,7 @@ export const LoginPage: React.FC = () => {
             </label>
             <input
               type="password"
+              required={mode === 'signup'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"

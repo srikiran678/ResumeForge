@@ -8,6 +8,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { useToast } from '../components/common/Toast';
 import { AIService } from '../lib/aiService';
 import { JobDescriptionAnalysis } from '../types';
 import { StorageService } from '@/modules/database';
@@ -16,7 +17,8 @@ import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 const SAMPLE_JOB_DESCRIPTION = '';
 
 export const AIToolsPage: React.FC = () => {
-  const { resumes, aiUsage, refreshAIUsage } = useWorkspace();
+  const { resumes, masterProfile, aiUsage, refreshAIUsage } = useWorkspace();
+  const { showToast } = useToast();
   const [jobDescription, setJobDescription] = useState(SAMPLE_JOB_DESCRIPTION);
   const [selectedResumeId, setSelectedResumeId] = useState(resumes[0]?.id || '');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -26,7 +28,7 @@ export const AIToolsPage: React.FC = () => {
 
   const handleAnalyze = async () => {
     if (resumes.length === 0) {
-      alert('Please create a resume first in Resume Manager before running job description analysis.');
+      showToast('Please create a resume first in Resume Manager before running job description analysis.', 'info');
       return;
     }
 
@@ -42,24 +44,83 @@ export const AIToolsPage: React.FC = () => {
     try {
       const result = await AIService.analyzeJobDescription(
         jobDescription,
-        null as any,
+        masterProfile,
         currentResume
       );
       setAnalysisResult(result.analysis);
       refreshAIUsage();
+      showToast('Job description analysis complete!', 'success');
     } catch (err: any) {
-      alert(`AI Execution Notice: ${err.message}`);
+      showToast(`AI Execution Notice: ${err.message}`, 'error');
     } finally {
       setIsAnalyzing(false);
     }
   };
 
   const handleAcceptSuggestion = (sugId: string) => {
-    setAcceptedChanges({ ...acceptedChanges, [sugId]: true });
+    const sug = analysisResult?.tailoringSuggestions.find((s) => s.id === sugId);
+    if (!sug) return;
+
+    const targetResume = resumes.find((r) => r.id === selectedResumeId) || resumes[0];
+    if (!targetResume) return;
+
+    // Create a clone to safely modify
+    const updatedResume = JSON.parse(JSON.stringify(targetResume));
+    let modified = false;
+
+    const secLower = sug.section.toLowerCase();
+    if (secLower.includes('summary')) {
+      updatedResume.basics.summary = sug.after;
+      modified = true;
+    } else if (secLower.includes('experience') || secLower.includes('work')) {
+      if (updatedResume.work && updatedResume.work.length > 0) {
+        for (const w of updatedResume.work) {
+          if (w.highlights && Array.isArray(w.highlights)) {
+            const hIdx = w.highlights.findIndex((h: string) => h.includes(sug.before) || sug.before.includes(h));
+            if (hIdx !== -1) {
+              w.highlights[hIdx] = sug.after;
+              modified = true;
+              break;
+            }
+          }
+        }
+        if (!modified && updatedResume.work[0].highlights) {
+          updatedResume.work[0].highlights.unshift(sug.after);
+          modified = true;
+        }
+      }
+    } else if (secLower.includes('project')) {
+      if (updatedResume.projects && updatedResume.projects.length > 0) {
+        for (const p of updatedResume.projects) {
+          if (p.highlights && Array.isArray(p.highlights)) {
+            const hIdx = p.highlights.findIndex((h: string) => h.includes(sug.before) || sug.before.includes(h));
+            if (hIdx !== -1) {
+              p.highlights[hIdx] = sug.after;
+              modified = true;
+              break;
+            }
+          }
+        }
+        if (!modified && updatedResume.projects[0].highlights) {
+          updatedResume.projects[0].highlights.unshift(sug.after);
+          modified = true;
+        }
+      }
+    }
+
+    if (modified) {
+      StorageService.saveResume(updatedResume);
+      setAcceptedChanges({ ...acceptedChanges, [sugId]: true });
+      showToast('Tailoring suggestion applied directly to your resume!', 'success');
+    } else {
+      setAcceptedChanges({ ...acceptedChanges, [sugId]: true });
+      showToast('Suggestion marked as accepted', 'info');
+    }
   };
 
   const handleRejectSuggestion = (sugId: string) => {
     setAcceptedChanges({ ...acceptedChanges, [sugId]: false });
+    showToast('Suggestion dismissed', 'info');
   };
 
   return (

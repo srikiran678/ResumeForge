@@ -13,6 +13,8 @@ import {
   User 
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { useToast } from '../components/common/Toast';
+import { ConfirmModal } from '../components/common/ConfirmModal';
 import { ATSAnalyzer } from '@/modules/ats';
 import { CreateResumeModal } from '../components/profile/CreateResumeModal';
 import { ResumePhotoUploadModal } from '../components/profile/ResumePhotoUploadModal';
@@ -22,6 +24,7 @@ import { TemplateId } from '../types';
 
 export const ResumesPage: React.FC = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const { 
     resumes, 
     duplicateResume, 
@@ -40,6 +43,30 @@ export const ResumesPage: React.FC = () => {
   const [wizardModalOpen, setWizardModalOpen] = useState(false);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
   const [selectedGalleryTemplate, setSelectedGalleryTemplate] = useState<TemplateId>('modern');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  const handleDuplicate = (id: string) => {
+    duplicateResume(id);
+    showToast('Resume duplicated successfully', 'success');
+  };
+
+  const handleMoveToTrash = (id: string) => {
+    moveToTrash(id);
+    showToast('Resume moved to trash', 'info');
+  };
+
+  const handleRestore = (id: string) => {
+    restoreFromTrash(id);
+    showToast('Resume restored from trash', 'info');
+  };
+
+  const handlePermanentDelete = () => {
+    if (deleteTargetId) {
+      deletePermanently(deleteTargetId);
+      showToast('Resume permanently deleted', 'info');
+      setDeleteTargetId(null);
+    }
+  };
 
   const filteredResumes = resumes.filter((r) => {
     if (filter === 'active') {
@@ -248,7 +275,7 @@ export const ResumesPage: React.FC = () => {
                     {filter === 'trash' ? (
                       <>
                         <button
-                          onClick={() => restoreFromTrash(resume.id)}
+                          onClick={() => handleRestore(resume.id)}
                           title="Restore from trash"
                           aria-label="Restore from trash"
                           className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
@@ -256,11 +283,7 @@ export const ResumesPage: React.FC = () => {
                           <RotateCcw className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => {
-                            if (confirm('Permanently delete this resume? This cannot be undone.')) {
-                              deletePermanently(resume.id);
-                            }
-                          }}
+                          onClick={() => setDeleteTargetId(resume.id)}
                           title="Delete permanently"
                           aria-label="Delete permanently"
                           className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
@@ -271,7 +294,7 @@ export const ResumesPage: React.FC = () => {
                     ) : (
                       <>
                         <button
-                          onClick={() => duplicateResume(resume.id)}
+                          onClick={() => handleDuplicate(resume.id)}
                           title="Duplicate resume"
                           aria-label="Duplicate resume"
                           className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
@@ -280,7 +303,7 @@ export const ResumesPage: React.FC = () => {
                         </button>
 
                         <button
-                          onClick={() => moveToTrash(resume.id)}
+                          onClick={() => handleMoveToTrash(resume.id)}
                           title="Move to trash"
                           aria-label="Move to trash"
                           className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
@@ -309,6 +332,7 @@ export const ResumesPage: React.FC = () => {
         isOpen={createModalOpen}
         onCreate={(title, targetRole, targetCompany, template) => {
           const newResume = createResume(title, targetRole, targetCompany, template);
+          showToast(`Created new resume: ${title}`, 'success');
           navigate(`/editor/${newResume.id}`);
         }}
         onClose={() => setCreateModalOpen(false)}
@@ -360,6 +384,18 @@ export const ResumesPage: React.FC = () => {
           navigate(`/editor/${newResume.id}`);
         }}
         onClose={() => setGalleryModalOpen(false)}
+      />
+
+      {/* Permanent Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={!!deleteTargetId}
+        title="Permanently Delete Resume"
+        message="This action cannot be undone. This tailored resume and its history will be permanently wiped."
+        confirmLabel="Permanently Delete"
+        cancelLabel="Cancel"
+        isDestructive={true}
+        onConfirm={handlePermanentDelete}
+        onCancel={() => setDeleteTargetId(null)}
       />
     </div>
   );

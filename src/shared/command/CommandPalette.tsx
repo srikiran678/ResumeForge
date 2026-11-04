@@ -17,7 +17,13 @@ import {
   Command, 
   ArrowRight, 
   Layers, 
-  History 
+  History,
+  BarChart3,
+  MessageSquare,
+  Target,
+  DollarSign,
+  TrendingUp,
+  Building2 
 } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 
@@ -94,7 +100,74 @@ export const CommandPalette: React.FC = () => {
       title: 'ATS Resume Scorer',
       category: 'AI Tools',
       icon: FileCheck,
-      run: () => navigate('/analyzer'),
+      run: () => {
+        const targetId = currentResume?.id || resumes[0]?.id;
+        navigate(targetId ? `/analyzer/${targetId}` : '/resumes');
+      },
+    },
+    {
+      id: 'job_search',
+      title: 'Job Search Explorer',
+      subtitle: 'Curated roles with instant ATS fit & 1-click track',
+      category: 'Career Suite',
+      icon: Search,
+      run: () => navigate('/jobs'),
+    },
+    {
+      id: 'app_analytics',
+      title: 'Pipeline & Funnel Analytics',
+      subtitle: 'Conversion rates, response times & CSV sync',
+      category: 'Career Suite',
+      icon: BarChart3,
+      run: () => navigate('/analytics'),
+    },
+    {
+      id: 'cover_letter',
+      title: 'Cover Letter Studio',
+      subtitle: 'ATS 1-page tailored cover letters',
+      category: 'Career Suite',
+      icon: FileText,
+      run: () => navigate('/cover-letters'),
+    },
+    {
+      id: 'interview_prep',
+      title: 'Interview Prep & STAR Simulator',
+      subtitle: 'STAR answers & tough question coach',
+      category: 'Career Suite',
+      icon: MessageSquare,
+      run: () => navigate('/interview-prep'),
+    },
+    {
+      id: 'job_match',
+      title: 'Job Match Radar',
+      subtitle: '5-D fit score & eligibility gates',
+      category: 'Career Suite',
+      icon: Target,
+      run: () => navigate('/job-match'),
+    },
+    {
+      id: 'salary_intel',
+      title: 'Salary Intelligence',
+      subtitle: 'Percentile benchmarks & scripts',
+      category: 'Career Suite',
+      icon: DollarSign,
+      run: () => navigate('/salary-intel'),
+    },
+    {
+      id: 'upskilling',
+      title: 'Skill Gap & Upskilling Roadmap',
+      subtitle: 'Proof-of-work project roadmaps',
+      category: 'Career Suite',
+      icon: TrendingUp,
+      run: () => navigate('/upskilling'),
+    },
+    {
+      id: 'company_templates',
+      title: 'Company-Curated Templates',
+      subtitle: 'ATS templates tailored for top tech employers',
+      category: 'Templates',
+      icon: Building2,
+      run: () => navigate('/templates'),
     },
     {
       id: 'settings',

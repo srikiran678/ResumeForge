@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Check, X, ArrowRight, ShieldAlert } from 'lucide-react';
 import { ResumeParser, ExtractedResumeDraft } from '../../lib/resumeParser';
 import { MasterProfile } from '../../types';
+import { useToast } from '../common/Toast';
 
 interface ResumeImportModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export const ResumeImportModal: React.FC<ResumeImportModalProps> = ({
   onSaveToProfile,
   onClose,
 }) => {
+  const { showToast } = useToast();
   const [step, setStep] = useState<'upload' | 'verify'>('upload');
   const [extractedDraft, setExtractedDraft] = useState<ExtractedResumeDraft | null>(null);
   const [rawTextInput, setRawTextInput] = useState('');
@@ -44,7 +46,7 @@ export const ResumeImportModal: React.FC<ResumeImportModalProps> = ({
     };
 
     reader.onerror = () => {
-      alert('Failed to read file. Please paste plain text instead.');
+      showToast('Failed to read file. Please paste plain text instead.', 'error');
       setIsProcessing(false);
     };
 
@@ -76,6 +78,7 @@ export const ResumeImportModal: React.FC<ResumeImportModalProps> = ({
     });
 
     onSaveToProfile(merged);
+    showToast('Imported resume information merged into default profile!', 'success');
     onClose();
   };
 

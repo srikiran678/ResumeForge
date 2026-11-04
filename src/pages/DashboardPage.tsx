@@ -17,7 +17,9 @@ import {
   DollarSign,
   Target,
   TrendingUp,
-  MessageSquare
+  MessageSquare,
+  BarChart3,
+  Compass
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -298,7 +300,41 @@ export const DashboardPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+          <Link
+            to="/jobs"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Compass className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Job Search</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Live candidate match & pipeline</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-blue-600 dark:text-blue-400 pt-1">
+              <span>Explore Roles</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
+          <Link
+            to="/analytics"
+            className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
+          >
+            <div className="size-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <BarChart3 className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-slate-900 dark:text-white">Analytics</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Funnel velocity & CSV sync</div>
+            </div>
+            <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 pt-1">
+              <span>View Funnel</span>
+              <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
           <Link
             to="/cover-letters"
             className="p-4 rounded-2xl bg-slate-50/70 dark:bg-[#18191f] hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 border border-slate-200/70 dark:border-white/[0.06] hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all group flex flex-col justify-between space-y-2.5"
