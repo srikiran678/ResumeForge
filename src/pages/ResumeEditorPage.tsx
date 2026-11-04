@@ -240,9 +240,16 @@ export const ResumeEditorPage: React.FC = () => {
               <input
                 type="text"
                 value={currentResume.title}
+                placeholder="Untitled Resume"
+                aria-label="Resume title"
                 onChange={(e) =>
                   updateCurrentResume((prev) => ({ ...prev, title: e.target.value }))
                 }
+                onBlur={(e) => {
+                  if (!e.target.value.trim()) {
+                    updateCurrentResume((prev) => ({ ...prev, title: 'Untitled Resume' }));
+                  }
+                }}
                 className="text-sm font-extrabold text-forge-900 dark:text-white bg-transparent hover:bg-forge-50 dark:hover:bg-white/[0.05] px-1 py-0.5 rounded border border-transparent hover:border-forge-200 dark:hover:border-white/[0.1] focus:border-indigo-500 focus:bg-white dark:focus:bg-[#121316] focus:outline-none"
               />
               <span className="text-[10px] font-mono px-1.5 py-0.2 bg-forge-100 dark:bg-white/[0.06] text-forge-700 dark:text-slate-300 rounded font-semibold border border-transparent dark:border-white/[0.08]">

@@ -147,8 +147,11 @@ export const DashboardPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Card 1: Upload Photo / Scan */}
           <div 
+            role="button"
+            tabIndex={0}
             onClick={() => setPhotoModalOpen(true)}
-            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPhotoModalOpen(true); } }}
+            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
           >
             <div className="flex items-center space-x-3">
               <div className="size-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -174,8 +177,11 @@ export const DashboardPage: React.FC = () => {
 
           {/* Card 2: Fill Details Step-by-Step */}
           <div 
+            role="button"
+            tabIndex={0}
             onClick={() => setWizardModalOpen(true)}
-            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setWizardModalOpen(true); } }}
+            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
           >
             <div className="flex items-center space-x-3">
               <div className="size-10 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -201,8 +207,11 @@ export const DashboardPage: React.FC = () => {
 
           {/* Card 3: 10 ATS Templates */}
           <div 
+            role="button"
+            tabIndex={0}
             onClick={() => setGalleryModalOpen(true)}
-            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setGalleryModalOpen(true); } }}
+            className="p-4 rounded-2xl bg-white dark:bg-[#16171c] border border-slate-200/80 dark:border-white/[0.08] hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-2xs hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between space-y-3 group focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
           >
             <div className="flex items-center space-x-3">
               <div className="size-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -446,7 +455,7 @@ export const DashboardPage: React.FC = () => {
 
           {/* Action 2: Analyze Resume */}
           <Link
-            to={resumes[0] ? `/analyzer/${resumes[0].id}` : '/resumes'}
+            to={activeResumes[0] ? `/analyzer/${activeResumes[0].id}` : '/resumes'}
             className="p-4 bg-slate-50/70 dark:bg-[#18191f] hover:bg-slate-100 dark:hover:bg-[#202128] border border-slate-200/70 dark:border-white/[0.06] rounded-2xl text-left transition-all group flex items-start space-x-3.5 hover:border-slate-300 dark:hover:border-white/[0.12] cursor-pointer"
           >
             <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-500/20 group-hover:scale-105 transition-all">

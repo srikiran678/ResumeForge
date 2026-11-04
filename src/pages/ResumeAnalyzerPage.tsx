@@ -8,7 +8,8 @@ import {
   ArrowLeft, 
   Terminal, 
   Zap, 
-  BookOpen
+  BookOpen,
+  AlertCircle
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { ATSAnalyzer, QualityAnalyzer, TextExtractionViewer } from '@/modules/ats';
@@ -19,7 +20,11 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'ats' | 'quality' | 'notepad'>('ats');
 
-  const resume = resumes.find((r) => r.id === id) || resumes[0];
+  const requestedResume = resumes.find((r) => r.id === id);
+  const activeResumes = resumes.filter((r) => !r.isTrash);
+  const resume = requestedResume || activeResumes[0] || resumes[0];
+  const isFallback = Boolean(id && !requestedResume);
+  const isTrashed = Boolean(resume?.isTrash);
 
   if (!resume) {
     return (
@@ -37,6 +42,19 @@ export const ResumeAnalyzerPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-left space-y-6">
+      {isFallback && (
+        <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-300 flex items-center space-x-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>The requested resume was not found or was moved. Now analyzing your active resume: <strong>{resume.title}</strong></span>
+        </div>
+      )}
+      {isTrashed && (
+        <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 rounded-xl text-xs text-rose-700 dark:text-rose-300 flex items-center space-x-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>Notice: This resume is currently in the Trash. Restore it in the Resume Manager to edit or submit applications.</span>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-[#121316] p-6 rounded-2xl border border-forge-200 dark:border-white/[0.07] shadow-xs">
         <div>

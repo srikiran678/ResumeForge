@@ -57,9 +57,26 @@ export const CoverLetterStudioPage: React.FC = () => {
   const handleSelectResume = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rId = e.target.value;
     setSelectedResumeId(rId);
+    const selectedResume = resumes.find(r => r.id === rId);
+    if (selectedResume) {
+      setActiveLetter(prev => ({
+        ...prev,
+        senderName: selectedResume.basics.name || prev.senderName,
+        senderEmail: selectedResume.basics.email || prev.senderEmail,
+        senderPhone: selectedResume.basics.phone || prev.senderPhone,
+        senderLocation: selectedResume.basics.location || prev.senderLocation,
+        senderLinkedIn: selectedResume.basics.profiles?.find(p => p.network.toLowerCase().includes('linkedin'))?.url || prev.senderLinkedIn,
+        role: selectedResume.targetRole || prev.role,
+        company: selectedResume.targetCompany || prev.company,
+      }));
+    }
   };
 
   const handleGenerate = () => {
+    if (!activeLetter.role.trim() || !activeLetter.company.trim()) {
+      showToast('Please specify both a target role and company name before generating.', 'error');
+      return;
+    }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
     const candidateName = selectedResume?.basics?.name || masterProfile?.personalInfo?.fullName || 'Candidate Name';
     const candidateEmail = selectedResume?.basics?.email || masterProfile?.personalInfo?.email || 'candidate@example.com';

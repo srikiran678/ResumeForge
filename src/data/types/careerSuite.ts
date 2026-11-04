@@ -212,6 +212,7 @@ export interface UpskillPlan {
   }>;
   sprintRoadmap: RoadmapSprint[];
   curatedResources: CuratedStudyResource[];
+  completedStepIds?: string[];
   createdAt: string;
 }
 

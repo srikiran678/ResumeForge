@@ -60,6 +60,10 @@ export const JobMatchRadarPage: React.FC = () => {
   }, []);
 
   const handleEvaluate = () => {
+    if (!jobDescription.trim() || jobDescription.trim().length < 20) {
+      showToast('Please paste a job description (at least 20 characters) to evaluate fit.', 'error');
+      return;
+    }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
     const result = evaluateJobFit({
       role,

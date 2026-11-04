@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AlertCircle, Sun, Moon, Laptop, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, Sun, Moon, Laptop, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { GoogleIcon } from '../components/common/GoogleIcon';
@@ -20,6 +20,7 @@ export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(() => {
@@ -58,20 +59,21 @@ export const LoginPage: React.FC = () => {
     setMessage(null);
     clearAuthError();
 
+    const cleanEmail = email.trim().toLowerCase();
     if (mode === 'signup') {
       if (!password || password.length < 6) {
         setError('Password must be at least 6 characters long.');
         setLoading(false);
         return;
       }
-      const res = await signUpWithEmail(email, fullName, password);
+      const res = await signUpWithEmail(cleanEmail, fullName.trim(), password);
       if (res.error) {
         setError(res.error);
       } else {
         navigate(destination);
       }
     } else {
-      const res = await signInWithEmail(email, password);
+      const res = await signInWithEmail(cleanEmail, password);
       if (res.error) {
         setError(res.error);
       } else {
@@ -316,15 +318,26 @@ export const LoginPage: React.FC = () => {
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Password {mode === 'signin' && <span className="font-normal text-slate-400 dark:text-slate-500">(Optional for instant test)</span>}
             </label>
-            <input
-              type="password"
-              required={mode === 'signup'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              minLength={6}
-              className="w-full text-xs p-2.5 border border-slate-300 dark:border-slate-700/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required={mode === 'signup'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                minLength={6}
+                className="w-full text-xs p-2.5 pr-10 border border-slate-300 dark:border-slate-700/80 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                title={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           <button

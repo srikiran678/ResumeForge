@@ -61,6 +61,10 @@ export const InterviewPrepPage: React.FC = () => {
   }, []);
 
   const handleGenerate = () => {
+    if (!role.trim()) {
+      showToast('Please specify a target role before generating interview prep.', 'error');
+      return;
+    }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
     const newPrep = generateInterviewPrep({
       role,
@@ -178,7 +182,15 @@ export const InterviewPrepPage: React.FC = () => {
               </label>
               <select
                 value={selectedResumeId}
-                onChange={(e) => setSelectedResumeId(e.target.value)}
+                onChange={(e) => {
+                  const rId = e.target.value;
+                  setSelectedResumeId(rId);
+                  const found = resumes.find(r => r.id === rId);
+                  if (found) {
+                    if (found.targetRole) setRole(found.targetRole);
+                    if (found.targetCompany) setCompany(found.targetCompany);
+                  }
+                }}
                 className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-slate-900 dark:text-slate-100"
               >
                 <option value="">Default Profile</option>

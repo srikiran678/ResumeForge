@@ -340,12 +340,15 @@ export const SettingsPage: React.FC = () => {
               Public Resume Links & Access Control
             </h2>
           </div>
-          {resumes.length > 0 && (
+          {resumes.some(r => !r.isTrash) && (
             <button
               type="button"
               onClick={() => {
-                const link = togglePublicLink(resumes[0].id, 'public');
-                window.open(`/r/${link.slug}`, '_blank');
+                const active = resumes.find(r => !r.isTrash) || resumes[0];
+                if (active) {
+                  const link = togglePublicLink(active.id, 'public');
+                  window.open(`/r/${link.slug}`, '_blank');
+                }
               }}
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-950 dark:bg-white text-white dark:text-slate-950 text-xs font-semibold hover:bg-slate-850 dark:hover:bg-slate-100 shadow-2xs transition-colors cursor-pointer"
               title="Create a share link and preview it"

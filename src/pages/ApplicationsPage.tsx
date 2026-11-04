@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { JobApplication, ApplicationStatus } from '../types';
 import { SnapshotViewer } from '../components/application/SnapshotViewer';
+import { useToast } from '../components/common/Toast';
 
 const STATUS_COLUMNS: ApplicationStatus[] = [
   'Interested',
@@ -25,6 +26,7 @@ const STATUS_COLUMNS: ApplicationStatus[] = [
 export const ApplicationsPage: React.FC = () => {
   const { user } = useAuth();
   const { applications, resumes, saveApplication } = useWorkspace();
+  const { showToast } = useToast();
 
   const [activeView, setActiveView] = useState<'kanban' | 'table'>('kanban');
   const [selectedSnapshotApp, setSelectedSnapshotApp] = useState<JobApplication | null>(null);
@@ -55,18 +57,26 @@ export const ApplicationsPage: React.FC = () => {
 
   const handleCreateApplication = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!newCompany.trim() || !newRole.trim()) {
+      showToast('Company name and Job Role are required.', 'error');
+      return;
+    }
+    let formattedUrl = newJobUrl.trim();
+    if (formattedUrl && !/^https?:\/\//i.test(formattedUrl)) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
     const app: JobApplication = {
       id: `app_${Date.now()}`,
       userId: user?.id || '',
-      company: newCompany,
-      role: newRole,
-      jobUrl: newJobUrl || undefined,
-      location: newLocation || undefined,
+      company: newCompany.trim(),
+      role: newRole.trim(),
+      jobUrl: formattedUrl || undefined,
+      location: newLocation.trim() || undefined,
       deadline: newDeadline || undefined,
       resumeId: newResumeId,
       resumeVersion: '1.0',
       status: newStatus,
-      notes: newNotes,
+      notes: newNotes.trim(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -78,10 +88,13 @@ export const ApplicationsPage: React.FC = () => {
     setNewJobUrl('');
     setNewLocation('');
     setNewDeadline('');
+    setNewNotes('');
+    showToast(`Added application for ${newRole.trim()} at ${newCompany.trim()}`, 'success');
   };
 
   const handleStatusChange = (app: JobApplication, newStatus: ApplicationStatus) => {
-    saveApplication({ ...app, status: newStatus });
+    saveApplication({ ...app, status: newStatus, updatedAt: new Date().toISOString() });
+    showToast(`Moved ${app.company} application to ${newStatus}`, 'info');
   };
 
   return (

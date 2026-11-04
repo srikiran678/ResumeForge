@@ -10,7 +10,9 @@ import {
   FileCheck, 
   Camera, 
   Layout, 
-  User 
+  User,
+  Archive,
+  ArchiveRestore
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
@@ -31,6 +33,7 @@ export const ResumesPage: React.FC = () => {
     moveToTrash, 
     restoreFromTrash, 
     deletePermanently, 
+    toggleArchive,
     createResume,
     masterProfile,
     updateMasterProfile
@@ -58,6 +61,11 @@ export const ResumesPage: React.FC = () => {
   const handleRestore = (id: string) => {
     restoreFromTrash(id);
     showToast('Resume restored from trash', 'info');
+  };
+
+  const handleToggleArchive = (id: string, willArchive: boolean) => {
+    toggleArchive(id);
+    showToast(willArchive ? 'Resume moved to archive' : 'Resume restored to active', 'info');
   };
 
   const handlePermanentDelete = () => {
@@ -291,6 +299,33 @@ export const ResumesPage: React.FC = () => {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </>
+                    ) : filter === 'archived' ? (
+                      <>
+                        <button
+                          onClick={() => handleToggleArchive(resume.id, false)}
+                          title="Restore to active resumes"
+                          aria-label="Restore to active resumes"
+                          className="p-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors cursor-pointer"
+                        >
+                          <ArchiveRestore className="w-4 h-4" />
+                        </button>
+
+                        <button
+                          onClick={() => handleMoveToTrash(resume.id)}
+                          title="Move to trash"
+                          aria-label="Move to trash"
+                          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+
+                        <Link
+                          to={`/editor/${resume.id}`}
+                          className="px-3 py-1.5 text-xs font-semibold bg-slate-950 hover:bg-slate-850 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 rounded-lg transition-colors shadow-2xs ml-1 cursor-pointer"
+                        >
+                          Edit
+                        </Link>
+                      </>
                     ) : (
                       <>
                         <button
@@ -300,6 +335,15 @@ export const ResumesPage: React.FC = () => {
                           className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                         >
                           <Copy className="w-4 h-4" />
+                        </button>
+
+                        <button
+                          onClick={() => handleToggleArchive(resume.id, true)}
+                          title="Move to archive"
+                          aria-label="Move to archive"
+                          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 transition-colors cursor-pointer"
+                        >
+                          <Archive className="w-4 h-4" />
                         </button>
 
                         <button

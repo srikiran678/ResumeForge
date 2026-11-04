@@ -41,6 +41,7 @@ interface WorkspaceContextType {
   moveToTrash: (id: string) => void;
   restoreFromTrash: (id: string) => void;
   deletePermanently: (id: string) => void;
+  toggleArchive: (id: string) => void;
   saveStatus: SaveStatus;
   
   // Versions
@@ -364,6 +365,17 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, [currentResume]);
 
+  const toggleArchive = useCallback((id: string) => {
+    const list = StorageService.getResumes();
+    const target = list.find((r) => r.id === id);
+    if (target) {
+      target.isArchived = !target.isArchived;
+      target.updatedAt = new Date().toISOString();
+      StorageService.saveResume(target);
+      setResumes(StorageService.getResumes());
+    }
+  }, []);
+
   // Versioning
   const createVersionSnapshot = useCallback((name?: string, note?: string) => {
     if (!currentResume) return undefined;
@@ -494,6 +506,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         moveToTrash,
         restoreFromTrash,
         deletePermanently,
+        toggleArchive,
         saveStatus,
         versions,
         createVersionSnapshot,

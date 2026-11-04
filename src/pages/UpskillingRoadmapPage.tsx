@@ -53,6 +53,10 @@ export const UpskillingRoadmapPage: React.FC = () => {
   }, []);
 
   const handleGenerate = () => {
+    if (!targetRole.trim()) {
+      showToast('Please specify a target role before generating an upskilling roadmap.', 'error');
+      return;
+    }
     const plan = generateUpskillPlan({
       targetRole,
       targetCompany,
@@ -62,6 +66,19 @@ export const UpskillingRoadmapPage: React.FC = () => {
     setActivePlan(plan);
     CareerStorageService.saveUpskillPlan(plan);
     showToast('Personalized upskilling roadmap generated!', 'success');
+  };
+
+  const handleToggleStep = (stepKey: string) => {
+    const current = new Set(activePlan.completedStepIds || []);
+    if (current.has(stepKey)) {
+      current.delete(stepKey);
+    } else {
+      current.add(stepKey);
+    }
+    const updated = { ...activePlan, completedStepIds: Array.from(current) };
+    setActivePlan(updated);
+    CareerStorageService.saveUpskillPlan(updated);
+    showToast(current.has(stepKey) ? 'Step marked as completed!' : 'Step unmarked', 'info');
   };
 
   const getPriorityBadge = (priority: 'CRITICAL' | 'HIGH' | 'MEDIUM') => {
@@ -261,12 +278,28 @@ export const UpskillingRoadmapPage: React.FC = () => {
                       Weekly Execution Checklist:
                     </span>
                     <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
-                      {sprint.actionableSteps.map((step: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
-                          <span>{step}</span>
-                        </li>
-                      ))}
+                      {sprint.actionableSteps.map((step: string, i: number) => {
+                        const stepKey = `${idx}_${i}`;
+                        const isDone = (activePlan.completedStepIds || []).includes(stepKey);
+                        return (
+                          <li 
+                            key={i} 
+                            onClick={() => handleToggleStep(stepKey)}
+                            className="flex items-start gap-2 cursor-pointer group select-none hover:text-slate-950 dark:hover:text-white transition-colors"
+                          >
+                            <div className={`size-4 rounded-md flex items-center justify-center shrink-0 mt-0.5 border transition-colors ${
+                              isDone 
+                                ? 'bg-emerald-500 border-emerald-500 text-white' 
+                                : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-indigo-400'
+                            }`}>
+                              {isDone && <CheckCircle2 className="w-3.5 h-3.5" />}
+                            </div>
+                            <span className={isDone ? 'line-through text-slate-400 dark:text-slate-500' : ''}>
+                              {step}
+                            </span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>

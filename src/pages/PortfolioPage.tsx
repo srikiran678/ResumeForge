@@ -11,7 +11,7 @@ import {
 import { useWorkspace } from '../context/WorkspaceContext';
 
 export const PortfolioPage: React.FC = () => {
-  const { resumes, portfolio, updatePortfolio } = useWorkspace();
+  const { resumes, masterProfile, portfolio, updatePortfolio } = useWorkspace();
   const [copied, setCopied] = useState(false);
 
   const portfolioUrl = `${window.location.origin}/portfolio`;
@@ -26,39 +26,49 @@ export const PortfolioPage: React.FC = () => {
     updatePortfolio({ ...portfolio, theme });
   };
 
-  const activeResume = resumes[0];
+  const activeResume = resumes.find((r) => !r.isTrash) || resumes[0];
+  const p = masterProfile;
 
-  const githubProfile = activeResume?.basics?.profiles?.find((p) => p.network.toLowerCase().includes('github'))?.url;
-  const linkedInProfile = activeResume?.basics?.profiles?.find((p) => p.network.toLowerCase().includes('linkedin'))?.url;
+  const githubProfile = activeResume?.basics?.profiles?.find((pr) => pr.network.toLowerCase().includes('github'))?.url || p?.personalInfo?.github;
+  const linkedInProfile = activeResume?.basics?.profiles?.find((pr) => pr.network.toLowerCase().includes('linkedin'))?.url || p?.personalInfo?.linkedIn;
 
   const personalInfo = {
-    fullName: activeResume?.basics?.name || 'Career Professional',
-    label: activeResume?.basics?.label || 'Software Engineer',
-    summary: activeResume?.basics?.summary || 'Passionate software builder with expertise in high-scale systems and web engineering.',
-    email: activeResume?.basics?.email || '',
+    fullName: activeResume?.basics?.name || p?.personalInfo?.fullName || 'Your Name',
+    label: activeResume?.basics?.label || p?.personalInfo?.label || 'Software Engineer',
+    summary: activeResume?.basics?.summary || p?.personalInfo?.summary || 'Passionate software builder with expertise in high-scale systems and web engineering.',
+    email: activeResume?.basics?.email || p?.personalInfo?.email || '',
     github: githubProfile || '',
     linkedIn: linkedInProfile || '',
-    website: activeResume?.basics?.url || '',
+    website: activeResume?.basics?.url || p?.personalInfo?.website || '',
   };
 
-  const projects = activeResume?.projects?.map((p) => ({
-    id: p.id,
-    name: p.name,
-    description: p.highlights?.[0] || p.description || 'Technical implementation and architecture.',
-    githubUrl: p.githubUrl || p.url,
-    technologies: p.technologies || ['TypeScript', 'React'],
+  const projects = (activeResume?.projects?.length ? activeResume.projects : p?.projects)?.map((proj: any) => ({
+    id: proj.id,
+    name: proj.name,
+    description: proj.highlights?.[0] || proj.description || 'Technical implementation and architecture.',
+    githubUrl: proj.githubUrl || proj.url,
+    technologies: proj.technologies || ['TypeScript', 'React'],
   })) || [];
 
-  const skillsList = activeResume?.skills?.flatMap((s) => s.items || []) || [
+  const rawSkills = activeResume?.skills?.flatMap((s) => s.items || []) || [];
+  const profileSkills = p?.skills ? [
+    ...(p.skills.languages || []),
+    ...(p.skills.frameworks || []),
+    ...(p.skills.databases || []),
+    ...(p.skills.cloud || []),
+    ...(p.skills.tools || []),
+  ] : [];
+
+  const skillsList = rawSkills.length > 0 ? rawSkills : (profileSkills.length > 0 ? profileSkills : [
     'TypeScript',
     'React',
     'PostgreSQL',
     'Node.js',
     'Docker',
     'Git',
-  ];
+  ]);
 
-  const experience = activeResume?.work?.map((w) => ({
+  const experience = (activeResume?.work?.length ? activeResume.work : p?.experience)?.map((w: any) => ({
     id: w.id,
     position: w.position,
     company: w.company,
@@ -67,7 +77,7 @@ export const PortfolioPage: React.FC = () => {
     responsibilities: w.responsibilities,
   })) || [];
 
-  const education = activeResume?.education?.map((e) => ({
+  const education = (activeResume?.education?.length ? activeResume.education : p?.education)?.map((e: any) => ({
     id: e.id,
     institution: e.institution,
     degree: e.degree,
@@ -181,15 +191,39 @@ export const PortfolioPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Section 36: Optional visual QR code for non-ATS portfolio version */}
+          {/* Section 36: Visual QR Code Matrix */}
           {portfolio.showQrCode && (
-            <div className="p-3 bg-white text-black rounded-xl border border-forge-200 shadow-sm text-center shrink-0">
-              <div className="w-24 h-24 bg-forge-900 text-white flex items-center justify-center rounded-lg font-mono text-[10px] p-2 leading-tight">
-                [QR CODE]
-                <br />
-                {personalInfo.website?.replace('https://', '') || 'resumeforge.dev'}
-              </div>
-              <span className="text-[10px] text-forge-500 font-semibold block mt-1">Scan for Portfolio</span>
+            <div className="p-3 bg-white text-black rounded-xl border border-forge-200 dark:border-slate-800 shadow-sm text-center shrink-0">
+              <svg viewBox="0 0 100 100" className="w-24 h-24 mx-auto" aria-label="Portfolio QR Code">
+                <rect width="100" height="100" fill="white" />
+                <rect x="10" y="10" width="24" height="24" fill="black" />
+                <rect x="14" y="14" width="16" height="16" fill="white" />
+                <rect x="18" y="18" width="8" height="8" fill="black" />
+                <rect x="66" y="10" width="24" height="24" fill="black" />
+                <rect x="70" y="14" width="16" height="16" fill="white" />
+                <rect x="74" y="18" width="8" height="8" fill="black" />
+                <rect x="10" y="66" width="24" height="24" fill="black" />
+                <rect x="14" y="70" width="16" height="16" fill="white" />
+                <rect x="18" y="74" width="8" height="8" fill="black" />
+                <rect x="38" y="14" width="4" height="4" fill="black" />
+                <rect x="46" y="14" width="4" height="4" fill="black" />
+                <rect x="54" y="14" width="4" height="4" fill="black" />
+                <rect x="14" y="38" width="4" height="4" fill="black" />
+                <rect x="14" y="46" width="4" height="4" fill="black" />
+                <rect x="14" y="54" width="4" height="4" fill="black" />
+                <rect x="38" y="38" width="24" height="24" fill="black" />
+                <rect x="42" y="42" width="16" height="16" fill="white" />
+                <rect x="46" y="46" width="8" height="8" fill="black" />
+                <rect x="66" y="42" width="6" height="6" fill="black" />
+                <rect x="78" y="42" width="6" height="6" fill="black" />
+                <rect x="66" y="54" width="6" height="6" fill="black" />
+                <rect x="74" y="66" width="6" height="6" fill="black" />
+                <rect x="82" y="78" width="8" height="8" fill="black" />
+                <rect x="42" y="70" width="6" height="6" fill="black" />
+                <rect x="54" y="78" width="6" height="6" fill="black" />
+                <rect x="70" y="82" width="6" height="6" fill="black" />
+              </svg>
+              <span className="text-[10px] text-forge-600 font-mono font-bold block mt-1">Scan for Portfolio</span>
             </div>
           )}
         </section>
