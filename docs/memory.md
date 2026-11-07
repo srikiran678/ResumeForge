@@ -201,6 +201,11 @@
 
 ### Recent Changes
 - **November 2026:**
+  - **Whole Resume Structure Inspection & Fit-Page Presets:**
+    - De-cropped `TemplateThumbnail.tsx` from `max-h-56` down to natural `aspect-[8.5/11]` Letter proportions, rendering all 7 document sections (Header, Objective, Education, Experience, Projects, Skills, Declaration/Certifications) so users can examine the exact layout skeleton at a glance.
+    - Updated `TemplateFullPreviewModal.tsx` with dynamic auto-fit calculation (`calculateFitPageScale`), "Fit Whole Page" (55%), "Fit Width", "100%", structure roadmap sub-banner, and live toggle between candidate draft data and complete sample structure.
+    - Added "View Whole Resume" inspection button and "Fit" (55%) page scale preset directly into the Live Vector Document toolbar in `ResumeEditorPage.tsx`.
+    - Enforced `#ffffff` paper background, `#000000` text, and `color-scheme: light !important` on `.resume-document-container` and `TemplateThumbnail` cards to guarantee authentic white paper presentation across all themes.
   - **Comprehensive Secrets Sanitization & Client Bundle Hardening:**
     - Purged all hardcoded backend instance IDs and anonymous API keys from `src/modules/database/core/insforgeClient.ts` and `api/*.ts` serverless functions.
     - Sanitized documentation and test markdown files (`PROJECT.md`, `TEST_INFRA.md`, `TEST_READY.md`) with generic placeholders (`<project-id>`).

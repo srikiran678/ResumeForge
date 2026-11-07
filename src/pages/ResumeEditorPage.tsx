@@ -22,8 +22,9 @@ import confetti from 'canvas-confetti';
 import { AIPrivacyModal } from '../components/common/AIPrivacyModal';
 import { PersonaTestingModal } from '../components/testing/PersonaTestingModal';
 import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
+import { TemplateFullPreviewModal } from '../components/resume/TemplateFullPreviewModal';
 import { JobCustomizationPanel } from '../components/resume/JobCustomizationPanel';
-import { Users, Zap, ZoomIn, ZoomOut, Scan, Layout, FileText } from 'lucide-react';
+import { Users, Zap, ZoomIn, ZoomOut, Scan, Layout, FileText, Maximize2 } from 'lucide-react';
 
 export const ResumeEditorPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +48,7 @@ export const ResumeEditorPage: React.FC = () => {
   // Modals state
   const [versionModalOpen, setVersionModalOpen] = useState(false);
   const [templateGalleryOpen, setTemplateGalleryOpen] = useState(false);
+  const [wholeResumeModalOpen, setWholeResumeModalOpen] = useState(false);
   const [aiPrivacyModalOpen, setAiPrivacyModalOpen] = useState(false);
   const [bulletModalOpen, setBulletModalOpen] = useState(false);
   const [activeBullet, setActiveBullet] = useState<{
@@ -501,6 +503,17 @@ export const ResumeEditorPage: React.FC = () => {
 
               {/* Dynamic Zoom & Inspector Toolbar */}
               <div className="flex items-center space-x-2">
+                {/* Whole Resume Full Inspection Modal Button */}
+                <button
+                  type="button"
+                  onClick={() => setWholeResumeModalOpen(true)}
+                  className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-[#121316] hover:bg-forge-100 dark:hover:bg-[#1a1b20] text-forge-800 dark:text-slate-200 border border-forge-300 dark:border-white/[0.08] shadow-xs transition-all hover:border-accent-500"
+                  title="Inspect Whole Resume Layout Structure from Header to Footer"
+                >
+                  <Maximize2 className="w-3.5 h-3.5 text-accent-500" />
+                  <span>View Whole Resume</span>
+                </button>
+
                 {/* ATS Inspector Toggle */}
                 <button
                   type="button"
@@ -520,7 +533,7 @@ export const ResumeEditorPage: React.FC = () => {
                 <div className="flex items-center space-x-1 bg-white dark:bg-[#121316] border border-forge-300 dark:border-white/[0.08] rounded-md p-0.5 text-[11px]">
                   <button
                     type="button"
-                    onClick={() => setPreviewScale((prev) => Math.max(0.6, prev - 0.1))}
+                    onClick={() => setPreviewScale((prev) => Math.max(0.4, Number((prev - 0.1).toFixed(2))))}
                     className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom out"
                     aria-label="Zoom out preview"
@@ -532,7 +545,7 @@ export const ResumeEditorPage: React.FC = () => {
                   </span>
                   <button
                     type="button"
-                    onClick={() => setPreviewScale((prev) => Math.min(1.4, prev + 0.1))}
+                    onClick={() => setPreviewScale((prev) => Math.min(1.4, Number((prev + 0.1).toFixed(2))))}
                     className="p-1 hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-600 dark:text-slate-400"
                     title="Zoom in"
                     aria-label="Zoom in preview"
@@ -541,12 +554,29 @@ export const ResumeEditorPage: React.FC = () => {
                   </button>
                   <button
                     type="button"
+                    onClick={() => setPreviewScale(0.55)}
+                    className={`px-1.5 py-0.5 text-[10px] rounded font-semibold transition-colors ${
+                      Math.abs(previewScale - 0.55) < 0.05
+                        ? 'bg-accent-50 dark:bg-accent-950/40 text-accent-600 dark:text-accent-400 font-bold'
+                        : 'hover:bg-forge-100 dark:hover:bg-white/[0.06] text-forge-600 dark:text-slate-400'
+                    }`}
+                    title="Fit Whole Page into View (55%)"
+                    aria-label="Fit whole page"
+                  >
+                    Fit
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setPreviewScale(1)}
-                    className="px-1 text-[10px] hover:bg-forge-100 dark:hover:bg-white/[0.06] rounded text-forge-500 dark:text-slate-400 font-semibold"
+                    className={`px-1.5 py-0.5 text-[10px] rounded font-semibold transition-colors ${
+                      previewScale === 1
+                        ? 'bg-forge-100 dark:bg-white/[0.1] text-forge-900 dark:text-white font-bold'
+                        : 'hover:bg-forge-100 dark:hover:bg-white/[0.06] text-forge-500 dark:text-slate-400'
+                    }`}
                     title="Reset to 100%"
                     aria-label="Reset zoom to 100%"
                   >
-                    Reset
+                    100%
                   </button>
                 </div>
               </div>
@@ -639,6 +669,18 @@ export const ResumeEditorPage: React.FC = () => {
           setTemplateGalleryOpen(false);
         }}
         onClose={() => setTemplateGalleryOpen(false)}
+      />
+
+      {/* Whole Resume Full Inspection Modal */}
+      <TemplateFullPreviewModal
+        isOpen={wholeResumeModalOpen}
+        initialTemplateId={currentResume.meta?.template || 'classic'}
+        activeResume={currentResume}
+        title="Whole Resume Structure Inspection"
+        onSelectTemplate={(tplId) => {
+          handleTemplateChange(tplId);
+        }}
+        onClose={() => setWholeResumeModalOpen(false)}
       />
     </div>
   );

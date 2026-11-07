@@ -17,11 +17,11 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
   className = '',
   showOverlayButton = true,
 }) => {
-  // Height / aspect ratio configs
+  // Height / aspect ratio configs - Authentic 8.5:11 Letter page proportions without height clipping
   const containerClasses = {
     sm: 'w-16 h-20 text-[6px]',
-    md: 'w-full aspect-[8.5/11] max-h-56 text-[8px]',
-    lg: 'w-full aspect-[8.5/11] max-h-96 text-[10px]',
+    md: 'w-full aspect-[8.5/11] text-[7.5px]',
+    lg: 'w-full aspect-[8.5/11] text-[9.5px]',
   }[size];
 
   return (
@@ -29,20 +29,20 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
       className={`relative rounded-xl border border-slate-200/90 bg-white text-slate-900 shadow-sm overflow-hidden select-none group transition-all ${containerClasses} ${className}`}
       style={{ backgroundColor: '#ffffff', color: '#0f172a' }}
     >
-      {/* Paper Sheen & Subtle Top Edge Rule */}
+      {/* Paper Sheen & Top Edge Rule */}
       <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 opacity-60" />
 
-      {/* Internal Mini White Document Sheet */}
-      <div className="p-3 h-full flex flex-col justify-between overflow-hidden bg-white text-slate-900">
-        {/* Header Block based on Template Style (Authentic White Paper Ink) */}
+      {/* Internal Mini Document: Full Resume Structure (Top to Bottom) */}
+      <div className="p-3 h-full flex flex-col justify-between overflow-hidden bg-white text-slate-900 text-left">
+        {/* 1. Resume Header */}
         <div className="space-y-1">
           {templateId === 'classic' && (
             <div className="text-center pb-1.5 border-b-2 border-slate-900">
-              <div className="font-serif font-black tracking-wider text-[1.15em] uppercase text-slate-950 leading-tight">
+              <div className="font-serif font-black tracking-wider text-[1.2em] uppercase text-slate-950 leading-tight">
                 ALEX CHEN
               </div>
               <div className="text-[0.75em] text-slate-600 flex justify-center gap-1">
-                <span>San Francisco, CA</span> • <span>alex@berkeley.edu</span>
+                <span>San Francisco, CA</span> • <span>alex@berkeley.edu</span> • <span>+1 555-019-2834</span>
               </div>
             </div>
           )}
@@ -50,12 +50,13 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
           {templateId === 'modern' && (
             <div className="text-left pb-1 border-b border-indigo-200 flex justify-between items-start">
               <div>
-                <div className="font-sans font-extrabold text-[1.15em] text-slate-950 leading-tight">
+                <div className="font-sans font-extrabold text-[1.2em] text-slate-950 leading-tight">
                   Alex Chen
                 </div>
                 <div className="text-[0.75em] text-indigo-700 font-semibold">
-                  Software Engineer
+                  Software Engineer &amp; Systems Builder
                 </div>
+                <div className="text-[0.65em] text-slate-500">alex@berkeley.edu • github.com/alexchen</div>
               </div>
               <div className="w-1.5 h-6 rounded-full bg-indigo-600" />
             </div>
@@ -64,20 +65,20 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
           {templateId === 'compact' && (
             <div className="flex justify-between items-center pb-1 border-b border-slate-300 leading-none">
               <div>
-                <span className="font-bold text-[1.1em] text-slate-950">Alex Chen</span>
-                <span className="text-[0.7em] text-slate-600 ml-1.5">Full Stack</span>
+                <span className="font-bold text-[1.15em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.7em] text-slate-600 ml-1.5">Full Stack Systems</span>
               </div>
-              <div className="text-[0.7em] text-slate-500 font-mono">1-Page High Density</div>
+              <div className="text-[0.65em] text-slate-500 font-mono">1-Page High Density ATS</div>
             </div>
           )}
 
           {templateId === 'academic' && (
             <div className="text-center pb-1 border-b-2 border-slate-900">
-              <div className="font-serif font-bold text-[1.1em] tracking-wide text-slate-950">
+              <div className="font-serif font-bold text-[1.15em] tracking-wide text-slate-950">
                 ALEX CHEN, B.S.
               </div>
               <div className="text-[0.7em] italic text-slate-600">
-                Department of Computer Science • UC Berkeley
+                Department of Computer Science • UC Berkeley • alex@berkeley.edu
               </div>
             </div>
           )}
@@ -85,92 +86,102 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
           {templateId === 'hackathon' && (
             <div className="pb-1 border-b border-slate-300 font-mono">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-[1.1em] text-indigo-800">&gt; alex_chen.ts</span>
+                <span className="font-bold text-[1.15em] text-indigo-800">&gt; alex_chen.ts</span>
                 <span className="text-[0.65em] px-1 py-0.2 rounded bg-indigo-50 text-indigo-800 border border-indigo-200 font-bold">
-                  BUILDER
+                  HACKATHON BUILDER
                 </span>
               </div>
-              <div className="text-[0.7em] text-slate-600">github.com/alexchen • Full Stack</div>
+              <div className="text-[0.65em] text-slate-600">github.com/alexchen • 1st Place CalHacks Winner</div>
             </div>
           )}
 
           {templateId === 'executive' && (
             <div className="text-center py-1 border-y-2 border-slate-950">
-              <div className="font-serif font-black tracking-widest text-[1.2em] uppercase text-slate-950">
+              <div className="font-serif font-black tracking-widest text-[1.25em] uppercase text-slate-950">
                 ALEX CHEN
               </div>
-              <div className="text-[0.7em] uppercase tracking-wider font-semibold text-slate-600">
+              <div className="text-[0.68em] uppercase tracking-wider font-semibold text-slate-600">
                 Principal Software Engineer &amp; Systems Architect
               </div>
             </div>
           )}
 
           {templateId === 'minimal' && (
-            <div className="pb-1.5 text-left">
+            <div className="pb-1.5 text-left border-b border-slate-200">
               <div className="font-sans font-light tracking-tight text-[1.3em] text-slate-950 leading-none">
                 Alex Chen
               </div>
-              <div className="text-[0.7em] text-slate-500 mt-0.5">Software Engineering • Distributed Systems</div>
+              <div className="text-[0.68em] text-slate-500 mt-0.5">Software Engineering • Distributed Systems • alex@berkeley.edu</div>
             </div>
           )}
 
           {templateId === 'creative' && (
-            <div className="p-1 rounded-md bg-slate-50 border border-slate-200 text-left">
-              <div className="font-sans font-bold text-[1.1em] text-slate-950">
+            <div className="p-1.5 rounded-md bg-slate-50 border border-slate-200 text-left">
+              <div className="font-sans font-bold text-[1.15em] text-slate-950">
                 Alex Chen
               </div>
               <div className="text-[0.7em] text-indigo-700 font-medium">
-                Product &amp; Systems Engineer
+                Product &amp; Systems Engineer • Portfolio: alexchen.dev
               </div>
             </div>
           )}
 
           {templateId === 'elegant' && (
             <div className="text-center pb-1">
-              <div className="font-serif font-bold text-[1.15em] tracking-wider text-slate-950">
+              <div className="font-serif font-bold text-[1.2em] tracking-wider text-slate-950">
                 ALEX CHEN
               </div>
-              <div className="text-[0.7em] text-slate-600 font-serif flex items-center justify-center gap-1">
+              <div className="text-[0.68em] text-slate-600 font-serif flex items-center justify-center gap-1">
                 <span>NEW YORK</span> <span>◆</span> <span>SAN FRANCISCO</span> <span>◆</span> <span>LONDON</span>
               </div>
-              <div className="w-12 h-px bg-slate-300 mx-auto mt-1" />
+              <div className="w-12 h-px bg-slate-300 mx-auto mt-0.5" />
             </div>
           )}
 
           {templateId === 'technical' && (
             <div className="pb-1 border-b border-emerald-400 text-left">
               <div className="flex justify-between items-center">
-                <span className="font-sans font-bold text-[1.1em] text-slate-950">Alex Chen</span>
+                <span className="font-sans font-bold text-[1.15em] text-slate-950">Alex Chen</span>
                 <span className="text-[0.65em] font-mono px-1 py-0.2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  AWS Certified
+                  AWS Certified Architect
                 </span>
               </div>
-              <div className="text-[0.7em] text-slate-600 font-mono">Cloud Architecture &amp; Distributed Systems</div>
+              <div className="text-[0.68em] text-slate-600 font-mono">Cloud Architecture &amp; Distributed Systems • Go / TS</div>
             </div>
           )}
 
           {templateId === 'classic-resume' && (
             <div className="text-center pb-1 border-b-2 border-slate-900">
-              <div className="font-serif font-bold text-[1.15em] tracking-wide uppercase text-slate-950">
+              <div className="font-serif font-bold text-[1.1em] tracking-wide uppercase text-slate-950">
                 RESUME
               </div>
-              <div className="font-bold text-[0.85em] text-slate-900">Alex Chen</div>
-              <div className="text-[0.7em] text-slate-600">Contact: +1 (555) 019-2834 • Email: alex@berkeley.edu</div>
+              <div className="font-bold text-[0.9em] text-slate-900">Alex Chen</div>
+              <div className="text-[0.65em] text-slate-600">alex@berkeley.edu • +1 555-019-2834 • San Francisco, CA</div>
             </div>
           )}
         </div>
 
-        {/* Miniature Document Body Blocks (White Paper, Dark Ink) */}
-        <div className="space-y-1.5 flex-1 pt-1.5">
-          {/* Section 1: Education or Experience */}
+        {/* 2. Document Sections (Whole Resume Layout) */}
+        <div className="space-y-1 flex-1 pt-1 overflow-hidden">
+          {/* Summary / Objective */}
           <div className="space-y-0.5">
-            <div className="flex items-center justify-between text-[0.8em] font-bold text-slate-950 border-b border-slate-300 pb-0.2 uppercase">
-              <span>{templateId === 'academic' || templateId === 'classic-resume' ? 'Education' : 'Experience'}</span>
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              Career Objective &amp; Summary
+            </div>
+            <div className="text-[0.62em] text-slate-600 line-clamp-1 leading-tight">
+              Curious software engineer with strong background in distributed systems, modern web architecture, and clean APIs.
+            </div>
+          </div>
+
+          {/* Education Section */}
+          <div className="space-y-0.5">
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              Education
             </div>
 
             {templateId === 'classic-resume' ? (
-              // 5-Column Miniature Table representation
-              <div className="w-full border border-slate-300 rounded text-[0.65em] overflow-hidden my-0.5 bg-white">
+              // 5-Column Table
+              <div className="w-full border border-slate-300 rounded text-[0.6em] overflow-hidden my-0.5 bg-white">
                 <div className="grid grid-cols-5 bg-slate-100 font-bold p-0.5 text-center border-b border-slate-300 text-slate-900">
                   <span>Degree</span>
                   <span>College</span>
@@ -187,86 +198,82 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
                 </div>
               </div>
             ) : (
-              <div className="text-[0.7em] text-slate-700 leading-tight">
-                <div className="flex justify-between font-semibold text-slate-950">
-                  <span>Stripe • SWE Intern</span>
-                  <span className="text-slate-500 font-normal">2025</span>
-                </div>
-                <div className="flex items-center gap-1 text-slate-600">
-                  <span className="w-1 h-1 rounded-full bg-slate-500 shrink-0" />
-                  <span className="truncate">Architected webhook retry queue reducing latency by 38%</span>
-                </div>
+              <div className="text-[0.65em] flex justify-between font-semibold text-slate-900 leading-tight">
+                <span>UC Berkeley — B.S. in Computer Science</span>
+                <span className="text-slate-500 font-normal">GPA 3.92 • 2026</span>
               </div>
             )}
           </div>
 
-          {/* Section 2: Projects / Skills */}
+          {/* Work Experience Section */}
           <div className="space-y-0.5">
-            <div className="flex items-center justify-between text-[0.8em] font-bold text-slate-950 border-b border-slate-300 pb-0.2 uppercase">
-              <span>{templateId === 'hackathon' ? 'Flagship Projects' : templateId === 'technical' ? 'Technical Competencies' : 'Projects'}</span>
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              Experience
             </div>
-
-            {templateId === 'hackathon' ? (
-              <div className="text-[0.7em] space-y-0.5 font-mono">
-                <div className="flex justify-between text-indigo-800 font-bold">
-                  <span>CloudMesh KV Engine</span>
-                  <span className="text-[0.85em] text-slate-500">CalHacks #1</span>
-                </div>
-                <div className="flex gap-1">
-                  <span className="px-1 bg-slate-100 text-slate-800 border border-slate-200 rounded text-[0.9em]">
-                    [Go]
-                  </span>
-                  <span className="px-1 bg-slate-100 text-slate-800 border border-slate-200 rounded text-[0.9em]">
-                    [Raft]
-                  </span>
-                  <span className="px-1 bg-slate-100 text-slate-800 border border-slate-200 rounded text-[0.9em]">
-                    [Docker]
-                  </span>
-                </div>
+            <div className="text-[0.65em] text-slate-700 leading-tight">
+              <div className="flex justify-between font-semibold text-slate-950">
+                <span>Stripe • Software Engineering Intern</span>
+                <span className="text-slate-500 font-normal">Summer 2025</span>
               </div>
-            ) : templateId === 'creative' ? (
-              <div className="flex flex-wrap gap-0.5 text-[0.65em]">
-                {['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'Docker'].map((s) => (
-                  <span
-                    key={s}
-                    className="px-1.5 py-0.2 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 font-medium"
-                  >
-                    {s}
-                  </span>
-                ))}
+              <div className="flex items-center gap-1 text-slate-600 text-[0.95em]">
+                <span className="w-1 h-1 rounded-full bg-slate-500 shrink-0" />
+                <span className="truncate">Architected idempotent webhook retry queue reducing latency by 38%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Flagship Projects Section */}
+          <div className="space-y-0.5">
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              Key Projects
+            </div>
+            <div className="text-[0.65em] text-slate-700 leading-tight">
+              <div className="flex justify-between font-semibold text-slate-950">
+                <span>CloudMesh KV Engine</span>
+                <span className="text-indigo-700 font-normal">[Go, Raft, Docker]</span>
+              </div>
+              <div className="flex items-center gap-1 text-slate-600 text-[0.95em]">
+                <span className="w-1 h-1 rounded-full bg-slate-500 shrink-0" />
+                <span className="truncate">48k writes/sec across 5-node cluster with zero data loss</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Technical Skills Section */}
+          <div className="space-y-0.5">
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              Technical Skills &amp; Competencies
+            </div>
+            <div className="text-[0.62em] text-slate-700 leading-tight truncate">
+              <strong>Languages &amp; DB:</strong> TypeScript, Go, Python, PostgreSQL, Redis, SQL
+            </div>
+            <div className="text-[0.62em] text-slate-700 leading-tight truncate">
+              <strong>Frameworks &amp; Tools:</strong> React, Node.js, Next.js, Docker, Kubernetes, AWS
+            </div>
+          </div>
+
+          {/* Certifications & Extracurricular / Declaration */}
+          <div className="space-y-0.5">
+            <div className="text-[0.72em] font-bold text-slate-900 uppercase border-b border-slate-200 pb-0.2">
+              {templateId === 'classic-resume' ? 'Declaration' : 'Certifications & Honors'}
+            </div>
+            {templateId === 'classic-resume' ? (
+              <div className="text-[0.58em] text-slate-500 italic leading-none truncate">
+                I hereby declare that the information provided is true and correct to the best of my knowledge.
               </div>
             ) : (
-              <div className="text-[0.7em] text-slate-700 leading-tight">
-                <div className="flex justify-between font-semibold text-slate-950">
-                  <span>CloudMesh Distributed Store</span>
-                  <span className="text-slate-500 font-normal">Go, Raft</span>
-                </div>
-                <div className="flex items-center gap-1 text-slate-600">
-                  <span className="w-1 h-1 rounded-full bg-slate-500 shrink-0" />
-                  <span className="truncate">48k writes/sec across 5-node cluster</span>
-                </div>
+              <div className="text-[0.62em] text-slate-700 flex justify-between leading-none">
+                <span>AWS Certified Solutions Architect</span>
+                <span className="text-slate-500">CalHacks 1st Place</span>
               </div>
             )}
-          </div>
-
-          {/* Section 3: Technical Skills Matrix */}
-          <div className="space-y-0.5 pt-0.5">
-            <div className="flex items-center justify-between text-[0.8em] font-bold text-slate-950 border-b border-slate-300 pb-0.2 uppercase">
-              <span>Skills &amp; Tools</span>
-            </div>
-            <div className="text-[0.68em] text-slate-700 leading-tight truncate">
-              <strong>Languages:</strong> TypeScript, Go, Python, SQL, C++
-            </div>
-            <div className="text-[0.68em] text-slate-700 leading-tight truncate">
-              <strong>Frameworks:</strong> React, Node.js, Next.js, Docker
-            </div>
           </div>
         </div>
 
-        {/* Footer / ATS Verification Bar */}
-        <div className="pt-1.5 border-t border-slate-200 flex justify-between items-center text-[0.7em] text-slate-500 font-mono">
-          <span>ATS 1-Col</span>
-          <span className="text-emerald-700 font-bold">100% Pass</span>
+        {/* 3. Document Footer & ATS Verification Bar */}
+        <div className="pt-1 border-t border-slate-200 flex justify-between items-center text-[0.65em] text-slate-500 font-mono">
+          <span>ATS 1-Col Standard</span>
+          <span className="text-emerald-700 font-bold">100% Readable</span>
         </div>
       </div>
 
@@ -281,10 +288,10 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
         >
           <button
             type="button"
-            className="px-3 py-1.5 rounded-xl bg-white text-slate-950 font-bold text-xs shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center space-x-1.5 border border-slate-200"
+            className="px-3.5 py-2 rounded-xl bg-white text-slate-950 font-bold text-xs shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center space-x-1.5 border border-slate-200 cursor-pointer"
           >
             <Eye className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Full Preview</span>
+            <span>View Whole Resume</span>
           </button>
         </div>
       )}
