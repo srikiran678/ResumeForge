@@ -32,11 +32,11 @@ export const CoverLetterStudioPage: React.FC = () => {
   // Active Cover Letter State
   const [activeLetter, setActiveLetter] = useState<CoverLetterData>(() => {
     return generateTailoredCoverLetter({
-      candidateName: masterProfile?.personalInfo?.fullName || 'Alex Morgan',
-      candidateEmail: masterProfile?.personalInfo?.email || 'alex.morgan@example.com',
-      candidatePhone: masterProfile?.personalInfo?.phone || '+1 (555) 019-2834',
-      candidateLocation: masterProfile?.personalInfo?.location || 'San Francisco, CA',
-      candidateLinkedIn: masterProfile?.personalInfo?.linkedIn || 'linkedin.com/in/alexmorgan',
+      candidateName: masterProfile?.personalInfo?.fullName || '',
+      candidateEmail: masterProfile?.personalInfo?.email || '',
+      candidatePhone: masterProfile?.personalInfo?.phone || '',
+      candidateLocation: masterProfile?.personalInfo?.location || '',
+      candidateLinkedIn: masterProfile?.personalInfo?.linkedIn || '',
       role: 'Senior Full-Stack Engineer',
       company: 'Stripe',
       jobDescription: '',
@@ -78,8 +78,8 @@ export const CoverLetterStudioPage: React.FC = () => {
       return;
     }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
-    const candidateName = selectedResume?.basics?.name || masterProfile?.personalInfo?.fullName || 'Candidate Name';
-    const candidateEmail = selectedResume?.basics?.email || masterProfile?.personalInfo?.email || 'candidate@example.com';
+    const candidateName = selectedResume?.basics?.name || masterProfile?.personalInfo?.fullName || '';
+    const candidateEmail = selectedResume?.basics?.email || masterProfile?.personalInfo?.email || '';
     const candidatePhone = selectedResume?.basics?.phone || masterProfile?.personalInfo?.phone;
     const candidateLocation = selectedResume?.basics?.location || masterProfile?.personalInfo?.location;
     const candidateLinkedIn = selectedResume?.basics?.profiles?.find(p => p.network.toLowerCase().includes('linkedin'))?.url || masterProfile?.personalInfo?.linkedIn;
@@ -152,7 +152,7 @@ export const CoverLetterStudioPage: React.FC = () => {
   const handleAddBullet = () => {
     setActiveLetter({
       ...activeLetter,
-      achievementBullets: [...activeLetter.achievementBullets, 'Engineered high-performance feature workflow improving user velocity and reliability.']
+      achievementBullets: [...activeLetter.achievementBullets, '']
     });
   };
 
