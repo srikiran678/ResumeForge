@@ -87,11 +87,40 @@ export const InterviewPrepPage: React.FC = () => {
         }
       });
       if (aiDraft) {
+        const toughQuestions = Array.isArray(aiDraft.toughQuestions)
+          ? aiDraft.toughQuestions.filter((value): value is ToughQuestion => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<ToughQuestion>;
+              return typeof item.question === 'string'
+                && typeof item.responseStrategy === 'string'
+                && typeof item.sampleAnswer === 'string'
+                && ['gap', 'transition', 'weakness', 'motivation'].includes(item.category || '');
+            })
+          : [];
+        const technicalProbes = Array.isArray(aiDraft.technicalProbes)
+          ? aiDraft.technicalProbes.filter((value): value is TechnicalProbe => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<TechnicalProbe>;
+              return typeof item.topic === 'string'
+                && typeof item.predictedQuestion === 'string'
+                && Array.isArray(item.keyTalkingPoints)
+                && item.keyTalkingPoints.every(point => typeof point === 'string');
+            })
+          : [];
+        const reverseQuestions = Array.isArray(aiDraft.reverseQuestions)
+          ? aiDraft.reverseQuestions.filter((value): value is ReverseQuestion => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<ReverseQuestion>;
+              return typeof item.question === 'string'
+                && typeof item.rationale === 'string'
+                && ['role', 'team', 'tech', 'culture'].includes(item.category || '');
+            })
+          : [];
         const safePrep: InterviewPrepData = {
           ...newPrep,
-          toughQuestions: Array.isArray(aiDraft.toughQuestions) ? aiDraft.toughQuestions as ToughQuestion[] : newPrep.toughQuestions,
-          technicalProbes: Array.isArray(aiDraft.technicalProbes) ? aiDraft.technicalProbes as TechnicalProbe[] : newPrep.technicalProbes,
-          reverseQuestions: Array.isArray(aiDraft.reverseQuestions) ? aiDraft.reverseQuestions as ReverseQuestion[] : newPrep.reverseQuestions
+          toughQuestions: toughQuestions.length ? toughQuestions : newPrep.toughQuestions,
+          technicalProbes: technicalProbes.length ? technicalProbes : newPrep.technicalProbes,
+          reverseQuestions: reverseQuestions.length ? reverseQuestions : newPrep.reverseQuestions
         };
         setActivePrep(safePrep);
         CareerStorageService.saveInterviewPrep(safePrep);
