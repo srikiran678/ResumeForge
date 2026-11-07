@@ -12,7 +12,7 @@ import {
   Download,
   Settings2
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { 
@@ -25,6 +25,8 @@ import {
 export const CoverLetterStudioPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
   const { showToast } = useToast();
+  const location = useLocation();
+  const jobContext = location.state as { company?: string; role?: string; jobDescription?: string } | null;
 
   const [savedLetters, setSavedLetters] = useState<CoverLetterData[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>('');
@@ -37,9 +39,9 @@ export const CoverLetterStudioPage: React.FC = () => {
       candidatePhone: masterProfile?.personalInfo?.phone || '',
       candidateLocation: masterProfile?.personalInfo?.location || '',
       candidateLinkedIn: masterProfile?.personalInfo?.linkedIn || '',
-      role: 'Senior Full-Stack Engineer',
-      company: 'Stripe',
-      jobDescription: '',
+      role: jobContext?.role || '',
+      company: jobContext?.company || '',
+      jobDescription: jobContext?.jobDescription || '',
       masterProfile: masterProfile || undefined
     });
   });
@@ -49,10 +51,12 @@ export const CoverLetterStudioPage: React.FC = () => {
   useEffect(() => {
     const letters = CareerStorageService.getCoverLetters();
     setSavedLetters(letters);
-    if (letters.length > 0) {
+    if (jobContext) {
+      setActiveLetter((current) => ({ ...current, role: jobContext.role || current.role, company: jobContext.company || current.company, jobDescription: jobContext.jobDescription || current.jobDescription }));
+    } else if (letters.length > 0) {
       setActiveLetter(letters[0]);
     }
-  }, []);
+  }, [location.state]);
 
   const handleSelectResume = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rId = e.target.value;
