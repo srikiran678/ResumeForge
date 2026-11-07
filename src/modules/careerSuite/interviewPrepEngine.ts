@@ -38,13 +38,13 @@ export function buildStarStories(
         id: `star_exp_${idx}_${Date.now()}`,
         projectOrRole: `${exp.position} at ${exp.company}`,
         questionTrigger: idx === 0 
-          ? 'Tell me about a time you owned a high-impact technical deliverable under tight constraints.'
-          : 'Describe a situation where you diagnosed and resolved a production bottleneck or complex defect.',
+          ? 'Describe a real deliverable you personally worked on and the constraints involved.'
+          : 'Describe a real technical challenge you personally helped investigate or resolve.'
         situation: `Describe the actual situation and context at ${exp.company}. Replace this prompt with facts you can verify.`,
         task: `Describe your actual responsibility as ${exp.position}. Do not claim ownership or duties that were not yours.`,
         action: primaryBullet,
         result: outcomeBullet,
-        skillsDemonstrated: [exp.position, 'Problem Solving', 'Architecture', 'Execution']
+        skillsDemonstrated: []
       });
     });
   }
@@ -64,7 +64,7 @@ export function buildStarStories(
         task: `Describe your actual contribution and level of responsibility on ${proj.name}.`,
         action: primaryAction,
         result: `Add the actual result. Include metrics only when you measured and can verify them.`,
-        skillsDemonstrated: [...techStack.slice(0, 3), 'Initiative', 'System Design']
+        skillsDemonstrated: techStack.slice(0, 3)
       });
     });
   }
