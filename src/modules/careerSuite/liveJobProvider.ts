@@ -36,7 +36,8 @@ function experienceLevel(title: string, tags: string[]): JobListing['experienceL
   if (/intern|internship|working student/.test(value)) return 'Intern';
   if (/junior|entry.level|graduate|new.grad|trainee|fresher/.test(value)) return 'Entry Level';
   if (/senior|lead|principal|staff|director|head of/.test(value)) return 'Senior';
-  return 'Mid Level';
+  if (/mid.level|intermediate/.test(value)) return 'Mid Level';
+  return 'Unspecified';
 }
 
 function normalizeJob(job: ArbeitnowJob): JobListing | null {
@@ -58,9 +59,9 @@ function normalizeJob(job: ArbeitnowJob): JobListing | null {
     title: job.title.trim(),
     company: job.company_name.trim(),
     companyLogo: job.company_logo,
-    tier: 'Enterprise',
+    tier: 'Unclassified',
     location: job.location || (job.remote ? 'Remote' : 'Location not provided'),
-    remoteType: job.remote ? 'Remote' : /hybrid/i.test(job.location || '') ? 'Hybrid' : 'Onsite',
+    remoteType: job.remote === true ? 'Remote' : /hybrid/i.test(job.location || '') ? 'Hybrid' : /on.?site/i.test(job.location || '') ? 'Onsite' : 'Unspecified',
     experienceLevel: experienceLevel(job.title, tags),
     salaryRange: 'Not disclosed',
     minSalary: 0,
