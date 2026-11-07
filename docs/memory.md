@@ -105,6 +105,13 @@
   7. **Obsidian Dark Mode Visual Parity:** Upgraded `ApplicationDetailPage.tsx` to dark mode (`rgb(17, 18, 24)`), connected all 7 Career Suite tools in `DashboardPage.tsx` and `Footer.tsx`.
 - **Rationale:** Guarantees consumer-grade polish, zero headless test breakage, fluid UX, and deep synergy across the application ecosystem.
 
+### ADR-10: Visual Template Previews, Interactive Live Inspection & Mobile Compact Mode
+- **Decision:** Architected a high-fidelity visual preview and inspection subsystem for all 11 ATS templates across `TemplateGalleryModal`, `CreateResumeModal`, and `CompanyTemplatesPage`:
+  1. **Miniature Visual Thumbnails (`TemplateThumbnail.tsx`)**: Replaced abstract layout icons and blank colored boxes with rendered vector document mini-cards displaying authentic template headers, accent bars, typographic hierarchy, multi-column tables (`classic-resume`), and tag chips (`hackathon`).
+  2. **Interactive Live Inspection Modal (`TemplateFullPreviewModal.tsx`)**: Full-screen modal rendering real `TemplateComponent` with continuous zoom (45%–140%), template switcher, and live toggle between standard sample data (`SAMPLE_PREVIEW_RESUME`) and active user resume data.
+  3. **Mobile-First Compact View Toggle**: On small screens (smartphones/touch), users can toggle between "Visual Grid" and a high-density "Compact List" (64px mini-thumbnail + name + tags + 1-tap select) to eliminate long vertical scrolling.
+- **Rationale:** Greatly reduces friction during template selection on both desktop and mobile viewports, allowing candidates to evaluate real typographic styling and layout density before committing.
+
 ---
 
 ## 4. Existing Database & Authentication Setup

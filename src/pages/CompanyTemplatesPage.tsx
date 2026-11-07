@@ -19,6 +19,7 @@ import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { StorageService } from '../lib/storage';
 import { TemplateId, ResumeData } from '../data/types/resume';
+import { TemplateThumbnail } from '../components/resume/TemplateThumbnail';
 
 export const CompanyTemplatesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -407,19 +408,13 @@ export const CompanyTemplatesPage: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Thumbnail / Mini ATS Layout Mockup */}
+                  {/* Visual Template Thumbnail */}
                   <div className="px-5 py-2">
-                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/80 text-[10px] space-y-1.5 font-mono">
-                      <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/60 pb-1 text-slate-400">
-                        <span className="font-semibold text-slate-800 dark:text-slate-200">ATS Single-Column Flow</span>
-                        <span className="text-[9px] uppercase px-1.5 py-0.2 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 rounded">
-                          {template.experience_level}
-                        </span>
-                      </div>
-                      <div className="h-1.5 w-2/3 bg-slate-300 dark:bg-slate-700 rounded-full" />
-                      <div className="h-1.5 w-1/2 bg-slate-200 dark:bg-slate-800 rounded-full" />
-                      <div className="h-1.5 w-4/5 bg-slate-200 dark:bg-slate-800 rounded-full" />
-                    </div>
+                    <TemplateThumbnail
+                      templateId={(template.template_data?.baseTemplate || 'classic') as TemplateId}
+                      size="md"
+                      onPreviewClick={() => setPreviewTemplate(template)}
+                    />
                   </div>
 
                   {/* Key Highlights / Requirements */}

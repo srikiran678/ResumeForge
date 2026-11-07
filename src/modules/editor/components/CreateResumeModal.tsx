@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, FileText, Check, Sparkles, Layout } from 'lucide-react';
+import { X, FileText, Check, Sparkles } from 'lucide-react';
 import { TemplateId } from '@/types';
 import { getAllTemplates } from '@/modules/templates';
+import { TemplateThumbnail } from '@/components/resume/TemplateThumbnail';
 
 interface CreateResumeModalProps {
   isOpen: boolean;
@@ -124,12 +125,12 @@ export const CreateResumeModal: React.FC<CreateResumeModalProps> = ({
                         : 'border-forge-200 dark:border-slate-800 bg-forge-50/40 dark:bg-slate-800/40 hover:bg-forge-100 dark:hover:bg-slate-800'
                     }`}
                   >
-                    <div className={`p-2 rounded-lg mt-0.5 ${
-                      isSelected 
-                        ? 'bg-indigo-600 text-white' 
-                        : 'bg-white dark:bg-slate-800 text-forge-600 dark:text-slate-400 border border-forge-200 dark:border-slate-700'
-                    }`}>
-                      <Layout className="w-4 h-4" />
+                    <div className="shrink-0 mt-0.5">
+                      <TemplateThumbnail
+                        templateId={t.id}
+                        size="sm"
+                        showOverlayButton={false}
+                      />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
