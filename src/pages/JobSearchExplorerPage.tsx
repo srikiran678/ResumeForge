@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
@@ -28,6 +28,7 @@ import {
   CURATED_JOB_LISTINGS, 
   JobSearchEngine 
 } from '../modules/careerSuite';
+import { fetchLiveJobs } from '../modules/careerSuite/liveJobProvider';
 
 export const JobSearchExplorerPage: React.FC = () => {
   const navigate = useNavigate();
@@ -42,6 +43,30 @@ export const JobSearchExplorerPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<JobFilterCriteria['sortBy']>('match');
   const [selectedJobId, setSelectedJobId] = useState<string>(CURATED_JOB_LISTINGS[0]?.id || '');
   const [savedJobIds, setSavedJobIds] = useState<string[]>(() => JobSearchEngine.getSavedJobIds());
+  const [availableJobs, setAvailableJobs] = useState<JobListing[]>(CURATED_JOB_LISTINGS);
+  const [isLoadingLiveJobs, setIsLoadingLiveJobs] = useState(true);
+  const [liveJobsError, setLiveJobsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchLiveJobs(controller.signal)
+      .then((jobs) => {
+        if (controller.signal.aborted) return;
+        if (jobs.length > 0) {
+          setAvailableJobs(jobs);
+          setSelectedJobId(jobs[0].id);
+          setLiveJobsError(null);
+        } else {
+          setLiveJobsError('The live provider returned no listings. Showing sample roles.');
+        }
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        setLiveJobsError(error instanceof Error ? error.message : 'Live job feed is temporarily unavailable.');
+      })
+      .finally(() => { if (!controller.signal.aborted) setIsLoadingLiveJobs(false); });
+    return () => controller.abort();
+  }, []);
 
   // Aggregate candidate skills from active resume or master profile
   const candidateSkills = useMemo(() => {
@@ -66,17 +91,12 @@ export const JobSearchExplorerPage: React.FC = () => {
   // Compute matched jobs
   const filteredJobs = useMemo(() => {
     return JobSearchEngine.searchJobs(
-      {
-        keyword,
-        remoteType,
-        experienceLevel,
-        tier,
-        sortBy
-      },
+      { keyword, remoteType, experienceLevel, tier, sortBy },
       candidateSkills,
-      candidateHeadline
+      candidateHeadline,
+      availableJobs
     );
-  }, [keyword, remoteType, experienceLevel, tier, sortBy, candidateSkills, candidateHeadline]);
+  }, [keyword, remoteType, experienceLevel, tier, sortBy, candidateSkills, candidateHeadline, availableJobs]);
 
   const selectedJob = useMemo(() => {
     return filteredJobs.find(j => j.id === selectedJobId) || filteredJobs[0] || CURATED_JOB_LISTINGS[0];
@@ -137,7 +157,7 @@ export const JobSearchExplorerPage: React.FC = () => {
             <div className="flex items-center space-x-2.5">
               <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 <Sparkles className="size-3.5 text-indigo-400" />
-                <span>Real-Time ATS Matching Active</span>
+                <span>{isLoadingLiveJobs ? 'Loading live job feed…' : liveJobsError ? 'Sample roles · live feed unavailable' : 'Live job feed · skills matching'}</span>
               </span>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 100% Free
