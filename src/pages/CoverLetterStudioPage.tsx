@@ -21,6 +21,7 @@ import {
   generateTailoredCoverLetter, 
   formatCoverLetterAsMarkdown 
 } from '../modules/careerSuite';
+import { requestCareerAI } from '../modules/careerSuite/careerAiService';
 
 export const CoverLetterStudioPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
@@ -76,7 +77,7 @@ export const CoverLetterStudioPage: React.FC = () => {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!activeLetter.role.trim() || !activeLetter.company.trim()) {
       showToast('Please specify both a target role and company name before generating.', 'error');
       return;
@@ -89,21 +90,43 @@ export const CoverLetterStudioPage: React.FC = () => {
     const candidateLinkedIn = selectedResume?.basics?.profiles?.find(p => p.network.toLowerCase().includes('linkedin'))?.url || masterProfile?.personalInfo?.linkedIn;
 
     const newLetter = generateTailoredCoverLetter({
-      candidateName,
-      candidateEmail,
-      candidatePhone,
-      candidateLocation,
-      candidateLinkedIn,
-      role: activeLetter.role,
-      company: activeLetter.company,
-      jobDescription: activeLetter.jobDescription,
-      resumeData: selectedResume,
-      masterProfile: masterProfile || undefined,
-      recipientName: activeLetter.recipientName
+      candidateName, candidateEmail, candidatePhone, candidateLocation, candidateLinkedIn,
+      role: activeLetter.role, company: activeLetter.company,
+      jobDescription: activeLetter.jobDescription, resumeData: selectedResume,
+      masterProfile: masterProfile || undefined, recipientName: activeLetter.recipientName
     });
 
+    try {
+      const aiDraft = await requestCareerAI('GENERATE_COVER_LETTER', {
+        instruction: 'Return JSON with openingParagraph, bodyParagraph, achievementBullets, companyConnectionParagraph, closingParagraph. Use only the supplied candidate facts. Do not invent employers, qualifications, projects, metrics, experience, or company research. achievementBullets must be copied exactly from verifiedAchievements. If evidence is absent, return an empty array.',
+        role: activeLetter.role,
+        company: activeLetter.company,
+        jobDescription: activeLetter.jobDescription,
+        candidate: { name: candidateName, skills: masterProfile?.skills || selectedResume?.skills || {} },
+        verifiedAchievements: newLetter.achievementBullets
+      });
+      if (aiDraft) {
+        const allowedBullets = newLetter.achievementBullets;
+        const generatedBullets = Array.isArray(aiDraft.achievementBullets)
+          ? aiDraft.achievementBullets.filter((item): item is string => typeof item === 'string' && allowedBullets.includes(item))
+          : allowedBullets;
+        const aiLetter = {
+          ...newLetter,
+          openingParagraph: typeof aiDraft.openingParagraph === 'string' ? aiDraft.openingParagraph : newLetter.openingParagraph,
+          bodyParagraph: typeof aiDraft.bodyParagraph === 'string' ? aiDraft.bodyParagraph : newLetter.bodyParagraph,
+          achievementBullets: generatedBullets,
+          companyConnectionParagraph: typeof aiDraft.companyConnectionParagraph === 'string' ? aiDraft.companyConnectionParagraph : newLetter.companyConnectionParagraph,
+          closingParagraph: typeof aiDraft.closingParagraph === 'string' ? aiDraft.closingParagraph : newLetter.closingParagraph
+        };
+        setActiveLetter(aiLetter);
+        showToast('AI cover letter draft generated. Review every statement before sending.', 'success');
+        return;
+      }
+    } catch (error) {
+      console.warn('Career AI unavailable; using evidence-based local draft.', error);
+    }
     setActiveLetter(newLetter);
-    showToast('Tailored cover letter generated from profile!', 'success');
+    showToast('Evidence-based cover letter draft generated. Review before sending.', 'info');
   };
 
   const handleSave = () => {
