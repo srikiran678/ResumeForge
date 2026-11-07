@@ -87,12 +87,8 @@ export function extractTopAchievements(
     if (topThree.length >= 3) return topThree;
   }
 
-  // Safe baseline defaults if user profile has no bullets yet
-  return [
-    `Spearheaded modular architecture design and cross-functional feature implementation, reducing latency and boosting maintainability.`,
-    `Engineered scalable full-stack workflows using modern component patterns, rigorous automated testing, and clean data modeling.`,
-    `Collaborated with product and engineering stakeholders to deliver high-quality, production-ready releases aligned with user requirements.`
-  ];
+  // Never invent achievements. An empty list is safer than fabricated candidate evidence.
+  return [];
 }
 
 /**
@@ -125,13 +121,15 @@ export function generateTailoredCoverLetter(params: GenerateCoverLetterParams): 
     ? `Dear ${recipientName},`
     : `Dear Hiring Team at ${company || 'your organization'},`;
 
-  const openingParagraph = `I am writing to express my enthusiastic interest in the ${role || 'Engineering'} position at ${company || 'your company'}. With a proven foundation in modern software engineering, test-driven craftsmanship, and user-centric problem solving, I am eager to contribute immediately to your product roadmap and engineering initiatives.`;
+  const openingParagraph = `I am writing to apply for the ${role || '[target role]'} position at ${company || '[company]'}. I would welcome the opportunity to be considered and to explain how the verified experience and projects in my resume relate to this role.`;
 
-  const bodyParagraph = `Throughout my career and technical projects, I have focused on delivering robust systems that combine architectural elegance with measurable user impact. My background directly aligns with the key challenges of this role:`;
+  const bodyParagraph = topAchievements.length > 0
+    ? `The following examples are drawn from my saved resume or master profile and are the most relevant evidence I can offer for this role:`
+    : `My saved profile does not currently contain verified achievement examples to include. Add relevant evidence before sending this letter.`;
 
-  const companyConnectionParagraph = `What excites me most about ${company || 'your team'} is your dedication to engineering excellence and mission-driven innovation. I thrive in collaborative environments where ownership, rigorous quality standards, and continuous learning are celebrated, and I would be thrilled to bring that energy to your team.`;
+  const companyConnectionParagraph = `I would appreciate the opportunity to learn more about the team's priorities and discuss whether my documented skills and interests align with the role.`;
 
-  const closingParagraph = `Thank you for your time and thoughtful consideration. I would welcome the opportunity to discuss in greater detail how my technical skills, domain curiosity, and collaborative mindset can support ${company || 'your organization'}'s future goals.`;
+  const closingParagraph = `Thank you for your time and consideration. I would be pleased to discuss my application and provide any additional information needed.`;
 
   return {
     id: `cl_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
@@ -148,8 +146,8 @@ export function generateTailoredCoverLetter(params: GenerateCoverLetterParams): 
     companyConnectionParagraph,
     closingParagraph,
     signoff: 'Sincerely,',
-    senderName: candidateName || 'Candidate Name',
-    senderEmail: candidateEmail || 'candidate@example.com',
+    senderName: candidateName || '',
+    senderEmail: candidateEmail || '',
     senderPhone: candidatePhone || '',
     senderLocation: candidateLocation || '',
     senderLinkedIn: candidateLinkedIn || '',
