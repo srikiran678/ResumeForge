@@ -260,7 +260,7 @@ export const JobSearchEngine = {
     let titleBonus = 0;
     if (candidateHeadline) {
       const hLower = candidateHeadline.toLowerCase();
-      const titleWords = job.title.toLowerCase().split(/\\W+/).filter(word => word.length > 3);
+      const titleWords = job.title.toLowerCase().split(/\W+/).filter(word => word.length > 3);
       if (titleWords.some(word => hLower.includes(word))) titleBonus = 5;
     }
 
@@ -274,7 +274,7 @@ export const JobSearchEngine = {
     };
   },
 
-  // Search & filter curated job database
+  // Search and filter the supplied live job listings
   searchJobs(
     filters: Partial<JobFilterCriteria> = {},
     candidateSkills: string[] = [],
