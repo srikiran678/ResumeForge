@@ -15,7 +15,7 @@ import {
   Tag,
   Lightbulb
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { 
@@ -31,17 +31,19 @@ import {
 export const InterviewPrepPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
   const { showToast } = useToast();
+  const location = useLocation();
+  const jobContext = location.state as { company?: string; role?: string; jobDescription?: string } | null;
 
-  const [role, setRole] = useState('Senior Full-Stack Engineer');
-  const [company, setCompany] = useState('Stripe');
-  const [jobDescription, setJobDescription] = useState('');
+  const [role, setRole] = useState(jobContext?.role || '');
+  const [company, setCompany] = useState(jobContext?.company || '');
+  const [jobDescription, setJobDescription] = useState(jobContext?.jobDescription || '');
   const [selectedResumeId, setSelectedResumeId] = useState('');
 
   const [activePrep, setActivePrep] = useState<InterviewPrepData>(() => {
     return generateInterviewPrep({
-      role: 'Senior Full-Stack Engineer',
-      company: 'Stripe',
-      jobDescription: 'Seeking an engineer experienced in high-performance web systems, React, TypeScript, APIs, and scalable databases.',
+      role: jobContext?.role || '',
+      company: jobContext?.company || '',
+      jobDescription: jobContext?.jobDescription || '',
       masterProfile: masterProfile || undefined
     });
   });
@@ -52,13 +54,17 @@ export const InterviewPrepPage: React.FC = () => {
 
   useEffect(() => {
     const saved = CareerStorageService.getInterviewPreps();
-    if (saved.length > 0) {
+    if (jobContext) {
+      setRole(jobContext.role || '');
+      setCompany(jobContext.company || '');
+      setJobDescription(jobContext.jobDescription || '');
+    } else if (saved.length > 0) {
       setActivePrep(saved[0]);
       setRole(saved[0].role);
       setCompany(saved[0].company);
       setJobDescription(saved[0].jobDescription);
     }
-  }, []);
+  }, [location.state]);
 
   const handleGenerate = () => {
     if (!role.trim()) {
