@@ -280,7 +280,8 @@ export const JobSearchEngine = {
   searchJobs(
     filters: Partial<JobFilterCriteria> = {},
     candidateSkills: string[] = [],
-    candidateHeadline?: string
+    candidateHeadline?: string,
+    listings: JobListing[] = CURATED_JOB_LISTINGS
   ): JobListing[] {
     const {
       keyword = '',
@@ -293,7 +294,7 @@ export const JobSearchEngine = {
 
     const query = keyword.toLowerCase().trim();
 
-    const results = CURATED_JOB_LISTINGS.map(job => {
+    const results = listings.map(job => {
       const match = this.computeJobMatch(job, candidateSkills, candidateHeadline);
       return {
         ...job,
@@ -343,6 +344,7 @@ export const JobSearchEngine = {
       if (sortBy === 'salary') {
         return b.maxSalary - a.maxSalary;
       }
+      if (sortBy === 'recent') return Date.parse(b.postedDate) - Date.parse(a.postedDate);
       return 0; // default order
     });
   },
@@ -397,7 +399,7 @@ export const JobSearchEngine = {
       status,
       resumeId,
       resumeVersion: 'v1.0 (Direct Track)',
-      notes: `Matched via ResumeForge Job Search (${job.matchScore || 85}% ATS Match).\nKey Requirements: ${job.requiredSkills.join(', ')}.\nTier: ${job.tier}.`,
+      notes: `Matched via ResumeForge Job Search (${job.matchScore == null ? 'score not calculated' : `${job.matchScore}% skills match`}).\nKey Requirements: ${job.requiredSkills.join(', ')}.\nTier: ${job.tier}.`,
       applicationDate: status === 'Applied' ? now.split('T')[0] : undefined,
       createdAt: now,
       updatedAt: now
