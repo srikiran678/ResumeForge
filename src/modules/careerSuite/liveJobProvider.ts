@@ -28,7 +28,7 @@ function normalizeJob(job: ArbeitnowJob): JobListing | null {
   return {
     id: `arbeitnow_${job.slug || encodeURIComponent(job.url)}`, title: job.title.trim(), company: job.company_name.trim(),
     companyLogo: job.company_logo, tier: 'Enterprise', location: job.location || (job.remote ? 'Remote' : 'Location not provided'),
-    remoteType: job.remote ? 'Remote' : 'Onsite', experienceLevel: experienceLevel(job.title, tags),
+    remoteType: job.remote ? 'Remote' : /hybrid/i.test(job.location || '') ? 'Hybrid' : 'Onsite', experienceLevel: experienceLevel(job.title, tags),
     salaryRange: 'Not disclosed', minSalary: 0, maxSalary: 0,
     postedDate: job.created_at ? new Date(job.created_at * 1000).toISOString() : 'Date not provided',
     applyUrl: url.toString(), source: 'Arbeitnow', description: textFromHtml(job.description || ''),
