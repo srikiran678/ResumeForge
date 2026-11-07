@@ -339,12 +339,18 @@ export const InterviewPrepPage: React.FC = () => {
               <div>
                 <strong className="font-semibold">The STAR Methodology:</strong> Structure your answers in 90 to 120 seconds.
                 Cover the <strong>Situation</strong> (15s), <strong>Task</strong> (15s), <strong>Action</strong> (60s), and <strong>Result</strong> (30s).
-                All stories below are pulled directly from your verified background to ensure zero fabrication.
+                Project names and action bullets are drawn from your saved profile. Complete the situation, task, and result prompts with facts you can personally verify before using a story.
               </div>
             </div>
 
             <div className="space-y-4">
-              {activePrep.starStories.map((story: StarStory) => {
+              {activePrep.starStories.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">No verified experience or project evidence yet</p>
+                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Add real projects, responsibilities, and outcomes to your Master Profile or select a saved resume. ResumeForge will not invent STAR stories.</p>
+                  <Link to="/profile" className="inline-flex mt-4 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Update Master Profile</Link>
+                </div>
+              ) : activePrep.starStories.map((story: StarStory) => {
                 const isExpanded = expandedStoryId === story.id;
                 return (
                   <div 
