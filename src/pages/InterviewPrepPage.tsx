@@ -27,6 +27,7 @@ import {
   CareerStorageService, 
   generateInterviewPrep 
 } from '../modules/careerSuite';
+import { requestCareerAI } from '../modules/careerSuite/careerAiService';
 
 export const InterviewPrepPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
@@ -66,22 +67,43 @@ export const InterviewPrepPage: React.FC = () => {
     }
   }, [location.state]);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!role.trim()) {
       showToast('Please specify a target role before generating interview prep.', 'error');
       return;
     }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
     const newPrep = generateInterviewPrep({
-      role,
-      company,
-      jobDescription,
-      resumeData: selectedResume,
-      masterProfile: masterProfile || undefined
+      role, company, jobDescription, resumeData: selectedResume, masterProfile: masterProfile || undefined
     });
+    try {
+      const aiDraft = await requestCareerAI('GENERATE_INTERVIEW_PREP', {
+        instruction: 'Return JSON with toughQuestions, technicalProbes, and reverseQuestions arrays. Generate role-specific questions and coaching prompts only. Do not invent candidate work history, STAR stories, achievements, metrics, or personal answers. Use STAR story prompts already supplied by the application; do not create any candidate claims.',
+        role, company, jobDescription,
+        candidateFacts: {
+          skills: masterProfile?.skills || selectedResume?.skills || {},
+          projects: masterProfile?.projects || selectedResume?.projects || [],
+          experience: masterProfile?.experience || selectedResume?.work || []
+        }
+      });
+      if (aiDraft) {
+        const safePrep: InterviewPrepData = {
+          ...newPrep,
+          toughQuestions: Array.isArray(aiDraft.toughQuestions) ? aiDraft.toughQuestions as ToughQuestion[] : newPrep.toughQuestions,
+          technicalProbes: Array.isArray(aiDraft.technicalProbes) ? aiDraft.technicalProbes as TechnicalProbe[] : newPrep.technicalProbes,
+          reverseQuestions: Array.isArray(aiDraft.reverseQuestions) ? aiDraft.reverseQuestions as ReverseQuestion[] : newPrep.reverseQuestions
+        };
+        setActivePrep(safePrep);
+        CareerStorageService.saveInterviewPrep(safePrep);
+        showToast('AI interview guide generated. STAR examples remain grounded in your saved evidence.', 'success');
+        return;
+      }
+    } catch (error) {
+      console.warn('Career AI unavailable; using evidence-based local interview guide.', error);
+    }
     setActivePrep(newPrep);
     CareerStorageService.saveInterviewPrep(newPrep);
-    showToast('Interview Prep Guide generated from your profile!', 'success');
+    showToast('Interview preparation guide generated from your saved profile.', 'info');
   };
 
   const handleSaveNotes = (notes: string) => {
