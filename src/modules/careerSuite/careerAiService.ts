@@ -1,10 +1,14 @@
 import { callClaude, isClaudeConfigured } from '@/lib/anthropic';
+import { StorageService } from '@/data/repositories/storageService';
 
 /** Uses the candidate's own configured Claude key. The key is never sent to ResumeForge servers. */
 export async function requestCareerAI(
   operation: 'GENERATE_COVER_LETTER' | 'GENERATE_INTERVIEW_PREP',
   payload: Record<string, unknown>,
 ): Promise<Record<string, unknown> | null> {
+  if (!StorageService.hasAcceptedAIPrivacy()) {
+    throw new Error('Accept the AI Privacy Notice before sending profile details to the AI provider.');
+  }
   if (!isClaudeConfigured()) return null;
 
   const response = await callClaude({
