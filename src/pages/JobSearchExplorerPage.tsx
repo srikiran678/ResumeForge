@@ -281,9 +281,9 @@ export const JobSearchExplorerPage: React.FC = () => {
           {filteredJobs.length === 0 ? (
             <div className="p-12 text-center rounded-2xl bg-white dark:bg-[#111218] border border-slate-200 dark:border-white/[0.08]">
               <Briefcase className="size-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">No matching roles found</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{isLoadingLiveJobs ? 'Loading live job listings…' : 'No matching roles found'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
-                Try widening your search terms or resetting filters. If the live feed is unavailable, refresh the page later.
+                {isLoadingLiveJobs ? 'Fetching current listings from the public job feed.' : 'Try widening your search terms or resetting filters. If the live feed is unavailable, refresh the page later.'}
               </p>
               <button
                 type="button"
@@ -301,7 +301,7 @@ export const JobSearchExplorerPage: React.FC = () => {
             </div>
           ) : (
             filteredJobs.map(job => {
-              const isSelected = job.id === selectedJob.id;
+              const isSelected = job.id === selectedJob?.id;
               const isSaved = savedJobIds.includes(job.id);
               const score = job.matchScore ?? 0;
 
