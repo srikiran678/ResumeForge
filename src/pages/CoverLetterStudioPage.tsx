@@ -102,7 +102,7 @@ export const CoverLetterStudioPage: React.FC = () => {
         role: activeLetter.role,
         company: activeLetter.company,
         jobDescription: activeLetter.jobDescription,
-        candidate: { name: candidateName, skills: masterProfile?.skills || selectedResume?.skills || {} },
+        candidate: { skills: masterProfile?.skills || selectedResume?.skills || {} },
         verifiedAchievements: newLetter.achievementBullets
       });
       if (aiDraft) {
@@ -124,6 +124,7 @@ export const CoverLetterStudioPage: React.FC = () => {
       }
     } catch (error) {
       console.warn('Career AI unavailable; using evidence-based local draft.', error);
+      if (error instanceof Error && error.message.includes('AI Privacy Notice')) showToast(error.message, 'info');
     }
     setActiveLetter(newLetter);
     showToast('Evidence-based cover letter draft generated. Review before sending.', 'info');
