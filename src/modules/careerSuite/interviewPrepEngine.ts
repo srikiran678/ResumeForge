@@ -39,7 +39,7 @@ export function buildStarStories(
         projectOrRole: `${exp.position} at ${exp.company}`,
         questionTrigger: idx === 0 
           ? 'Describe a real deliverable you personally worked on and the constraints involved.'
-          : 'Describe a real technical challenge you personally helped investigate or resolve.'
+          : 'Describe a real technical challenge you personally helped investigate or resolve.',
         situation: `Describe the actual situation and context at ${exp.company}. Replace this prompt with facts you can verify.`,
         task: `Describe your actual responsibility as ${exp.position}. Do not claim ownership or duties that were not yours.`,
         action: primaryBullet,
