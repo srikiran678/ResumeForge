@@ -100,6 +100,7 @@ export const InterviewPrepPage: React.FC = () => {
       }
     } catch (error) {
       console.warn('Career AI unavailable; using evidence-based local interview guide.', error);
+      if (error instanceof Error && error.message.includes('AI Privacy Notice')) showToast(error.message, 'info');
     }
     setActivePrep(newPrep);
     CareerStorageService.saveInterviewPrep(newPrep);
