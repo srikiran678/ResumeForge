@@ -233,7 +233,7 @@ export interface JobListing {
   maxSalary: number;
   postedDate: string;
   applyUrl: string;
-  source: 'Direct' | 'LinkedIn' | 'Wellfound' | 'Y Combinator' | 'Indeed';
+  source: 'Direct' | 'LinkedIn' | 'Wellfound' | 'Y Combinator' | 'Indeed' | 'Arbeitnow';
   description: string;
   requiredSkills: string[];
   preferredSkills: string[];
