@@ -7,7 +7,7 @@
 ## Test Architecture
 - **Runner**: Node.js automated test runner using `puppeteer-core` connected to local Google Chrome (`C:/Program Files/Google/Chrome/Application/chrome.exe`) and direct PostgreSQL database client (`pg.Client`).
 - **Target URL**: Production preview server `http://localhost:4173`.
-- **Database Target**: `postgresql://postgres:***@vdkvb6uy.ap-southeast.database.insforge.app:5432/insforge?sslmode=require`.
+- **Database Target**: `postgresql://postgres:***@<project-id>.ap-southeast.database.insforge.app:5432/insforge?sslmode=require`.
 - **Pass/Fail Semantics**: Process exits with code 0 if and only if all assertions pass with 0 unhandled rejections.
 
 ## Feature Inventory & Test Coverage Mapping

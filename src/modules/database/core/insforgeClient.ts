@@ -59,8 +59,8 @@ const getEnvVar = (key: string, fallback: string): string => {
   return fallback;
 };
 
-const insforgeUrl = getEnvVar('VITE_INSFORGE_URL', 'https://vdkvb6uy.ap-southeast.insforge.app');
-const insforgeKey = getEnvVar('VITE_INSFORGE_KEY', 'ik_b97a7fab26dfb80bab9dcb52753d9e4d');
+const insforgeUrl = getEnvVar('VITE_INSFORGE_URL', '');
+const insforgeKey = getEnvVar('VITE_INSFORGE_KEY', '');
 
 export const isInsforgeConfigured = Boolean(insforgeUrl && insforgeKey);
 

@@ -3,7 +3,7 @@
 ## Architecture
 ResumeForge is a production-grade, ATS-first resume builder and career workflow platform for university students.
 - **Frontend Framework**: React 19 + TypeScript + Vite + Tailwind CSS + React Router v7.
-- **Backend & Database Infrastructure**: Live InsForge PostgreSQL backend (`vdkvb6uy.ap-southeast.database.insforge.app:5432/insforge`) accessed via `@insforge/sdk` PostgREST gateway (`https://vdkvb6uy.ap-southeast.insforge.app/api/database/records`) and direct SSL PostgreSQL connections for database auditing.
+- **Backend & Database Infrastructure**: Live InsForge PostgreSQL backend (`<project-id>.ap-southeast.database.insforge.app:5432/insforge`) accessed via `@insforge/sdk` PostgREST gateway (`https://<project-id>.ap-southeast.insforge.app/api/database/records`) and direct SSL PostgreSQL connections for database auditing.
 - **Authentication**: InsForge Auth with Google OAuth PKCE flow (`insforge.auth.signInWithOAuth`) and session state managed via `AuthContext`.
 - **Storage Layer**: `src/lib/storage.ts` providing bidirectional sync between local workspace state and InsForge PostgreSQL tables (`resumes`, `master_profiles`, `applications`, `resume_snapshots`, `ai_usage`, `user_settings`) with multi-tenant Row-Level Security (RLS).
 - **ATS & PDF Engine**: Single-column ATS-parseable templates, AST reading order inspector `#01..#0N`, real-time bullet impact telemetry, and `@react-pdf/renderer` vector PDF generation ensuring 100% selectable text in natural reading order.
@@ -25,7 +25,7 @@ All features identified during the survey phase from `ORIGINAL_REQUEST.md` and c
 
 | # | Feature | Description | Milestone | Source |
 |---|---------|-------------|-----------|--------|
-| 1 | PostgreSQL Database Sync | Connect to live InsForge PostgreSQL backend (`vdkvb6uy.ap-southeast.database.insforge.app:5432`) and sync data via `@insforge/sdk` | M1 | ORIGINAL_REQUEST §R1 |
+| 1 | PostgreSQL Database Sync | Connect to live InsForge PostgreSQL backend (`<project-id>.ap-southeast.database.insforge.app:5432`) and sync data via `@insforge/sdk` | M1 | ORIGINAL_REQUEST §R1 |
 | 2 | Core Tables Persistence | Persist `resumes`, `master_profiles`, `applications`, `resume_snapshots`, `ai_usage`, `user_settings` matching schema | M1 | ORIGINAL_REQUEST §R1 |
 | 3 | Row-Level Security (RLS) | Enforce multi-tenant data isolation via `(auth.uid() = user_id)` on all core tables | M1 | ORIGINAL_REQUEST §R1 |
 | 4 | Secret Isolation & Guardrails | Ensure zero database credentials, service role keys, or tokens leak into client bundles; add `.env` to `.gitignore` | M1 | ORIGINAL_REQUEST §R5 |
@@ -56,7 +56,7 @@ All features identified during the survey phase from `ORIGINAL_REQUEST.md` and c
 
 ### Frontend Storage ↔ InsForge PostgREST API
 - **Client**: `insforge.database.from(tableName)` from `src/lib/insforge.ts`
-- **Endpoint**: `https://vdkvb6uy.ap-southeast.insforge.app/api/database/records/<table_name>`
+- **Endpoint**: `https://<project-id>.ap-southeast.insforge.app/api/database/records/<table_name>`
 - **Authorization**: `Bearer <session_token>` header automatically attached by `@insforge/sdk`
 - **Schemas**:
   - `resumes`: `{ id: UUID, user_id: UUID, title: text, template: text, data: JSONB, is_public: boolean, slug: text|null, updated_at: ISO8601 }`

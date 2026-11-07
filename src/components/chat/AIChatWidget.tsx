@@ -44,14 +44,13 @@ export const AIChatWidget: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   
-  // Secret API Key resolution (internal environment or secure storage)
+  // Secure user API Key resolution (reads exclusively from user's local browser storage)
   const [apiKey] = useState(() => {
     try {
       const local = localStorage.getItem('resumeforge_custom_api_key');
       if (local && local.trim().length > 0) return local.trim();
     } catch {}
-    const envKey = (import.meta as any).env?.VITE_ANTHROPIC_API_KEY;
-    return typeof envKey === 'string' ? envKey.trim() : '';
+    return '';
   });
   const [apiProvider] = useState<'anthropic' | 'openai' | 'gemini'>('anthropic');
 

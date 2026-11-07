@@ -1,8 +1,8 @@
 import { createClient } from '@insforge/sdk';
 import { ResumeLibraryAgent } from '../src/services/resumeLibraryAgent';
 
-const insforgeUrl = process.env.VITE_INSFORGE_URL || process.env.INSFORGE_URL || 'https://vdkvb6uy.ap-southeast.insforge.app';
-const insforgeKey = process.env.INSFORGE_SERVICE_KEY || process.env.VITE_INSFORGE_KEY || 'ik_b97a7fab26dfb80bab9dcb52753d9e4d';
+const insforgeUrl = process.env.VITE_INSFORGE_URL || process.env.INSFORGE_URL || '';
+const insforgeKey = process.env.INSFORGE_SERVICE_KEY || process.env.VITE_INSFORGE_KEY || '';
 
 const insforge = createClient({
   baseUrl: insforgeUrl,

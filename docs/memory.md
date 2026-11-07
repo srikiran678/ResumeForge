@@ -201,6 +201,12 @@
 
 ### Recent Changes
 - **November 2026:**
+  - **Comprehensive Secrets Sanitization & Client Bundle Hardening:**
+    - Purged all hardcoded backend instance IDs and anonymous API keys from `src/modules/database/core/insforgeClient.ts` and `api/*.ts` serverless functions.
+    - Sanitized documentation and test markdown files (`PROJECT.md`, `TEST_INFRA.md`, `TEST_READY.md`) with generic placeholders (`<project-id>`).
+    - Removed `VITE_ANTHROPIC_API_KEY` from `.env.local`, `src/lib/anthropic.ts`, and `src/components/chat/AIChatWidget.tsx` to prevent Vite from baking private API keys into public client-side JavaScript bundles.
+    - Verified production build bundle contains 0 private keys or database credentials.
+  - Implemented visual template thumbnails (`TemplateThumbnail.tsx`), live full inspection modal (`TemplateFullPreviewModal.tsx`), and mobile-compact view mode in `TemplateGalleryModal.tsx`.
   - Integrated full AI-Job-Search framework capabilities across 7 flagship tools (`/cover-letters`, `/interview-prep`, `/job-match`, `/salary-intel`, `/upskilling`, `/jobs`, `/analytics`).
   - Authored comprehensive QA audit report ([`TEST_REPORT.md`](file:///C:/project/TEST_REPORT.md)) auditing 20/20 routes and categorizing 38 findings.
   - Implemented `ConfirmModal` eliminating native `alert()`, `confirm()`, and `prompt()`.

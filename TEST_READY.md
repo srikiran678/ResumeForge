@@ -66,8 +66,8 @@ node scratch/e2e/tier4_scenarios.mjs
 ## Target Infrastructure Audit
 
 - **Frontend Server**: `http://localhost:4173` (Vite Preview serving production build).
-- **PostgreSQL Database**: `postgresql://postgres:***@vdkvb6uy.ap-southeast.database.insforge.app:5432/insforge?sslmode=require`.
-- **InsForge PostgREST API**: `https://vdkvb6uy.ap-southeast.insforge.app/api/database/records/`.
+- **PostgreSQL Database**: `postgresql://postgres:***@<project-id>.ap-southeast.database.insforge.app:5432/insforge?sslmode=require`.
+- **InsForge PostgREST API**: `https://<project-id>.ap-southeast.insforge.app/api/database/records/`.
 - **Browser Automation**: `puppeteer-core` connected to local Google Chrome at `C:/Program Files/Google/Chrome/Application/chrome.exe`.
 
 ---

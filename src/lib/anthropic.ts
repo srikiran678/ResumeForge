@@ -28,7 +28,8 @@ export interface ClaudeResponse {
 export const CLAUDE_DEFAULT_MODEL = 'claude-3-5-sonnet-20241022';
 
 /**
- * Retrieve the active Anthropic API key from localStorage or Vite environment.
+ * Retrieve the active Anthropic API key from secure user localStorage (BYOK).
+ * Secrets are never baked into client bundles.
  */
 export function getAnthropicApiKey(): string {
   try {
@@ -38,12 +39,6 @@ export function getAnthropicApiKey(): string {
     }
   } catch {
     // localStorage might be unavailable in some contexts
-  }
-
-  // Fallback to environment variable if configured
-  const envKey = (import.meta as any).env?.VITE_ANTHROPIC_API_KEY;
-  if (typeof envKey === 'string' && envKey.trim().length > 0) {
-    return envKey.trim();
   }
 
   return '';
