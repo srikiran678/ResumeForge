@@ -215,7 +215,7 @@ export const JobSearchEngine = {
     candidateHeadline?: string
   ): { matchScore: number; matchedSkills: string[]; missingSkills: string[] } {
     if (!candidateSkills || candidateSkills.length === 0) {
-      return { matchScore: 50, matchedSkills: [], missingSkills: job.requiredSkills };
+      return { matchScore: 0, matchedSkills: [], missingSkills: job.requiredSkills };
     }
 
     const normalizedCandidate = candidateSkills.map(s => s.toLowerCase().trim());
@@ -260,14 +260,12 @@ export const JobSearchEngine = {
     let titleBonus = 0;
     if (candidateHeadline) {
       const hLower = candidateHeadline.toLowerCase();
-      const tLower = job.title.toLowerCase();
-      if (hLower.includes('software') || hLower.includes('engineer') || hLower.includes('frontend') || hLower.includes('full-stack') || hLower.includes('developer')) {
-        titleBonus = 5;
-      }
+      const titleWords = job.title.toLowerCase().split(/\\W+/).filter(word => word.length > 3);
+      if (titleWords.some(word => hLower.includes(word))) titleBonus = 5;
     }
 
     const totalRaw = Math.min(100, Math.round(requiredScore + preferredScore + titleBonus));
-    const matchScore = Math.max(30, totalRaw); // clamp between 30 and 100
+    const matchScore = Math.max(0, totalRaw); // no artificial minimum match score
 
     return {
       matchScore,
