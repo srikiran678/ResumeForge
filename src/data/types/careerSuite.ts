@@ -224,10 +224,10 @@ export interface JobListing {
   title: string;
   company: string;
   companyLogo?: string;
-  tier: 'FAANG' | 'Unicorn' | 'Top Startup' | 'Enterprise' | 'Seed/Series A';
+  tier: 'FAANG' | 'Unicorn' | 'Top Startup' | 'Enterprise' | 'Seed/Series A' | 'Unclassified';
   location: string;
-  remoteType: 'Remote' | 'Hybrid' | 'Onsite';
-  experienceLevel: 'Intern' | 'Entry Level' | 'Mid Level' | 'Senior';
+  remoteType: 'Remote' | 'Hybrid' | 'Onsite' | 'Unspecified';
+  experienceLevel: 'Intern' | 'Entry Level' | 'Mid Level' | 'Senior' | 'Unspecified';
   salaryRange: string;
   minSalary: number;
   maxSalary: number;
