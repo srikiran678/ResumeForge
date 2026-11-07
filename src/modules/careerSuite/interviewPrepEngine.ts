@@ -31,8 +31,8 @@ export function buildStarStories(
   if (resumeData?.work && resumeData.work.length > 0) {
     resumeData.work.slice(0, 2).forEach((exp, idx) => {
       const bullets = Array.isArray(exp.responsibilities) ? exp.responsibilities : [];
-      const primaryBullet = bullets[0] || 'Delivered key engineering milestones and feature sets.';
-      const outcomeBullet = bullets[bullets.length - 1] || 'Improved system stability and delivery speed.';
+      const primaryBullet = bullets[0] || 'Add a verified action you personally completed in this role.';
+      const outcomeBullet = bullets.length > 0 ? bullets[bullets.length - 1] : 'Add an outcome you can substantiate; do not estimate one.';
 
       stories.push({
         id: `star_exp_${idx}_${Date.now()}`,
@@ -40,8 +40,8 @@ export function buildStarStories(
         questionTrigger: idx === 0 
           ? 'Tell me about a time you owned a high-impact technical deliverable under tight constraints.'
           : 'Describe a situation where you diagnosed and resolved a production bottleneck or complex defect.',
-        situation: `At ${exp.company}, our engineering team needed to maintain rapid feature velocity while ensuring high availability and robust data integrity.`,
-        task: `As ${exp.position}, my responsibility was to lead implementation, establish reliable test coverage, and coordinate releases without regressions.`,
+        situation: `Describe the actual situation and context at ${exp.company}. Replace this prompt with facts you can verify.`,
+        task: `Describe your actual responsibility as ${exp.position}. Do not claim ownership or duties that were not yours.`,
         action: primaryBullet,
         result: outcomeBullet,
         skillsDemonstrated: [exp.position, 'Problem Solving', 'Architecture', 'Execution']
@@ -53,47 +53,24 @@ export function buildStarStories(
   if (resumeData?.projects && resumeData.projects.length > 0) {
     resumeData.projects.slice(0, 2).forEach((proj, idx) => {
       const bullets = Array.isArray(proj.highlights) ? proj.highlights : [];
-      const primaryAction = bullets[0] || proj.description || 'Designed and implemented full-stack feature architecture.';
-      const techStack = Array.isArray(proj.technologies) ? proj.technologies : ['TypeScript', 'React'];
+      const primaryAction = bullets[0] || proj.description || 'Add a verified action you personally completed on this project.';
+      const techStack = Array.isArray(proj.technologies) ? proj.technologies : [];
 
       stories.push({
         id: `star_proj_${idx}_${Date.now()}`,
         projectOrRole: proj.name,
         questionTrigger: 'Tell me about an end-to-end technical system or project you designed from scratch.',
-        situation: `Identified a critical need to solve user friction and eliminate manual workflow overhead through an automated modern application.`,
-        task: `I took complete ownership of architecture, state management, API design, and client-side responsiveness for ${proj.name}.`,
+        situation: `Describe the real problem or opportunity that led to ${proj.name}.`,
+        task: `Describe your actual contribution and level of responsibility on ${proj.name}.`,
         action: primaryAction,
-        result: `Successfully launched the solution with clean type safety, sub-second response times, and zero critical production issues.`,
+        result: `Add the actual result. Include metrics only when you measured and can verify them.`,
         skillsDemonstrated: [...techStack.slice(0, 3), 'Initiative', 'System Design']
       });
     });
   }
 
-  // Baseline fallback STAR stories if user has limited resume items
-  if (stories.length === 0) {
-    stories.push(
-      {
-        id: `star_base_1_${Date.now()}`,
-        projectOrRole: 'Full-Stack Web Architecture Optimization',
-        questionTrigger: 'Tell me about a time you optimized system performance or user experience.',
-        situation: 'The web application suffered from slow bundle loading and sluggish navigation during peak traffic.',
-        task: 'Diagnose bundle bottlenecks and implement route-level code splitting and caching.',
-        action: 'Analyzed dependency trees, configured dynamic lazy loading with React Suspense, and extracted vendor chunks.',
-        result: 'Decreased initial JS entry payload by over 90%, achieving sub-second First Contentful Paint.',
-        skillsDemonstrated: ['Performance Optimization', 'React', 'Build Tooling']
-      },
-      {
-        id: `star_base_2_${Date.now()}`,
-        projectOrRole: 'Cross-Functional Team Collaboration',
-        questionTrigger: 'Tell me about a time you navigated conflicting priorities or ambiguous technical requirements.',
-        situation: 'Stakeholders presented conflicting timelines for releasing a complex user dashboard.',
-        task: 'Align engineering feasibility with business goals and establish an MVP scope.',
-        action: 'Organized a technical RFC walk-through, broke features into 2-week deliverable milestones, and automated QA gates.',
-        result: 'Delivered the core dashboard on schedule with 100% test pass rate and high user satisfaction.',
-        skillsDemonstrated: ['Communication', 'Prioritization', 'Agile Planning']
-      }
-    );
-  }
+  // Never create fictional STAR examples when no candidate evidence is available.
+  if (stories.length === 0) return [];
 
   return stories;
 }
@@ -107,25 +84,25 @@ export function buildToughQuestions(role: string, company: string): ToughQuestio
       question: `Why are you interested in joining ${company || 'our company'} specifically?`,
       category: 'motivation',
       responseStrategy: 'Anchor to specific engineering challenges, product mission, or technical scale. Avoid generic flattery.',
-      sampleAnswer: `I've followed ${company}'s work closely, particularly how you prioritize engineering craft and customer impact. Your focus on scalable systems matches my enthusiasm for building durable, maintainable software. I want to join a team where high standards and technical ownership are foundational.`
+      sampleAnswer: `Use one specific, researched reason for your interest in ${company}. Connect it to a genuine project, skill, or career goal from your own experience. Do not claim familiarity you do not have.`
     },
     {
       question: 'What is your strategy when a required technology is not part of your daily stack?',
       category: 'gap',
       responseStrategy: 'Bridge to adjacent foundational paradigms, show learning velocity, and cite past rapid-adoption examples.',
-      sampleAnswer: `I treat technologies as tools rooted in shared computer science principles. When adopting a new framework, I study official documentation, build a functional sandbox prototype to test edge cases, and leverage my deep foundation in core patterns to become productive within days.`
+      sampleAnswer: `Be transparent about the gap. Explain which adjacent concepts you know, how you would learn the required technology, and provide a real example of learning something new if you have one.`
     },
     {
       question: 'What is your greatest technical development area or weakness?',
       category: 'weakness',
       responseStrategy: 'Share a genuine engineering tendency, along with the concrete guardrail/process you employ to mitigate it.',
-      sampleAnswer: `Earlier in my career, I tended to over-optimize code architecture for hypothetical future requirements. I now mitigate this by adhering strictly to YAGNI (You Aren't Gonna Need It) principles, writing lightweight modular implementations first, and refactoring only when concrete requirements demand it.`
+      sampleAnswer: `Choose a genuine development area. Explain the steps you are taking to improve and give a real example of progress. Do not reuse this wording unless it accurately describes you.`
     },
     {
       question: `Where do you see yourself progressing in 3 to 5 years?`,
       category: 'transition',
       responseStrategy: 'Demonstrate ambition aligned with deeper technical ownership and cross-functional leadership.',
-      sampleAnswer: `In 3 to 5 years, I see myself as a seasoned technical leader who not only architects reliable core systems for ${company}, but also mentors engineers, shapes best practices, and bridges the gap between product strategy and engineering execution.`
+      sampleAnswer: `Describe a realistic goal that fits your interests. Explain what you want to learn and the kind of responsibility you hope to earn over time.`
     }
   ];
 }
