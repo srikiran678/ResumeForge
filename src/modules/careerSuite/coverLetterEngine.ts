@@ -121,7 +121,7 @@ export function generateTailoredCoverLetter(params: GenerateCoverLetterParams): 
     ? `Dear ${recipientName},`
     : `Dear Hiring Team at ${company || 'your organization'},`;
 
-  const openingParagraph = `I am writing to apply for the ${role || '[target role]'} position at ${company || '[company]'}. I would welcome the opportunity to be considered and to explain how the verified experience and projects in my resume relate to this role.`;
+  const openingParagraph = `I am writing to apply for the ${role || '[target role]'} position at ${company || '[company]'}. I am interested in this opportunity and would welcome consideration of my application.`;
 
   const bodyParagraph = topAchievements.length > 0
     ? `The following examples are drawn from my saved resume or master profile and are the most relevant evidence I can offer for this role:`
