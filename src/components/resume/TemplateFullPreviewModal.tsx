@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { X, Check, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, Sparkles, User, FileText, CheckCircle2 } from 'lucide-react';
+import { X, Check, ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight, User } from 'lucide-react';
 import { TemplateId, ResumeData } from '@/data/types';
 import { TemplateRegistry, getAllTemplates } from '@/modules/templates';
 import { SAMPLE_PREVIEW_RESUME } from './templatePreviewData';
@@ -171,13 +171,16 @@ export const TemplateFullPreviewModal: React.FC<TemplateFullPreviewModalProps> =
         </header>
 
         {/* Live Canvas Viewport */}
-        <div className="flex-1 overflow-auto p-4 sm:p-8 flex justify-center items-start relative select-text">
+        <div className="flex-1 overflow-auto p-4 sm:p-8 flex justify-center items-start relative select-text bg-slate-200/90 dark:bg-[#07080a]">
           <div
-            className="transition-transform duration-200 ease-out origin-top shadow-2xl rounded-xs bg-white text-black"
+            className="resume-document-container transition-transform duration-200 ease-out origin-top shadow-2xl rounded-xs bg-white text-black"
             style={{
               transform: `scale(${zoomScale})`,
               width: '850px',
               minHeight: '1100px',
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              colorScheme: 'light',
             }}
           >
             <TemplateComponent resume={documentData} />

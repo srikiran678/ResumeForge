@@ -14,13 +14,16 @@ export const ResumeDocument: React.FC<ResumeDocumentProps> = ({ resume, scale = 
   return (
     <div
       id="printable-resume"
-      className="resume-document-container bg-white shadow-sheet rounded-xs mx-auto overflow-hidden transition-all duration-200 select-text"
+      className="resume-document-container bg-white text-black shadow-sheet rounded-xs mx-auto overflow-hidden transition-all duration-200 select-text"
       style={{
         transform: scale !== 1 ? `scale(${scale})` : undefined,
         transformOrigin: 'top center',
         width: '100%',
         maxWidth: '850px',
         minHeight: '1100px',
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        colorScheme: 'light',
       }}
     >
       <TemplateComponent resume={resume} />

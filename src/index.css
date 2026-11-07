@@ -128,6 +128,17 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
 
+/* ATS Printable Resume Original White Format - Immune to dark mode inheritance */
+.resume-document-container {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  color-scheme: light !important;
+}
+
+.resume-document-container * {
+  color-scheme: light !important;
+}
+
 /* Print Styles for ATS Printable Resume */
 @media print {
   body {
