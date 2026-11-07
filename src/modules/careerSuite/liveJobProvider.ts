@@ -32,7 +32,7 @@ function textFromHtml(value: string): string {
 }
 
 function experienceLevel(title: string, tags: string[]): JobListing['experienceLevel'] {
-  const value = \`\${title} \${tags.join(' ')}\`.toLowerCase();
+  const value = `${title} ${tags.join(' ')}`.toLowerCase();
   if (/intern|internship|working student/.test(value)) return 'Intern';
   if (/junior|entry.level|graduate|new.grad|trainee|fresher/.test(value)) return 'Entry Level';
   if (/senior|lead|principal|staff|director|head of/.test(value)) return 'Senior';
@@ -54,7 +54,7 @@ function normalizeJob(job: ArbeitnowJob): JobListing | null {
     : [];
 
   return {
-    id: \`arbeitnow_\${job.slug || encodeURIComponent(job.url)}\`,
+    id: `arbeitnow_${job.slug || encodeURIComponent(job.url)}`,
     title: job.title.trim(),
     company: job.company_name.trim(),
     companyLogo: job.company_logo,
@@ -83,7 +83,7 @@ export async function fetchLiveJobs(signal?: AbortSignal): Promise<JobListing[]>
     headers: { Accept: 'application/json' },
     signal,
   });
-  if (!response.ok) throw new Error(\`Live job feed returned HTTP \${response.status}.\`);
+  if (!response.ok) throw new Error(`Live job feed returned HTTP ${response.status}.`);
 
   const payload = await response.json() as ArbeitnowResponse;
   if (!Array.isArray(payload.data)) throw new Error('Live job feed returned an unexpected response.');
