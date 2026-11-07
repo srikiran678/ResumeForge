@@ -84,7 +84,7 @@ export function extractTopAchievements(
 
     scored.sort((a, b) => b.score - a.score);
     const topThree = scored.slice(0, 3).map(s => s.bullet);
-    if (topThree.length >= 3) return topThree;
+    return topThree;
   }
 
   // Never invent achievements. An empty list is safer than fabricated candidate evidence.
