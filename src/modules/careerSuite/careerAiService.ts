@@ -6,10 +6,10 @@ export async function requestCareerAI(
   operation: 'GENERATE_COVER_LETTER' | 'GENERATE_INTERVIEW_PREP',
   payload: Record<string, unknown>,
 ): Promise<Record<string, unknown> | null> {
+  if (!isClaudeConfigured()) return null;
   if (!StorageService.hasAcceptedAIPrivacy()) {
     throw new Error('Accept the AI Privacy Notice before sending profile details to the AI provider.');
   }
-  if (!isClaudeConfigured()) return null;
 
   const response = await callClaude({
     prompt: `Operation: ${operation}\nInput JSON:\n${JSON.stringify(payload)}\n\nReturn one valid JSON object only. Do not include markdown fences or prose outside JSON.`,
