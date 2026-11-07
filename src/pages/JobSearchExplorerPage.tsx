@@ -446,14 +446,14 @@ export const JobSearchExplorerPage: React.FC = () => {
                     <span>ATS Match Diagnostics</span>
                   </span>
                   <span className="text-xs font-mono font-extrabold text-indigo-600 dark:text-indigo-400">
-                    {selectedJob.matchScore || 50}%
+                    {selectedJob.matchScore ?? 0}%
                   </span>
                 </div>
 
                 <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-500"
-                    style={{ width: `${selectedJob.matchScore || 50}%` }}
+                    style={{ width: `${selectedJob.matchScore ?? 0}%` }}
                   />
                 </div>
 
