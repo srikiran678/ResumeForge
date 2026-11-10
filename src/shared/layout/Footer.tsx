@@ -64,6 +64,17 @@ export const Footer: React.FC = () => {
               <li><Link to="/job-match" className="hover:text-forge-900 dark:hover:text-white">Job Match Radar</Link></li>
               <li><Link to="/salary-intel" className="hover:text-forge-900 dark:hover:text-white">Salary Intelligence</Link></li>
               <li><Link to="/upskilling" className="hover:text-forge-900 dark:hover:text-white">Skill Gap Roadmaps</Link></li>
+              <li>
+                <a 
+                  href="http://localhost:5173/learn" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-cyan-600 dark:text-cyan-400 font-semibold hover:underline flex items-center gap-1"
+                >
+                  <span>SkillMap 3D & AI Tutor</span>
+                  <span className="text-[10px]">↗</span>
+                </a>
+              </li>
             </ul>
           </div>
 

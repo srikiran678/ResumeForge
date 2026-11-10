@@ -23,11 +23,13 @@ import {
   MessageSquare,
   Award,
   Search,
-  BarChart3
+  BarChart3,
+  Compass
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { useTheme } from '../../context/ThemeContext';
+import { getSkillMapLearnUrl } from '../../services/skillMapBridge';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -104,6 +106,14 @@ export const Navbar: React.FC = () => {
       label: 'Skill Gap & Upskill', 
       desc: 'Proof-of-work project roadmaps', 
       icon: TrendingUp 
+    },
+    { 
+      to: '/skillmap',
+      href: getSkillMapLearnUrl(),
+      external: true,
+      label: 'SkillMap 3D & AI Tutor', 
+      desc: '30+ lessons, Sentinel AI & quizzes', 
+      icon: Compass 
     },
   ];
 
@@ -183,6 +193,28 @@ export const Navbar: React.FC = () => {
                       {careerSuiteLinks.map((item) => {
                         const Icon = item.icon;
                         const active = location.pathname.startsWith(item.to);
+                        if (item.href) {
+                          return (
+                            <a
+                              key={item.to}
+                              href={item.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-start gap-2.5 p-2 rounded-xl text-xs transition-colors text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/[0.04] group cursor-pointer"
+                            >
+                              <div className="size-7 rounded-lg bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200/50 dark:border-cyan-800/50 flex items-center justify-center text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
+                                <Icon className="w-3.5 h-3.5" />
+                              </div>
+                              <div>
+                                <div className="font-semibold flex items-center gap-1">
+                                  <span>{item.label}</span>
+                                  <span className="text-[10px] text-cyan-500 font-mono">↗</span>
+                                </div>
+                                <div className="text-[10px] text-slate-400 dark:text-slate-500">{item.desc}</div>
+                              </div>
+                            </a>
+                          );
+                        }
                         return (
                           <Link
                             key={item.to}
@@ -346,6 +378,21 @@ export const Navbar: React.FC = () => {
               {careerSuiteLinks.map((item) => {
                 const Icon = item.icon;
                 const active = location.pathname.startsWith(item.to);
+                if (item.href) {
+                  return (
+                    <a
+                      key={item.to}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center space-x-3 px-3 py-2 rounded-xl text-sm font-semibold text-cyan-600 dark:text-cyan-400 hover:bg-slate-50 dark:hover:bg-white/[0.04]"
+                    >
+                      <Icon className="w-4 h-4 text-cyan-500" />
+                      <span>{item.label} ↗</span>
+                    </a>
+                  );
+                }
                 return (
                   <Link
                     key={item.to}

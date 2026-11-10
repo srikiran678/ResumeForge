@@ -23,6 +23,7 @@ import {
   CareerStorageService, 
   generateUpskillPlan 
 } from '../modules/careerSuite';
+import { getSkillMapLearnUrl, getSkillMapRoadmapUrl } from '../services/skillMapBridge';
 
 export const UpskillingRoadmapPage: React.FC = () => {
   const { masterProfile } = useWorkspace();
@@ -201,6 +202,55 @@ export const UpskillingRoadmapPage: React.FC = () => {
           </div>
         </div>
 
+        {/* SkillMap 3D Visualizer & AI Tutor Deep-Link Bridge */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 border border-cyan-500/40 shadow-md text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">🗺️</span>
+                <h3 className="text-sm font-bold tracking-wide uppercase font-mono text-cyan-300">
+                  Interactive 3D SkillMap & Live Sentinel AI Tutor
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/25 text-cyan-300 border border-cyan-500/50">
+                  LIVE BRIDGE
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
+                Seamlessly transfer your detected skill gaps to the <strong>SkillMap</strong> learning hub. Experience 12 senior engineering tracks, 30 hands-on code playgrounds, and interactive AI mentoring.
+              </p>
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {activePlan.hardSkillGaps.slice(0, 6).map((g: SkillGapItem, i: number) => (
+                  <span key={i} className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-cyan-950/60 text-cyan-200 border border-cyan-800/60">
+                    ⚡ {g.skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+              <a
+                href={getSkillMapLearnUrl(activePlan.hardSkillGaps.map(g => g.skill), targetRole)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>Launch SkillMap Tutorials</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href={getSkillMapRoadmapUrl(activePlan.hardSkillGaps.map(g => g.skill), targetRole)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <span>3D Roadmap View</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Hard Skill Gaps Grid */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-white/[0.08] shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
@@ -231,9 +281,21 @@ export const UpskillingRoadmapPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-[11px] font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 px-2 py-1 rounded-md">
-                  <Clock className="w-3 h-3" />
-                  Estimated ramp: {item.learningCurve}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-1 text-[11px] font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 px-2 py-1 rounded-md">
+                    <Clock className="w-3 h-3" />
+                    <span>{item.learningCurve}</span>
+                  </div>
+                  <a
+                    href={getSkillMapLearnUrl([item.skill], targetRole)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 flex items-center gap-1 transition-colors cursor-pointer"
+                    title={`Open ${item.skill} interactive tutorials in SkillMap`}
+                  >
+                    <span>SkillMap</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
               </div>
             ))}
