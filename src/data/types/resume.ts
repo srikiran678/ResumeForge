@@ -26,7 +26,15 @@ export type TemplateId =
   | 'google-swe'
   | 'harvard-classic'
   | 'wall-street'
-  | 'mckinsey-consulting';
+  | 'mckinsey-consulting'
+  | 'stanford-swe'
+  | 'amazon-bar-raiser'
+  | 'apple-design-systems'
+  | 'mit-research'
+  | 'meta-production'
+  | 'netflix-senior'
+  | 'frontier-ai-agent'
+  | 'stripe-developer';
 
 export interface DeclarationInfo {
   text: string;

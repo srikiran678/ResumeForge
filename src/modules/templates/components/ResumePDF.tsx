@@ -53,15 +53,28 @@ export const ResumePDFDocument: React.FC<{ resume: ResumeData }> = ({ resume }) 
   }
 
   // Determine Font Family based on Template Archetype
-  const isSerif = ['classic', 'academic', 'executive', 'elegant', 'jakes-resume', 'harvard-classic', 'wall-street'].includes(template);
+  const isSerif = ['classic', 'academic', 'executive', 'elegant', 'jakes-resume', 'harvard-classic', 'wall-street', 'mit-research'].includes(template);
   const fontRegular = isSerif ? 'Times-Roman' : 'Helvetica';
   const fontBold = isSerif ? 'Times-Bold' : 'Helvetica-Bold';
   const fontItalic = isSerif ? 'Times-Italic' : 'Helvetica-Oblique';
-  const accentColor = meta?.accentColor || (template === 'google-swe' ? '#1a73e8' : (template === 'mckinsey-consulting' ? '#0f172a' : '#111827'));
+  const accentColor = meta?.accentColor || (
+    template === 'google-swe' ? '#1a73e8' :
+    template === 'mckinsey-consulting' ? '#0f172a' :
+    template === 'stanford-swe' ? '#8c1515' :
+    template === 'amazon-bar-raiser' ? '#e67a00' :
+    template === 'meta-production' ? '#0064e0' :
+    template === 'netflix-senior' ? '#e50914' :
+    template === 'frontier-ai-agent' ? '#10a37f' :
+    template === 'stripe-developer' ? '#635bff' :
+    template === 'apple-design-systems' ? '#1d1d1f' :
+    template === 'mit-research' ? '#750014' :
+    '#111827'
+  );
   const isWallStreet = template === 'wall-street';
   const isJakes = template === 'jakes-resume';
 
-  const pagePadding = isWallStreet ? 22 : (isJakes ? 26 : 34);
+  const isCompact = ['compact', 'wall-street', 'jakes-resume', 'stanford-swe', 'frontier-ai-agent', 'meta-production', 'netflix-senior'].includes(template);
+  const pagePadding = isWallStreet ? 22 : (isCompact ? 26 : 34);
 
   const dynamicStyles = StyleSheet.create({
     page: {

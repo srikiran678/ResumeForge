@@ -33,20 +33,22 @@ export const TemplateGalleryModal: React.FC<TemplateGalleryModalProps> = ({
 
   const categories = [
     { id: 'all', label: `All Templates (${allTemplates.length})` },
-    { id: 'placement', label: 'Campus Placement & Freshers' },
     { id: 'tech', label: 'Engineering & Tech' },
+    { id: 'ai-frontier', label: 'Frontier AI & Agents' },
+    { id: 'placement', label: 'Campus Placement & Freshers' },
     { id: 'academic', label: 'Research & Academics' },
-    { id: 'finance', label: 'Finance & Classic' },
-    { id: 'leadership', label: 'Leadership & Exec' },
+    { id: 'finance', label: 'Finance & Strategy' },
+    { id: 'leadership', label: 'Leadership & Staff' },
   ];
 
   const filteredTemplates = allTemplates.filter((t) => {
     if (filter === 'all') return true;
-    if (filter === 'placement') return ['classic-resume', 'classic', 'compact', 'academic', 'harvard-classic', 'jakes-resume'].includes(t.id);
-    if (filter === 'tech') return ['jakes-resume', 'google-swe', 'modern', 'compact', 'minimal', 'technical', 'hackathon', 'classic-resume'].includes(t.id);
-    if (filter === 'academic') return ['academic', 'harvard-classic', 'classic-resume', 'classic', 'compact'].includes(t.id);
-    if (filter === 'finance') return ['wall-street', 'mckinsey-consulting', 'classic', 'elegant', 'executive', 'classic-resume'].includes(t.id);
-    if (filter === 'leadership') return ['mckinsey-consulting', 'executive', 'modern', 'classic'].includes(t.id);
+    if (filter === 'tech') return ['jakes-resume', 'google-swe', 'stanford-swe', 'meta-production', 'stripe-developer', 'apple-design-systems', 'modern', 'compact', 'minimal', 'technical', 'hackathon', 'classic-resume'].includes(t.id);
+    if (filter === 'ai-frontier') return ['frontier-ai-agent', 'mit-research', 'google-swe', 'meta-production', 'technical', 'hackathon'].includes(t.id);
+    if (filter === 'placement') return ['classic-resume', 'classic', 'compact', 'academic', 'harvard-classic', 'jakes-resume', 'stanford-swe', 'stripe-developer'].includes(t.id);
+    if (filter === 'academic') return ['academic', 'harvard-classic', 'mit-research', 'classic-resume', 'classic', 'compact'].includes(t.id);
+    if (filter === 'finance') return ['wall-street', 'mckinsey-consulting', 'stripe-developer', 'classic', 'elegant', 'executive', 'classic-resume'].includes(t.id);
+    if (filter === 'leadership') return ['mckinsey-consulting', 'netflix-senior', 'amazon-bar-raiser', 'executive', 'apple-design-systems', 'modern', 'classic'].includes(t.id);
     return true;
   });
 

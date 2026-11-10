@@ -212,6 +212,84 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
               <div className="text-[0.65em] text-slate-600">San Francisco, CA • alex@berkeley.edu • Product &amp; Strategy</div>
             </div>
           )}
+
+          {templateId === 'stanford-swe' && (
+            <div className="text-left pb-1 border-b-2 border-[#8c1515] font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950 uppercase">Alex Chen</span>
+                <span className="text-[0.6em] font-mono font-bold text-[#8c1515]">YC S24 / FOUNDER</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">Palo Alto, CA • alex@stanford.edu • ARR $1.2M</div>
+            </div>
+          )}
+
+          {templateId === 'amazon-bar-raiser' && (
+            <div className="text-left pb-1 border-b-2 border-slate-900 font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-bold text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-bold text-[#e67a00]">BAR RAISER / SDE III</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600">Seattle, WA | alex@berkeley.edu | AWS Architecture</div>
+            </div>
+          )}
+
+          {templateId === 'apple-design-systems' && (
+            <div className="text-left pb-1 border-b border-neutral-300 font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-semibold text-[1.2em] text-[#1d1d1f]">Alex Chen</span>
+                <span className="text-[0.6em] text-neutral-400 font-medium tracking-wide">CUPERTINO</span>
+              </div>
+              <div className="text-[0.65em] text-neutral-500">San Francisco, CA · alex@berkeley.edu · Design Technologist</div>
+            </div>
+          )}
+
+          {templateId === 'mit-research' && (
+            <div className="text-center pb-1 border-b-2 border-slate-900 font-serif">
+              <div className="font-bold text-[1.15em] tracking-wide text-slate-950 uppercase">ALEX CHEN</div>
+              <div className="text-[0.62em] text-[#750014] font-sans font-semibold">CSAIL &amp; AI LAB · NEURIPS/ICLR</div>
+              <div className="text-[0.6em] text-slate-600 font-mono">Cambridge, MA • alex@csail.mit.edu</div>
+            </div>
+          )}
+
+          {templateId === 'meta-production' && (
+            <div className="text-left pb-1 border-b-2 border-[#0064e0] font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-mono font-bold text-[#0064e0]">E6 / INFRA</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">Menlo Park, CA • alex@berkeley.edu • 3B+ DAU Systems</div>
+            </div>
+          )}
+
+          {templateId === 'netflix-senior' && (
+            <div className="text-left pb-1 border-b-2 border-[#e50914] font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950 uppercase">Alex Chen</span>
+                <span className="text-[0.6em] font-mono font-bold text-[#e50914]">STAFF SWE</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">Los Gatos, CA | Context Not Control | Resiliency</div>
+            </div>
+          )}
+
+          {templateId === 'frontier-ai-agent' && (
+            <div className="text-left pb-1 border-b-2 border-[#10a37f] font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-mono font-bold text-[#10a37f]">MCP &amp; AGENTS</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">San Francisco, CA • alex@berkeley.edu • LangGraph</div>
+            </div>
+          )}
+
+          {templateId === 'stripe-developer' && (
+            <div className="text-left pb-1 border-b-2 border-[#635bff] font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-mono font-bold text-[#635bff]">PAYMENTS / 99.999%</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">San Francisco, CA • alex@berkeley.edu • API Design</div>
+            </div>
+          )}
         </div>
 
         {/* 2. Document Sections (Whole Resume Layout) */}
