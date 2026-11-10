@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Check, Target } from 'lucide-react';
 import { MasterProfile } from '@/types';
 
@@ -20,6 +20,12 @@ export const XYZFormulaModal: React.FC<XYZFormulaModalProps> = ({
   const [accomplishedX, setAccomplishedX] = useState(
     initialBullet ? initialBullet.replace(/^[A-Z][a-z]+ed\s+/i, '').replace(/\.$/, '') : 'an asynchronous telemetry ingestion microservice'
   );
+
+  useEffect(() => {
+    if (initialBullet) {
+      setAccomplishedX(initialBullet.replace(/^[A-Z][a-z]+ed\s+/i, '').replace(/\.$/, ''));
+    }
+  }, [initialBullet]);
   const [measuredY, setMeasuredY] = useState('reducing processing latency by 32% across 10,000 req/sec');
   const [byDoingZ, setByDoingZ] = useState(
     `utilizing ${masterProfile?.skills?.languages?.[0] || 'Go'} concurrency patterns and PostgreSQL indexing`

@@ -122,9 +122,9 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
       } else {
         if (isMounted) {
-          setResumes([]);
+          setResumes(StorageService.getResumes());
           setMasterProfile(StorageService.getMasterProfile());
-          setApplications([]);
+          setApplications(StorageService.getApplications());
         }
       }
     };

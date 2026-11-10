@@ -21,7 +21,12 @@ export type TemplateId =
   | 'creative' 
   | 'elegant' 
   | 'technical'
-  | 'classic-resume';
+  | 'classic-resume'
+  | 'jakes-resume'
+  | 'google-swe'
+  | 'harvard-classic'
+  | 'wall-street'
+  | 'mckinsey-consulting';
 
 export interface DeclarationInfo {
   text: string;
@@ -39,6 +44,7 @@ export interface ResumeMeta {
   lastModified: string;
   version: string; // e.g. "1.0", "1.1"
   template: TemplateId;
+  accentColor?: string;
   companyTemplateId?: string;
   targetCompany?: string;
   targetRole?: string;

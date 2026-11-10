@@ -141,7 +141,7 @@
 
 1. **Master Career Profile:** Centralized career archive; cherry-pick items to build targeted resumes; JSON backup/restore.
 2. **Resume Editor:** Real-time side-by-side editing; drag/button reordering; eye toggle for section visibility; 1-page autofit with confetti.
-3. **Template Engine:** 11 vetted ATS single-column templates (`Classic`, `Modern`, `Compact`, `Academic`, `Hackathon`, `Technical`, `Executive`, `Creative`, `Elegant`, `Minimal`, `ClassicResume`).
+3. **Template Engine:** 15 vetted ATS single-column templates (`Classic`, `Modern`, `Compact`, `Academic`, `Hackathon`, `Technical`, `Executive`, `Creative`, `Elegant`, `Minimal`, `ClassicResume`, and 5 high-value standards: `Jake's LaTeX Resume`, `Google SWE ATS`, `Harvard Classic`, `Wall Street IB/PE`, `McKinsey Strategy`).
 4. **Company-Wise Template Library:** Directory of verified employer formats with role and level filters (`/templates`).
 5. **Real-time ATS & Quality Verification:** 0–100 score; AST `#01..#0N` reading order check; terminal-style raw text stream; recruiter 6-second scan heatmap simulator.
 6. **Honest AI Writing Tools:** Action verb bullet improver; Google XYZ formula builder; job description match analyzer; BYOK custom LLM key modal.
@@ -153,6 +153,8 @@
 12. **Job Opportunity Radar & Fit Scorer (`/job-match`):** Qualification gates (Eligibility + Language) and 5-dimensional weighted fit evaluation with actionable gap reports.
 13. **Salary Intelligence & Benchmark Calculator (`/salary-intel`):** Market percentiles (P25, Median, P75, P90), total compensation calculator, and stage-by-stage negotiation scripts.
 14. **Skill Gap & Upskilling Roadmap (`/upskilling`):** Market demand gap detection, 4-week sprint execution milestones, proof-of-work project blueprints, and curated learning guides.
+15. **Live AI Resume Designer Agent (`/editor/:id`):** Natural language live styling and layout agent. Uses hybrid deterministic client-side intent routing for instantaneous execution (<2ms) and 0 API quota consumption, with floating interactive dock and in-memory undo/redo history.
+16. **Global UI Development & Review Ecosystem:** Google Elephant-Goldfish Model (EGM) integrated across all projects, accompanied by `taste-skill`, `awesome-design-md` (70+ design systems), `image-to-code`, `web-design-guidelines`, and `playwright-cli`.
 
 ---
 
@@ -201,6 +203,12 @@
 
 ### Recent Changes
 - **November 2026:**
+  - **White Page Elimination & Global Error Boundary Hardening:**
+    - Integrated top-level and route-level `ErrorBoundary` in `src/App.tsx` and `src/components/common/ErrorBoundary.tsx` to trap unhandled render exceptions, display informative error banners, and provide recovery actions ("Reload Page", "Go to Dashboard") instead of a blank white screen.
+    - Resolved fatal regex syntax crash in `jobFitEngine.ts` and `aiTailoringService.ts` when handling `C++`, `C#`, or `.NET` skills with `safeSkillMatch`.
+    - Eliminated destructive guest mode state wipe on reload in `WorkspaceContext.tsx`, preserving local drafts, resumes, and applications.
+    - Added safe profile URL guards in `ResumePDF.tsx` preventing null pointer exceptions during vector PDF rendering.
+    - Registered 5 new industry-standard templates (Google SWE, Harvard Classic, Jake's Resume, Wall Street, McKinsey) and interactive landing page showcases.
   - **Whole Resume Structure Inspection & Fit-Page Presets:**
     - De-cropped `TemplateThumbnail.tsx` from `max-h-56` down to natural `aspect-[8.5/11]` Letter proportions, rendering all 7 document sections (Header, Objective, Education, Experience, Projects, Skills, Declaration/Certifications) so users can examine the exact layout skeleton at a glance.
     - Updated `TemplateFullPreviewModal.tsx` with dynamic auto-fit calculation (`calculateFitPageScale`), "Fit Whole Page" (55%), "Fit Width", "100%", structure roadmap sub-banner, and live toggle between candidate draft data and complete sample structure.

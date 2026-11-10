@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { TemplateGalleryModal } from '../components/resume/TemplateGalleryModal';
 import { ResumePhotoUploadModal } from '../components/profile/ResumePhotoUploadModal';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { CompanyTemplatesShowcase } from '../components/landing/CompanyTemplatesShowcase';
+import { AIDesignerShowcase } from '../components/landing/AIDesignerShowcase';
 import { TemplateId } from '../types';
 
 export const LandingPage: React.FC = () => {
@@ -225,7 +227,7 @@ export const LandingPage: React.FC = () => {
                 Product Showcase
               </button>
               <Link
-                to={user ? "/resumes" : "/login?mode=signup"}
+                to={user ? "/resumes" : "/login?mode=signup&template=${templateId}"}
                 className="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-label-md text-label-md"
               >
                 Resume Studio
@@ -234,7 +236,7 @@ export const LandingPage: React.FC = () => {
                 onClick={() => setTemplateGalleryOpen(true)}
                 className="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all font-label-md text-label-md cursor-pointer"
               >
-                10 ATS Templates
+                15 ATS Templates
               </button>
               <button
                 onClick={scrollToScanner}
@@ -1027,6 +1029,16 @@ export const LandingPage: React.FC = () => {
         </section>
 
         {/* =========================================================================
+            4B. HIGH-VALUE COMPANY & INDUSTRY RESUME STANDARDS SHOWCASE
+        ========================================================================= */}
+        <CompanyTemplatesShowcase onOpenGallery={() => setTemplateGalleryOpen(true)} />
+
+        {/* =========================================================================
+            4C. LIVE AI RESUME DESIGNER SHOWCASE
+        ========================================================================= */}
+        <AIDesignerShowcase />
+
+        {/* =========================================================================
             5. INTERACTIVE RECRUITER & CANDIDATE ENDORSEMENT SECTION
         ========================================================================= */}
         <section className="w-full py-20 px-4 sm:px-6 lg:px-8 bg-surface-container-low/50">
@@ -1219,7 +1231,7 @@ export const LandingPage: React.FC = () => {
                   className="inline-flex items-center gap-2 px-6 py-4 rounded-xl bg-surface-container-highest text-on-surface font-label-md text-label-md hover:bg-surface-bright transition-colors cursor-pointer border border-outline-variant/30"
                 >
                   <span className="material-symbols-outlined">style</span>
-                  <span>Browse 10 ATS Templates</span>
+                  <span>Browse 15 ATS Templates</span>
                 </button>
               </div>
             </div>
@@ -1281,8 +1293,8 @@ export const LandingPage: React.FC = () => {
           setTemplateGalleryOpen(false);
           if (user) {
             const newResume = createResume(
-              `${masterProfile.personalInfo.fullName || 'Professional'} Resume`,
-              masterProfile.personalInfo.label || 'Software Engineer',
+              `${masterProfile?.personalInfo?.fullName || 'Professional'} Resume`,
+              masterProfile?.personalInfo?.label || 'Software Engineer',
               '',
               templateId
             );

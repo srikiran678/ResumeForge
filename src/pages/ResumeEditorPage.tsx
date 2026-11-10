@@ -13,7 +13,7 @@ import {
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { ResumeDocument, downloadResumePDF, getAllTemplates } from '@/modules/templates';
-import { SectionManager, ResumeFormManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal } from '@/modules/editor';
+import { SectionManager, ResumeFormManager, BulletImproverModal, VersionHistoryModal, XYZFormulaModal, AIDesignerDock } from '@/modules/editor';
 import { ATSAnalyzer, ATSInspectorOverlay, RecruiterScanSimulator } from '@/modules/ats';
 import { AIService } from '../workspace';
 import { StorageService } from '@/modules/database';
@@ -36,7 +36,8 @@ export const ResumeEditorPage: React.FC = () => {
     saveStatus,
     versions,
     createVersionSnapshot,
-    restoreVersion
+    restoreVersion,
+    masterProfile
   } = useWorkspace();
   const { showToast } = useToast();
 
@@ -180,7 +181,7 @@ export const ResumeEditorPage: React.FC = () => {
       const result = await AIService.improveBullet(
         bullet,
         { section, title },
-        null as any
+        masterProfile || StorageService.getMasterProfile()
       );
       setAiSuggestions(result.suggestions);
     } catch (err: any) {
@@ -670,6 +671,9 @@ export const ResumeEditorPage: React.FC = () => {
         }}
         onClose={() => setTemplateGalleryOpen(false)}
       />
+
+      {/* Live AI Resume Designer Assistant */}
+      <AIDesignerDock />
 
       {/* Whole Resume Full Inspection Modal */}
       <TemplateFullPreviewModal

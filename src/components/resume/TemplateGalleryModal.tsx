@@ -42,11 +42,11 @@ export const TemplateGalleryModal: React.FC<TemplateGalleryModalProps> = ({
 
   const filteredTemplates = allTemplates.filter((t) => {
     if (filter === 'all') return true;
-    if (filter === 'placement') return ['classic-resume', 'classic', 'compact', 'academic'].includes(t.id);
-    if (filter === 'tech') return ['modern', 'compact', 'minimal', 'technical', 'hackathon', 'classic-resume'].includes(t.id);
-    if (filter === 'academic') return ['academic', 'classic-resume', 'classic', 'compact'].includes(t.id);
-    if (filter === 'finance') return ['classic', 'elegant', 'executive', 'classic-resume'].includes(t.id);
-    if (filter === 'leadership') return ['executive', 'modern', 'classic'].includes(t.id);
+    if (filter === 'placement') return ['classic-resume', 'classic', 'compact', 'academic', 'harvard-classic', 'jakes-resume'].includes(t.id);
+    if (filter === 'tech') return ['jakes-resume', 'google-swe', 'modern', 'compact', 'minimal', 'technical', 'hackathon', 'classic-resume'].includes(t.id);
+    if (filter === 'academic') return ['academic', 'harvard-classic', 'classic-resume', 'classic', 'compact'].includes(t.id);
+    if (filter === 'finance') return ['wall-street', 'mckinsey-consulting', 'classic', 'elegant', 'executive', 'classic-resume'].includes(t.id);
+    if (filter === 'leadership') return ['mckinsey-consulting', 'executive', 'modern', 'classic'].includes(t.id);
     return true;
   });
 

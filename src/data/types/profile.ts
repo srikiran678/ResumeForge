@@ -28,6 +28,8 @@ export interface EducationItem {
   board?: string; // University / Board
   year?: string; // e.g. "2020 - 2024" or "2024"
   percentage?: string; // CGPA or Percentage e.g. "8.5 CGPA" or "85%"
+  honors?: string[];
+  testScores?: string;
 }
 
 export interface ExperienceItem {

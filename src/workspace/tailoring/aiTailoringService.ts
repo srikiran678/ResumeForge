@@ -218,9 +218,14 @@ function generateHonestBulletSuggestions(
     ...(masterProfile?.skills?.tools || []),
   ];
 
-  const matchedTechInBullet = knownTech.filter((t) =>
-    new RegExp(`\\b${t}\\b`, 'i').test(original)
-  );
+  const safeMatch = (target: string, term: string) => {
+    const escaped = term.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const start = /^\w/.test(term) ? "\\b" : "";
+    const end = /\w$/.test(term) ? "\\b" : "(?![a-zA-Z0-9_])";
+    try { return new RegExp(`${start}${escaped}${end}`, "i").test(target); }
+    catch { return target.toLowerCase().includes(term.toLowerCase()); }
+  };
+  const matchedTechInBullet = knownTech.filter((t) => safeMatch(original, t));
 
   // Suggestion 1: Strong Action Verb Restructure (Rephrased)
   let strongVerb = 'Engineered';
@@ -300,9 +305,17 @@ function performDeterministicJobAnalysis(
 
   const foundJdKeywords: string[] = [];
   KNOWN_TECH_KEYWORDS.forEach((kw) => {
-    const regex = new RegExp(`\\b${kw.replace('+', '\\+').replace('.', '\\.')}\\b`, 'i');
-    if (regex.test(jd)) {
-      foundJdKeywords.push(kw);
+    const kwEscaped = kw.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const kwStart = /^\w/.test(kw) ? "\\b" : "";
+    const kwEnd = /\w$/.test(kw) ? "\\b" : "(?![a-zA-Z0-9_])";
+    try {
+      if (new RegExp(`${kwStart}${kwEscaped}${kwEnd}`, "i").test(jd)) {
+        foundJdKeywords.push(kw);
+      }
+    } catch {
+      if (jd.toLowerCase().includes(kw.toLowerCase())) {
+        foundJdKeywords.push(kw);
+      }
     }
   });
 

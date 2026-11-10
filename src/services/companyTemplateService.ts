@@ -33,13 +33,89 @@ export const FALLBACK_ROLES: JobRole[] = [
 
 export const FALLBACK_TEMPLATES: CompanyTemplate[] = [
   {
+    id: 'tmpl-jakes-resume-latex',
+    name: "Jake's LaTeX Resume (r/EngineeringResumes)",
+    description: "The gold standard for software engineering. Hyper-dense single column, crisp horizontal rules, baseline date alignment, and guaranteed 100% ATS score.",
+    layout_style: 'single-column',
+    experience_level: 'Entry-Level & Experienced',
+    publication_status: 'published',
+    template_data: { baseTemplate: 'jakes-resume', badge: 'Gold Standard', recommendedFont: 'Times New Roman', accentColor: '#000000', highlights: ['1-Page Max Density', 'Baseline aligned dates', 'LaTeX typography', '100% ATS parse rate'] },
+    companies: [{ id: '11111111-1111-4111-8111-111111111113', name: 'Open Source Community', slug: 'open-source' }],
+    roles: [{ id: '22222222-2222-4222-8222-222222222202', title: 'Software Engineer', category: 'Software Engineering', experience_level: 'All Levels' }],
+    source: {
+      source_url: 'https://github.com/jakeryang/resume',
+      license_name: 'MIT License',
+      license_url: 'https://opensource.org/licenses/MIT',
+      attribution: 'Jake Ryan (MIT)',
+      file_hash: 'sha256-jakes-latex-resume',
+      verification_status: 'verified'
+    }
+  },
+  {
+    id: 'tmpl-goldman-sachs-ib',
+    name: 'Goldman Sachs & Bulge Bracket IB',
+    description: 'Strict investment banking format with 0.5" tight margins, transaction metrics ($M/B), DCF/LBO models, SAT/GPA metrics, and zero fluff.',
+    layout_style: 'single-column',
+    experience_level: 'All Levels',
+    publication_status: 'published',
+    template_data: { baseTemplate: 'wall-street', badge: 'Wall Street', recommendedFont: 'Times New Roman', accentColor: '#000000', highlights: ['Deal/transaction metrics', 'EBITDA valuation impact', 'Financial modeling (DCF/LBO)', 'Education & GPA prominence'] },
+    companies: [{ id: '11111111-1111-4111-8111-111111111111', name: 'Goldman Sachs', slug: 'goldman-sachs' }],
+    roles: [{ id: '22222222-2222-4222-8222-222222222206', title: 'Investment Banking Analyst', category: 'Finance & Banking', experience_level: 'All Levels' }],
+    source: {
+      source_url: 'https://www.wallstreetoasis.com/resources/templates/word-templates/investment-banking-resume-template',
+      license_name: 'Public Domain / Free Standard',
+      license_url: 'https://opensource.org/licenses/MIT',
+      attribution: 'Wall Street Oasis Investment Banking Standard',
+      file_hash: 'sha256-goldman-wso-ib',
+      verification_status: 'verified'
+    }
+  },
+  {
+    id: 'tmpl-harvard-mignone-classic',
+    name: 'Harvard Academic & Corporate Strategy',
+    description: 'Based on official Harvard Mignone Center standards. Formal centered header, distinguished serif typography, and academic honors emphasis.',
+    layout_style: 'single-column',
+    experience_level: 'All Levels',
+    publication_status: 'published',
+    template_data: { baseTemplate: 'harvard-classic', badge: 'Ivy League', recommendedFont: 'Georgia', accentColor: '#a51c30', highlights: ['Harvard Career Center standard', 'Academic standing & honors', 'Distinguished serif rules', 'Consulting & enterprise safe'] },
+    companies: [{ id: '11111111-1111-4111-8111-111111111101', name: 'Google', slug: 'google' }],
+    roles: [{ id: '22222222-2222-4222-8222-222222222202', title: 'Software Engineer', category: 'Software Engineering', experience_level: 'All Levels' }],
+    source: {
+      source_url: 'https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/',
+      license_name: 'Public Standard',
+      license_url: 'https://opensource.org/licenses/MIT',
+      attribution: 'Harvard University Mignone Center',
+      file_hash: 'sha256-harvard-mignone',
+      verification_status: 'verified'
+    }
+  },
+  {
+    id: 'tmpl-mckinsey-consulting-mbb',
+    name: 'McKinsey & Co. Strategy Consulting',
+    description: 'Executive management consulting layout emphasizing structured problem solving, team leadership, organizational scale, and quantifiable client impact.',
+    layout_style: 'single-column',
+    experience_level: 'Mid-Level & Senior',
+    publication_status: 'published',
+    template_data: { baseTemplate: 'mckinsey-consulting', badge: 'MBB Strategy', recommendedFont: 'Inter', accentColor: '#0f172a', highlights: ['Structured problem-solving', 'Executive communication', 'Client revenue & efficiency metrics', 'Cross-functional leadership'] },
+    companies: [{ id: '11111111-1111-4111-8111-111111111112', name: 'McKinsey & Company', slug: 'mckinsey' }],
+    roles: [{ id: '22222222-2222-4222-8222-222222222207', title: 'Management Consultant', category: 'Strategy & Operations', experience_level: 'All Levels' }],
+    source: {
+      source_url: 'https://www.mckinsey.com/careers/interviewing',
+      license_name: 'Public Standard',
+      license_url: 'https://opensource.org/licenses/MIT',
+      attribution: 'Top-Tier Management Consulting Standard',
+      file_hash: 'sha256-mckinsey-strategy',
+      verification_status: 'verified'
+    }
+  },
+  {
     id: 'tmpl-google-swe-clean',
     name: 'Google SWE ATS Minimalist',
     description: 'High-signal, single-column engineering layout emphasizing technical depth, algorithms, quantifiable metrics, and open-source contributions.',
     layout_style: 'single-column',
     experience_level: 'Entry-Level & Experienced',
     publication_status: 'published',
-    template_data: { baseTemplate: 'classic', badge: 'High Signal', recommendedFont: 'Calibri', accentColor: '#1a73e8', highlights: ['Quantifiable impact', 'Algorithms & Data Structures', 'Production systems'] },
+    template_data: { baseTemplate: 'google-swe', badge: 'Google XYZ', recommendedFont: 'Calibri', accentColor: '#1a73e8', highlights: ['Quantifiable impact', 'Algorithms & Data Structures', 'Production systems'] },
     companies: [FALLBACK_COMPANIES[0]],
     roles: [FALLBACK_ROLES[1]],
     source: {

@@ -37,7 +37,7 @@ export const AIChatWidget: React.FC = () => {
     {
       id: 'welcome',
       sender: 'ai',
-      text: `Hello ${masterProfile.personalInfo.fullName.split(' ')[0] || 'there'}! 👋 I am your **ResumeForge Career Assistant**.\n\nI can help you:\n• Improve your project & experience bullet points with strong action verbs.\n• Explain ATS parsing rules and check formatting issues.\n• Prepare for technical interviews and resume reviews.\n\nAsk me anything or select a topic below!`,
+      text: `Hello ${(masterProfile?.personalInfo?.fullName || 'there').split(' ')[0] || 'there'}! 👋 I am your **ResumeForge Career Assistant**.\n\nI can help you:\n• Improve your project & experience bullet points with strong action verbs.\n• Explain ATS parsing rules and check formatting issues.\n• Prepare for technical interviews and resume reviews.\n\nAsk me anything or select a topic below!`,
       timestamp: getTimestamp(),
     },
   ]);
@@ -73,9 +73,9 @@ export const AIChatWidget: React.FC = () => {
     } else if (q.includes('experience') || q.includes('student') || q.includes('fresher') || q.includes('lack')) {
       reply = `As a student or fresher, **you do not need 5 years of commercial experience** to get interviews. Recruiters look for **evidence of capability**:\n\n1. **Lead with Technical Projects:** Frame them with full-stack architecture, deployment URLs, and GitHub links.\n2. **Highlight Hackathons:** Demonstrates rapid problem solving under deadline pressure.\n3. **Include Advanced Coursework:** Algorithms, Operating Systems, Database Systems.\n4. **Mention Open Source & Mentoring:** Peer tutoring or open PRs prove collaboration skills.`;
     } else if (q.includes('skills') || q.includes('backend') || q.includes('interview')) {
-      reply = `Based on your profile, your verified technical stack includes:\n• **Languages:** ${masterProfile.skills.languages.slice(0, 4).join(', ') || 'Add languages to your resume'}\n• **Databases:** ${masterProfile.skills.databases.join(', ') || 'Add databases to your resume'}\n• **Cloud & Tools:** ${masterProfile.skills.cloud.join(', ') || 'Add tools to your resume'}\n\n**Next Step for Applications:** Emphasize measurable technical achievements in your top experience bullets to stand out to hiring managers.`;
+      reply = `Based on your profile, your verified technical stack includes:\n• **Languages:** ${masterProfile?.skills?.languages?.slice(0, 4).join(', ') || 'Add languages to your resume'}\n• **Databases:** ${masterProfile?.skills?.databases?.join(', ') || 'Add databases to your resume'}\n• **Cloud & Tools:** ${masterProfile?.skills?.cloud?.join(', ') || 'Add tools to your resume'}\n\n**Next Step for Applications:** Emphasize measurable technical achievements in your top experience bullets to stand out to hiring managers.`;
     } else {
-      reply = `Thank you for asking! I'm evaluating your question against your verified career profile (${masterProfile.personalInfo.fullName || 'Candidate'}, ${masterProfile.projects.length} projects, ${masterProfile.education[0]?.degree || 'degree'}).\n\nTo tailor your application truthfully, always ensure every bullet maps back to verifiable skills. You can also paste any job description into **AI Tools** (/ai) to check match scores and skill gaps.`;
+      reply = `Thank you for asking! I'm evaluating your question against your verified career profile (${masterProfile?.personalInfo?.fullName || 'Candidate'}, ${masterProfile?.projects?.length || 0} projects, ${masterProfile?.education?.[0]?.degree || 'degree'}).\n\nTo tailor your application truthfully, always ensure every bullet maps back to verifiable skills. You can also paste any job description into **AI Tools** (/ai) to check match scores and skill gaps.`;
     }
 
     const aiMsg: Message = {

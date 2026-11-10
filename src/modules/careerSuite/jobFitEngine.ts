@@ -109,14 +109,28 @@ export function checkLanguageGate(jd: string): GateEvaluation {
 }
 
 /**
+ * Safe regex matching for skills containing symbols like C++, C#, .NET
+ */
+function safeSkillMatch(text: string, skill: string): boolean {
+  const lowerText = text.toLowerCase();
+  const lowerSkill = skill.toLowerCase();
+  const escaped = lowerSkill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const boundaryStart = /^\w/.test(lowerSkill) ? '\\b' : '';
+  const boundaryEnd = /\w$/.test(lowerSkill) ? '\\b' : '(?![a-zA-Z0-9_])';
+
+  try {
+    const regex = new RegExp(`${boundaryStart}${escaped}${boundaryEnd}`, 'i');
+    return regex.test(lowerText);
+  } catch {
+    return lowerText.includes(lowerSkill);
+  }
+}
+
+/**
  * Extracts recognized technical skills from candidate data and job description.
  */
 function extractSkillTokens(text: string): string[] {
-  const lower = text.toLowerCase();
-  return COMMON_TECH_SKILLS.filter(skill => {
-    const regex = new RegExp(`\\b${skill.replace('.', '\\.')}\\b`, 'i');
-    return regex.test(lower);
-  });
+  return COMMON_TECH_SKILLS.filter(skill => safeSkillMatch(text, skill));
 }
 
 /**

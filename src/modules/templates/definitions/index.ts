@@ -9,3 +9,8 @@ export * from './CreativeTemplate';
 export * from './ElegantTemplate';
 export * from './MinimalTemplate';
 export * from './ClassicResumeTemplate';
+export * from './JakesResumeTemplate';
+export * from './GoogleSWETemplate';
+export * from './HarvardClassicTemplate';
+export * from './WallStreetTemplate';
+export * from './McKinseyTemplate';

@@ -91,14 +91,11 @@ export const JobSearchExplorerPage: React.FC = () => {
 
   const handleTrackApplication = (job: JobListing, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (!user) {
-      showToast('Please log in to track applications', 'info');
-      return;
-    }
+    const userId = user?.id || 'usr_guest';
 
     const newApp = JobSearchEngine.createApplicationFromJob(
       job,
-      user.id,
+      userId,
       currentResume?.id || resumes[0]?.id || '',
       'Interested'
     );

@@ -1,5 +1,5 @@
 import { createClient } from '@insforge/sdk';
-import { ResumeLibraryAgent } from '../src/services/resumeLibraryAgent';
+import { ResumeLibraryAgent } from '../../src/services/resumeLibraryAgent';
 
 const insforgeUrl = process.env.VITE_INSFORGE_URL || process.env.INSFORGE_URL || '';
 const insforgeKey = process.env.INSFORGE_SERVICE_KEY || process.env.VITE_INSFORGE_KEY || '';

@@ -159,6 +159,59 @@ export const TemplateThumbnail: React.FC<TemplateThumbnailProps> = ({
               <div className="text-[0.65em] text-slate-600">alex@berkeley.edu • +1 555-019-2834 • San Francisco, CA</div>
             </div>
           )}
+
+          {templateId === 'jakes-resume' && (
+            <div className="text-center pb-1 border-b border-black font-serif">
+              <div className="font-bold text-[1.15em] tracking-tight uppercase text-black">
+                ALEX CHEN
+              </div>
+              <div className="text-[0.62em] text-neutral-800">
+                alex@berkeley.edu | +1 555-019-2834 | github.com/alexchen | San Francisco, CA
+              </div>
+            </div>
+          )}
+
+          {templateId === 'google-swe' && (
+            <div className="text-left pb-1 border-b-2 border-blue-600 font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-bold text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-mono text-blue-700">Google SWE ATS</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600 font-mono">alex@berkeley.edu • github.com/alexchen • Systems & Cloud</div>
+            </div>
+          )}
+
+          {templateId === 'harvard-classic' && (
+            <div className="text-center pb-1 border-b border-neutral-900 font-serif">
+              <div className="font-bold text-[1.15em] tracking-wider uppercase text-neutral-950">
+                ALEX CHEN
+              </div>
+              <div className="text-[0.62em] text-neutral-700 italic">
+                Cambridge, MA • alex@harvard.edu • (555) 019-2834
+              </div>
+            </div>
+          )}
+
+          {templateId === 'wall-street' && (
+            <div className="text-center pb-1 border-b-2 border-black font-serif">
+              <div className="font-bold text-[1.1em] tracking-wider uppercase text-black">
+                ALEX CHEN
+              </div>
+              <div className="text-[0.6em] text-black">
+                New York, NY | +1 555-019-2834 | alex@berkeley.edu | linkedin.com/in/alexchen
+              </div>
+            </div>
+          )}
+
+          {templateId === 'mckinsey-consulting' && (
+            <div className="text-left pb-1 border-b-2 border-slate-900 font-sans">
+              <div className="flex justify-between items-baseline">
+                <span className="font-black text-[1.2em] text-slate-950">Alex Chen</span>
+                <span className="text-[0.6em] font-bold text-slate-700 uppercase tracking-widest">Strategy</span>
+              </div>
+              <div className="text-[0.65em] text-slate-600">San Francisco, CA • alex@berkeley.edu • Product &amp; Strategy</div>
+            </div>
+          )}
         </div>
 
         {/* 2. Document Sections (Whole Resume Layout) */}

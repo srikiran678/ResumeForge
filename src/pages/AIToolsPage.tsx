@@ -75,16 +75,20 @@ export const AIToolsPage: React.FC = () => {
     } else if (secLower.includes('experience') || secLower.includes('work')) {
       if (updatedResume.work && updatedResume.work.length > 0) {
         for (const w of updatedResume.work) {
-          if (w.highlights && Array.isArray(w.highlights)) {
-            const hIdx = w.highlights.findIndex((h: string) => h.includes(sug.before) || sug.before.includes(h));
+          const list = w.highlights || w.responsibilities;
+          if (list && Array.isArray(list)) {
+            const hIdx = list.findIndex((h: string) => h.includes(sug.before) || sug.before.includes(h));
             if (hIdx !== -1) {
-              w.highlights[hIdx] = sug.after;
+              list[hIdx] = sug.after;
+              if (w.highlights) w.highlights = list;
+              if (w.responsibilities) w.responsibilities = list;
               modified = true;
               break;
             }
           }
         }
-        if (!modified && updatedResume.work[0].highlights) {
+        if (!modified && updatedResume.work[0]) {
+          if (!updatedResume.work[0].highlights) updatedResume.work[0].highlights = [];
           updatedResume.work[0].highlights.unshift(sug.after);
           modified = true;
         }

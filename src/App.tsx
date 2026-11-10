@@ -10,6 +10,7 @@ import { CommandPalette } from './components/common/CommandPalette';
 import { ToastProvider } from './components/common/Toast';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { PageLoadingSkeleton } from './components/common/PageLoadingSkeleton';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Code-Split Lazy Loaded Page Routes for High-Performance Delivery
 const LoginPage = React.lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
@@ -55,8 +56,9 @@ const AppContent: React.FC = () => {
     <div className="min-h-dvh flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-150">
       {showHeader && <Navbar />}
       <main className="flex-1">
-        <Suspense fallback={<PageLoadingSkeleton />}>
-          <Routes>
+        <ErrorBoundary fallbackTitle="Page View Error">
+          <Suspense fallback={<PageLoadingSkeleton />}>
+            <Routes>
             {/* Landing Page: High-impact 3D Showcase with interactive ATS demo and account creation */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/landing" element={<LandingPage />} />
@@ -104,26 +106,29 @@ const AppContent: React.FC = () => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
-      </main>
-      {user && <CommandPalette />}
-      {!hideFloatingWidget && <AIChatWidget />}
-      {showFooter && <Footer />}
-    </div>
+      </ErrorBoundary>
+    </main>
+    {user && <CommandPalette />}
+    {!hideFloatingWidget && <AIChatWidget />}
+    {showFooter && <Footer />}
+  </div>
   );
 };
 
 export const App: React.FC = () => {
   return (
     <Router>
-      <ThemeProvider>
-        <AuthProvider>
-          <WorkspaceProvider>
-            <ToastProvider>
-              <AppContent />
-            </ToastProvider>
-          </WorkspaceProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <ErrorBoundary fallbackTitle="Application Initialization Error">
+        <ThemeProvider>
+          <AuthProvider>
+            <WorkspaceProvider>
+              <ToastProvider>
+                <AppContent />
+              </ToastProvider>
+            </WorkspaceProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
     </Router>
   );
 };

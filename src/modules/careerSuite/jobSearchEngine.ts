@@ -261,7 +261,7 @@ export const JobSearchEngine = {
     if (candidateHeadline) {
       const hLower = candidateHeadline.toLowerCase();
       const tLower = job.title.toLowerCase();
-      if (hLower.includes('software') || hLower.includes('engineer') || hLower.includes('frontend') || hLower.includes('full-stack') || hLower.includes('developer')) {
+      if (hLower.includes('software') || hLower.includes('engineer') || hLower.includes('frontend') || hLower.includes('full-stack') || hLower.includes('developer') || tLower.includes(hLower)) {
         titleBonus = 5;
       }
     }
