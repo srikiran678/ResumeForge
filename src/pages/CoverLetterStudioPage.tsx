@@ -12,7 +12,7 @@ import {
   Download,
   Settings2
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { 
@@ -21,10 +21,13 @@ import {
   generateTailoredCoverLetter, 
   formatCoverLetterAsMarkdown 
 } from '../modules/careerSuite';
+import { requestCareerAI } from '../modules/careerSuite/careerAiService';
 
 export const CoverLetterStudioPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
   const { showToast } = useToast();
+  const location = useLocation();
+  const jobContext = location.state as { company?: string; role?: string; jobDescription?: string } | null;
 
   const [savedLetters, setSavedLetters] = useState<CoverLetterData[]>([]);
   const [selectedResumeId, setSelectedResumeId] = useState<string>('');
@@ -32,14 +35,14 @@ export const CoverLetterStudioPage: React.FC = () => {
   // Active Cover Letter State
   const [activeLetter, setActiveLetter] = useState<CoverLetterData>(() => {
     return generateTailoredCoverLetter({
-      candidateName: masterProfile?.personalInfo?.fullName || 'Alex Morgan',
-      candidateEmail: masterProfile?.personalInfo?.email || 'alex.morgan@example.com',
-      candidatePhone: masterProfile?.personalInfo?.phone || '+1 (555) 019-2834',
-      candidateLocation: masterProfile?.personalInfo?.location || 'San Francisco, CA',
-      candidateLinkedIn: masterProfile?.personalInfo?.linkedIn || 'linkedin.com/in/alexmorgan',
-      role: 'Senior Full-Stack Engineer',
-      company: 'Stripe',
-      jobDescription: '',
+      candidateName: masterProfile?.personalInfo?.fullName || '',
+      candidateEmail: masterProfile?.personalInfo?.email || '',
+      candidatePhone: masterProfile?.personalInfo?.phone || '',
+      candidateLocation: masterProfile?.personalInfo?.location || '',
+      candidateLinkedIn: masterProfile?.personalInfo?.linkedIn || '',
+      role: jobContext?.role || '',
+      company: jobContext?.company || '',
+      jobDescription: jobContext?.jobDescription || '',
       masterProfile: masterProfile || undefined
     });
   });
@@ -49,10 +52,12 @@ export const CoverLetterStudioPage: React.FC = () => {
   useEffect(() => {
     const letters = CareerStorageService.getCoverLetters();
     setSavedLetters(letters);
-    if (letters.length > 0) {
+    if (jobContext) {
+      setActiveLetter((current) => ({ ...current, role: jobContext.role || current.role, company: jobContext.company || current.company, jobDescription: jobContext.jobDescription || current.jobDescription }));
+    } else if (letters.length > 0) {
       setActiveLetter(letters[0]);
     }
-  }, []);
+  }, [location.state]);
 
   const handleSelectResume = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rId = e.target.value;
@@ -72,34 +77,57 @@ export const CoverLetterStudioPage: React.FC = () => {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!activeLetter.role.trim() || !activeLetter.company.trim()) {
       showToast('Please specify both a target role and company name before generating.', 'error');
       return;
     }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
-    const candidateName = selectedResume?.basics?.name || masterProfile?.personalInfo?.fullName || 'Candidate Name';
-    const candidateEmail = selectedResume?.basics?.email || masterProfile?.personalInfo?.email || 'candidate@example.com';
+    const candidateName = selectedResume?.basics?.name || masterProfile?.personalInfo?.fullName || '';
+    const candidateEmail = selectedResume?.basics?.email || masterProfile?.personalInfo?.email || '';
     const candidatePhone = selectedResume?.basics?.phone || masterProfile?.personalInfo?.phone;
     const candidateLocation = selectedResume?.basics?.location || masterProfile?.personalInfo?.location;
     const candidateLinkedIn = selectedResume?.basics?.profiles?.find(p => p.network.toLowerCase().includes('linkedin'))?.url || masterProfile?.personalInfo?.linkedIn;
 
     const newLetter = generateTailoredCoverLetter({
-      candidateName,
-      candidateEmail,
-      candidatePhone,
-      candidateLocation,
-      candidateLinkedIn,
-      role: activeLetter.role,
-      company: activeLetter.company,
-      jobDescription: activeLetter.jobDescription,
-      resumeData: selectedResume,
-      masterProfile: masterProfile || undefined,
-      recipientName: activeLetter.recipientName
+      candidateName, candidateEmail, candidatePhone, candidateLocation, candidateLinkedIn,
+      role: activeLetter.role, company: activeLetter.company,
+      jobDescription: activeLetter.jobDescription, resumeData: selectedResume,
+      masterProfile: masterProfile || undefined, recipientName: activeLetter.recipientName
     });
 
+    try {
+      const aiDraft = await requestCareerAI('GENERATE_COVER_LETTER', {
+        instruction: 'Return JSON with openingParagraph, bodyParagraph, achievementBullets, companyConnectionParagraph, closingParagraph. Use only the supplied candidate facts. Do not invent employers, qualifications, projects, metrics, experience, or company research. achievementBullets must be copied exactly from verifiedAchievements. If evidence is absent, return an empty array.',
+        role: activeLetter.role,
+        company: activeLetter.company,
+        jobDescription: activeLetter.jobDescription,
+        candidate: { skills: masterProfile?.skills || selectedResume?.skills || {} },
+        verifiedAchievements: newLetter.achievementBullets
+      });
+      if (aiDraft) {
+        const allowedBullets = newLetter.achievementBullets;
+        const generatedBullets = Array.isArray(aiDraft.achievementBullets)
+          ? aiDraft.achievementBullets.filter((item): item is string => typeof item === 'string' && allowedBullets.includes(item))
+          : allowedBullets;
+        const aiLetter = {
+          ...newLetter,
+          openingParagraph: typeof aiDraft.openingParagraph === 'string' ? aiDraft.openingParagraph : newLetter.openingParagraph,
+          bodyParagraph: typeof aiDraft.bodyParagraph === 'string' ? aiDraft.bodyParagraph : newLetter.bodyParagraph,
+          achievementBullets: generatedBullets,
+          companyConnectionParagraph: typeof aiDraft.companyConnectionParagraph === 'string' ? aiDraft.companyConnectionParagraph : newLetter.companyConnectionParagraph,
+          closingParagraph: typeof aiDraft.closingParagraph === 'string' ? aiDraft.closingParagraph : newLetter.closingParagraph
+        };
+        setActiveLetter(aiLetter);
+        showToast('AI cover letter draft generated. Review every statement before sending.', 'success');
+        return;
+      }
+    } catch (error) {
+      console.warn('Career AI unavailable; using evidence-based local draft.', error);
+      if (error instanceof Error && error.message.includes('AI Privacy Notice')) showToast(error.message, 'info');
+    }
     setActiveLetter(newLetter);
-    showToast('Tailored cover letter generated from profile!', 'success');
+    showToast('Evidence-based cover letter draft generated. Review before sending.', 'info');
   };
 
   const handleSave = () => {
@@ -152,7 +180,7 @@ export const CoverLetterStudioPage: React.FC = () => {
   const handleAddBullet = () => {
     setActiveLetter({
       ...activeLetter,
-      achievementBullets: [...activeLetter.achievementBullets, 'Engineered high-performance feature workflow improving user velocity and reliability.']
+      achievementBullets: [...activeLetter.achievementBullets, '']
     });
   };
 

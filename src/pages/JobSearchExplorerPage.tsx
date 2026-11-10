@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
@@ -25,9 +25,9 @@ import { useToast } from '../components/common/Toast';
 import { 
   JobListing, 
   JobFilterCriteria, 
-  CURATED_JOB_LISTINGS, 
   JobSearchEngine 
 } from '../modules/careerSuite';
+import { fetchLiveJobs } from '../modules/careerSuite/liveJobProvider';
 
 export const JobSearchExplorerPage: React.FC = () => {
   const navigate = useNavigate();
@@ -40,8 +40,32 @@ export const JobSearchExplorerPage: React.FC = () => {
   const [experienceLevel, setExperienceLevel] = useState<JobFilterCriteria['experienceLevel']>('ALL');
   const [tier, setTier] = useState<JobFilterCriteria['tier']>('ALL');
   const [sortBy, setSortBy] = useState<JobFilterCriteria['sortBy']>('match');
-  const [selectedJobId, setSelectedJobId] = useState<string>(CURATED_JOB_LISTINGS[0]?.id || '');
+  const [selectedJobId, setSelectedJobId] = useState<string>('');
   const [savedJobIds, setSavedJobIds] = useState<string[]>(() => JobSearchEngine.getSavedJobIds());
+  const [availableJobs, setAvailableJobs] = useState<JobListing[]>([]);
+  const [isLoadingLiveJobs, setIsLoadingLiveJobs] = useState(true);
+  const [liveJobsError, setLiveJobsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchLiveJobs(controller.signal)
+      .then((jobs) => {
+        if (controller.signal.aborted) return;
+        if (jobs.length > 0) {
+          setAvailableJobs(jobs);
+          setSelectedJobId(jobs[0].id);
+          setLiveJobsError(null);
+        } else {
+          setLiveJobsError('The live provider returned no listings. Showing sample roles.');
+        }
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        setLiveJobsError(error instanceof Error ? error.message : 'Live job feed is temporarily unavailable.');
+      })
+      .finally(() => { if (!controller.signal.aborted) setIsLoadingLiveJobs(false); });
+    return () => controller.abort();
+  }, []);
 
   // Aggregate candidate skills from active resume or master profile
   const candidateSkills = useMemo(() => {
@@ -58,28 +82,23 @@ export const JobSearchExplorerPage: React.FC = () => {
     ];
 
     const merged = Array.from(new Set([...resumeSkills, ...profileSkills]));
-    return merged.length > 0 ? merged : ['React', 'TypeScript', 'JavaScript', 'HTML/CSS', 'Git', 'Node.js'];
+    return merged;
   }, [masterProfile, currentResume]);
 
-  const candidateHeadline = masterProfile.personalInfo?.label || 'Software Engineer';
+  const candidateHeadline = masterProfile.personalInfo?.label || '';
 
   // Compute matched jobs
   const filteredJobs = useMemo(() => {
     return JobSearchEngine.searchJobs(
-      {
-        keyword,
-        remoteType,
-        experienceLevel,
-        tier,
-        sortBy
-      },
+      { keyword, remoteType, experienceLevel, tier, sortBy },
       candidateSkills,
-      candidateHeadline
+      candidateHeadline,
+      availableJobs
     );
-  }, [keyword, remoteType, experienceLevel, tier, sortBy, candidateSkills, candidateHeadline]);
+  }, [keyword, remoteType, experienceLevel, tier, sortBy, candidateSkills, candidateHeadline, availableJobs]);
 
   const selectedJob = useMemo(() => {
-    return filteredJobs.find(j => j.id === selectedJobId) || filteredJobs[0] || CURATED_JOB_LISTINGS[0];
+    return filteredJobs.find(j => j.id === selectedJobId) || filteredJobs[0];
   }, [filteredJobs, selectedJobId]);
 
   const handleToggleSave = (jobId: string, e: React.MouseEvent) => {
@@ -137,7 +156,7 @@ export const JobSearchExplorerPage: React.FC = () => {
             <div className="flex items-center space-x-2.5">
               <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                 <Sparkles className="size-3.5 text-indigo-400" />
-                <span>Real-Time ATS Matching Active</span>
+                <span>{isLoadingLiveJobs ? 'Loading live job feed…' : liveJobsError ? 'Live feed unavailable' : 'Live Arbeitnow feed · skills matching'}</span>
               </span>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 100% Free
@@ -147,7 +166,7 @@ export const JobSearchExplorerPage: React.FC = () => {
               Job Search Explorer
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl">
-              Curated tech opportunities with instant ATS fit analysis against your master profile. Save roles, tailor your resumes, and track conversions in one click.
+              Current public listings from Arbeitnow, ranked against skills in your saved resume or profile. Coverage is strongest in Europe and remote roles; availability depends on the source feed.
             </p>
           </div>
 
@@ -262,9 +281,9 @@ export const JobSearchExplorerPage: React.FC = () => {
           {filteredJobs.length === 0 ? (
             <div className="p-12 text-center rounded-2xl bg-white dark:bg-[#111218] border border-slate-200 dark:border-white/[0.08]">
               <Briefcase className="size-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">No matching roles found</h3>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{isLoadingLiveJobs ? 'Loading live job listings…' : 'No matching roles found'}</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mb-4">
-                Try widening your search terms or resetting filters to explore all curated positions.
+                {isLoadingLiveJobs ? 'Fetching current listings from the public job feed.' : 'Try widening your search terms or resetting filters. If the live feed is unavailable, refresh the page later.'}
               </p>
               <button
                 type="button"
@@ -282,9 +301,9 @@ export const JobSearchExplorerPage: React.FC = () => {
             </div>
           ) : (
             filteredJobs.map(job => {
-              const isSelected = job.id === selectedJob.id;
+              const isSelected = job.id === selectedJob?.id;
               const isSaved = savedJobIds.includes(job.id);
-              const score = job.matchScore || 50;
+              const score = job.matchScore ?? 0;
 
               return (
                 <div
@@ -427,14 +446,14 @@ export const JobSearchExplorerPage: React.FC = () => {
                     <span>ATS Match Diagnostics</span>
                   </span>
                   <span className="text-xs font-mono font-extrabold text-indigo-600 dark:text-indigo-400">
-                    {selectedJob.matchScore || 50}%
+                    {selectedJob.matchScore ?? 0}%
                   </span>
                 </div>
 
                 <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-500"
-                    style={{ width: `${selectedJob.matchScore || 50}%` }}
+                    style={{ width: `${selectedJob.matchScore ?? 0}%` }}
                   />
                 </div>
 

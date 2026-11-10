@@ -15,7 +15,7 @@ import {
   Tag,
   Lightbulb
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { useToast } from '../components/common/Toast';
 import { 
@@ -27,21 +27,24 @@ import {
   CareerStorageService, 
   generateInterviewPrep 
 } from '../modules/careerSuite';
+import { requestCareerAI } from '../modules/careerSuite/careerAiService';
 
 export const InterviewPrepPage: React.FC = () => {
   const { resumes, masterProfile } = useWorkspace();
   const { showToast } = useToast();
+  const location = useLocation();
+  const jobContext = location.state as { company?: string; role?: string; jobDescription?: string } | null;
 
-  const [role, setRole] = useState('Senior Full-Stack Engineer');
-  const [company, setCompany] = useState('Stripe');
-  const [jobDescription, setJobDescription] = useState('');
+  const [role, setRole] = useState(jobContext?.role || '');
+  const [company, setCompany] = useState(jobContext?.company || '');
+  const [jobDescription, setJobDescription] = useState(jobContext?.jobDescription || '');
   const [selectedResumeId, setSelectedResumeId] = useState('');
 
   const [activePrep, setActivePrep] = useState<InterviewPrepData>(() => {
     return generateInterviewPrep({
-      role: 'Senior Full-Stack Engineer',
-      company: 'Stripe',
-      jobDescription: 'Seeking an engineer experienced in high-performance web systems, React, TypeScript, APIs, and scalable databases.',
+      role: jobContext?.role || '',
+      company: jobContext?.company || '',
+      jobDescription: jobContext?.jobDescription || '',
       masterProfile: masterProfile || undefined
     });
   });
@@ -52,30 +55,85 @@ export const InterviewPrepPage: React.FC = () => {
 
   useEffect(() => {
     const saved = CareerStorageService.getInterviewPreps();
-    if (saved.length > 0) {
+    if (jobContext) {
+      setRole(jobContext.role || '');
+      setCompany(jobContext.company || '');
+      setJobDescription(jobContext.jobDescription || '');
+    } else if (saved.length > 0) {
       setActivePrep(saved[0]);
       setRole(saved[0].role);
       setCompany(saved[0].company);
       setJobDescription(saved[0].jobDescription);
     }
-  }, []);
+  }, [location.state]);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!role.trim()) {
       showToast('Please specify a target role before generating interview prep.', 'error');
       return;
     }
     const selectedResume = resumes.find(r => r.id === selectedResumeId);
     const newPrep = generateInterviewPrep({
-      role,
-      company,
-      jobDescription,
-      resumeData: selectedResume,
-      masterProfile: masterProfile || undefined
+      role, company, jobDescription, resumeData: selectedResume, masterProfile: masterProfile || undefined
     });
+    try {
+      const aiDraft = await requestCareerAI('GENERATE_INTERVIEW_PREP', {
+        instruction: 'Return JSON with toughQuestions, technicalProbes, and reverseQuestions arrays. Generate role-specific questions and coaching prompts only. Do not invent candidate work history, STAR stories, achievements, metrics, or personal answers. Use STAR story prompts already supplied by the application; do not create any candidate claims.',
+        role, company, jobDescription,
+        candidateFacts: {
+          skills: masterProfile?.skills || selectedResume?.skills || {},
+          projects: masterProfile?.projects || selectedResume?.projects || [],
+          experience: masterProfile?.experience || selectedResume?.work || []
+        }
+      });
+      if (aiDraft) {
+        const toughQuestions = Array.isArray(aiDraft.toughQuestions)
+          ? aiDraft.toughQuestions.filter((value): value is ToughQuestion => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<ToughQuestion>;
+              return typeof item.question === 'string'
+                && typeof item.responseStrategy === 'string'
+                && typeof item.sampleAnswer === 'string'
+                && ['gap', 'transition', 'weakness', 'motivation'].includes(item.category || '');
+            })
+          : [];
+        const technicalProbes = Array.isArray(aiDraft.technicalProbes)
+          ? aiDraft.technicalProbes.filter((value): value is TechnicalProbe => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<TechnicalProbe>;
+              return typeof item.topic === 'string'
+                && typeof item.predictedQuestion === 'string'
+                && Array.isArray(item.keyTalkingPoints)
+                && item.keyTalkingPoints.every(point => typeof point === 'string');
+            })
+          : [];
+        const reverseQuestions = Array.isArray(aiDraft.reverseQuestions)
+          ? aiDraft.reverseQuestions.filter((value): value is ReverseQuestion => {
+              if (!value || typeof value !== 'object') return false;
+              const item = value as Partial<ReverseQuestion>;
+              return typeof item.question === 'string'
+                && typeof item.rationale === 'string'
+                && ['role', 'team', 'tech', 'culture'].includes(item.category || '');
+            })
+          : [];
+        const safePrep: InterviewPrepData = {
+          ...newPrep,
+          toughQuestions: toughQuestions.length ? toughQuestions : newPrep.toughQuestions,
+          technicalProbes: technicalProbes.length ? technicalProbes : newPrep.technicalProbes,
+          reverseQuestions: reverseQuestions.length ? reverseQuestions : newPrep.reverseQuestions
+        };
+        setActivePrep(safePrep);
+        CareerStorageService.saveInterviewPrep(safePrep);
+        showToast('AI interview guide generated. STAR examples remain grounded in your saved evidence.', 'success');
+        return;
+      }
+    } catch (error) {
+      console.warn('Career AI unavailable; using evidence-based local interview guide.', error);
+      if (error instanceof Error && error.message.includes('AI Privacy Notice')) showToast(error.message, 'info');
+    }
     setActivePrep(newPrep);
     CareerStorageService.saveInterviewPrep(newPrep);
-    showToast('Interview Prep Guide generated from your profile!', 'success');
+    showToast('Interview preparation guide generated from your saved profile.', 'info');
   };
 
   const handleSaveNotes = (notes: string) => {
@@ -281,12 +339,18 @@ export const InterviewPrepPage: React.FC = () => {
               <div>
                 <strong className="font-semibold">The STAR Methodology:</strong> Structure your answers in 90 to 120 seconds.
                 Cover the <strong>Situation</strong> (15s), <strong>Task</strong> (15s), <strong>Action</strong> (60s), and <strong>Result</strong> (30s).
-                All stories below are pulled directly from your verified background to ensure zero fabrication.
+                Project names and action bullets are drawn from your saved profile. Complete the situation, task, and result prompts with facts you can personally verify before using a story.
               </div>
             </div>
 
             <div className="space-y-4">
-              {activePrep.starStories.map((story: StarStory) => {
+              {activePrep.starStories.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">No verified experience or project evidence yet</p>
+                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Add real projects, responsibilities, and outcomes to your Master Profile or select a saved resume. ResumeForge will not invent STAR stories.</p>
+                  <Link to="/profile" className="inline-flex mt-4 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Update Master Profile</Link>
+                </div>
+              ) : activePrep.starStories.map((story: StarStory) => {
                 const isExpanded = expandedStoryId === story.id;
                 return (
                   <div 
